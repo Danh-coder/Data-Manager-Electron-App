@@ -1,0 +1,40 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-row {
+    height: 100vh;
+}
+
+h1{
+    font-size: 18px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.nhap {
+    background-color: rgb(152, 170, 164);
+}
+
+.xuat {
+    background-color: rgb(252, 168, 185);
+}
+
+.kx {
+    background-color: rgb(184, 115, 214);
+}
+
+label {
+    font-size: 25px;
+    margin-top: 15px;
+    font-weight: 500;
+}
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
