@@ -19,8 +19,8 @@ function createWindow () {
   Menu.setApplicationMenu(null)
   mainWindow.loadFile('src/index.html')
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+//   Open the DevTools.
+//   mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -43,9 +43,8 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-//Catch item:add
-const info = require('./database/information');
-ipcMain.on('obj:add', (e, obj) => {
-    console.log(obj);
-    info.save(obj);
-})
+//Catch obj:add
+// const info = require('./database/information');
+// ipcMain.on('obj:add', async (e, obj) => {
+//     await info.save(obj);
+// })

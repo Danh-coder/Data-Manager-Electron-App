@@ -59,7 +59,7 @@
             <label for="thanhtien">Thành tiền</label>
             <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" required>
             <div class="form-group row" style="margin: 30px 0;">
-                <input onclick="process()" id="sbm-btn" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
+                <input id="sbm-btn" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
                 <button class="col-6 form-control" onclick="location.href='nhap.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             </div>
         </form>
@@ -69,23 +69,46 @@
 
     <p id="hehe" style="font-size: 50px;"></p>
 
-    <script>
-        const electron = require('electron')
-        const {ipcRenderer} = electron;
-        const form = document.querySelector('form')
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
 
-        function process() {
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+        apiKey: "AIzaSyB9-dEkmcl8UZxMGOuuNixbWOTV56dvuGg",
+        authDomain: "fir-dcb51.firebaseapp.com",
+        projectId: "fir-dcb51",
+        storageBucket: "fir-dcb51.appspot.com",
+        messagingSenderId: "646138430424",
+        appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
+        measurementId: "G-72YX6WP7VW"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        var db = firebase.firestore();
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const tenhang = document.querySelector('#tenhang').value;
-            const partnum = document.querySelector('#partnum').value;
-            const sohopdong = document.querySelector('#sohopdong').value;
-            const sanpham = document.querySelector('#sanpham').value;
-            const cty = document.querySelector('#cty').value;
-            const date = document.querySelector('#date').value;
-            const dvtinh = document.querySelector('#dvtinh').value;
-            const quantity = document.querySelector('#quantity').value;
-            const dongia = document.querySelector('#dongia').value;
-            const thanhtien = document.querySelector('#thanhtien').value;
+
+            const tenhang = document.getElementById('tenhang').value;
+            const partnum = document.getElementById('partnum').value;
+            const sohopdong = document.getElementById('sohopdong').value;
+            const sanpham = document.getElementById('sanpham').value;
+            const cty = document.getElementById('cty').value;
+            const date = document.getElementById('date').value;
+            const dvtinh = document.getElementById('dvtinh').value;
+            const quantity = document.getElementById('quantity').value;
+            const dongia = document.getElementById('dongia').value;
+            const thanhtien = document.getElementById('thanhtien').value;
 
             const obj = {
                 tenhang: tenhang,
@@ -99,17 +122,12 @@
                 dongia: dongia,
                 thanhtien: thanhtien
             }
-            ipcRenderer.send('obj:add', obj);
-        }
-
-        // form.addEventListener('submit', function (e) {
-        //     e.preventDefault()
-        //     const tenhang = document.querySelector('#tenhang').value
-        //     const date = document.querySelector("#date").value
-        //     console.log(date)
-        // })
-
-        
+            db.collection("info").add(obj).then((docRef) => {
+                console.log("Document written with id: ", docRef.id);
+            }).catch((err) => {
+                console.error("Error adding document: ", err);
+            })
+        })
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
