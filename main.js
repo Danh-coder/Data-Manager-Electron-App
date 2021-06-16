@@ -42,9 +42,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
-//Catch obj:add
-// const info = require('./database/information');
-// ipcMain.on('obj:add', async (e, obj) => {
-//     await info.save(obj);
-// })
