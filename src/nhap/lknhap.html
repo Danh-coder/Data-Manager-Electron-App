@@ -75,12 +75,31 @@
         const form = document.querySelector('form')
 
         function process() {
-            const tenhang = document.querySelector('#tenhang').value
-            const date = document.querySelector("#date").value
-            console.log(date)
+            e.preventDefault();
+            const tenhang = document.querySelector('#tenhang').value;
+            const partnum = document.querySelector('#partnum').value;
+            const sohopdong = document.querySelector('#sohopdong').value;
+            const sanpham = document.querySelector('#sanpham').value;
+            const cty = document.querySelector('#cty').value;
+            const date = document.querySelector('#date').value;
+            const dvtinh = document.querySelector('#dvtinh').value;
+            const quantity = document.querySelector('#quantity').value;
+            const dongia = document.querySelector('#dongia').value;
+            const thanhtien = document.querySelector('#thanhtien').value;
 
-            console.log(typeof(date))
-            
+            const obj = {
+                tenhang: tenhang,
+                partnum: partnum,
+                sohopdong: sohopdong,
+                sanpham: sanpham,
+                cty: cty,
+                date: date,
+                dvtinh: dvtinh,
+                quantity: quantity,
+                dongia: dongia,
+                thanhtien: thanhtien
+            }
+            ipcRenderer.send('obj:add', obj);
         }
 
         // form.addEventListener('submit', function (e) {
