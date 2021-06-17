@@ -127,6 +127,20 @@
             }).catch((err) => {
                 console.error("Error adding document: ", err);
             })
+
+            // Get all data in database
+            const electron = require('electron');
+            db.collection("info").orderBy("date", "asc").get().then((querySnapshot) => {
+                var infos = [];
+                querySnapshot.forEach(doc => {
+                    infos.push({
+                        id: doc.id,
+                        ...doc.data()
+                    })
+                });
+                electron.ipcRenderer.send('read-data', infos);
+                form.submit();
+            })
         })
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
