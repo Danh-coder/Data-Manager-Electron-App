@@ -15,5 +15,6 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "firebase": "^8.6.7"
+
   }
 }
