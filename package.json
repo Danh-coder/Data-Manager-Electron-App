@@ -11,5 +11,10 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^13.1.2"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "firebase": "^8.6.7"
+
   }
 }

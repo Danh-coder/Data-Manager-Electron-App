@@ -13,14 +13,17 @@ function createWindow () {
     minHeight:500,
     minWidth:600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   })
   Menu.setApplicationMenu(null)
   mainWindow.loadFile('src/index.html')
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+//   Open the DevTools.
+  mainWindow.webContents.openDevTools()
+
 }
 
 // This method will be called when Electron has finished
@@ -41,4 +44,11 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
+})
+
+// Get data 
+var data;
+ipcMain.on('read-data', function (event, objs) {
+  data = objs;
+  console.log(data);
 })
