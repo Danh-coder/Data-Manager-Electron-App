@@ -67,12 +67,68 @@
         </div>
     </div>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-analytics.js"></script>
+
     <script>
-        function process()
-        {
-            alert('Success')
-            location.href='nhap.html'
-        }
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+        apiKey: "AIzaSyB9-dEkmcl8UZxMGOuuNixbWOTV56dvuGg",
+        authDomain: "fir-dcb51.firebaseapp.com",
+        projectId: "fir-dcb51",
+        storageBucket: "fir-dcb51.appspot.com",
+        messagingSenderId: "646138430424",
+        appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
+        measurementId: "G-72YX6WP7VW"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        var db = firebase.firestore();
+        const form = document.querySelector('form');
+        function process() {
+            const tenhang = document.getElementById('tenhang').value;
+            const partnum = document.getElementById('partnum').value;
+            const sohopdong = document.getElementById('sohopdong').value;
+            const sanpham = document.getElementById('sanpham').value;
+            const cty = document.getElementById('cty').value;
+            const date = document.getElementById('date').value;
+            const dvtinh = document.getElementById('dvtinh').value;
+            const quantity = document.getElementById('quantity').value;
+            const dongia = document.getElementById('dongia').value;
+            const thanhtien = document.getElementById('thanhtien').value;
+
+            const obj = {
+                tenhang: tenhang,
+                partnum: partnum,
+                sohopdong: sohopdong,
+                sanpham: sanpham,
+                cty: cty,
+                date: date,
+                dvtinh: dvtinh,
+                quantity: quantity,
+                dongia: dongia,
+                thanhtien: thanhtien,
+                state: 'nhap'
+            }
+            db.collection("thanh-pham").add(obj).then(async (docRef) => {
+                console.log("Document written with id: ", docRef.id);
+
+                // Get all data in database
+                const electron = require('electron');
+                await electron.ipcRenderer.send('read-thanhpham', {});
+                await form.submit();
+            }).catch((err) => {
+                console.error("Error adding document: ", err);
+            })
+        } 
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

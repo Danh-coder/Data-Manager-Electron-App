@@ -120,26 +120,18 @@
                 dvtinh: dvtinh,
                 quantity: quantity,
                 dongia: dongia,
-                thanhtien: thanhtien
+                thanhtien: thanhtien,
+                state: 'nhap'
             }
-            db.collection("info").add(obj).then((docRef) => {
+            db.collection("linh-kien").add(obj).then(async (docRef) => {
                 console.log("Document written with id: ", docRef.id);
+
+                // Get all data in database
+                const electron = require('electron');
+                await electron.ipcRenderer.send('read-linhkien', {});
+                await form.submit();
             }).catch((err) => {
                 console.error("Error adding document: ", err);
-            })
-
-            // Get all data in database
-            const electron = require('electron');
-            db.collection("info").orderBy("date", "asc").get().then((querySnapshot) => {
-                var infos = [];
-                querySnapshot.forEach(doc => {
-                    infos.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                });
-                electron.ipcRenderer.send('read-data', infos);
-                form.submit();
             })
         })
     </script>

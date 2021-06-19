@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
+const { readXuat } = require('./utils/database')
 
 
 
@@ -47,8 +48,17 @@ app.on('window-all-closed', function () {
 })
 
 // Get data 
-var data;
-ipcMain.on('read-data', function (event, objs) {
-  data = objs;
-  console.log(data);
+const database = require('./utils/database')
+var linhkien_nhap, thanhpham_nhap, linhkien_xuat, thanhpham_xuat;
+ipcMain.on('read-linhkien', async(event, objs) => {
+  linhkien_nhap = await database.readLinhkien('nhap');
+  console.log(linhkien_nhap);
+})
+ipcMain.on('read-thanhpham', async (event, objs) => {
+  thanhpham_nhap = await database.readThanhpham('nhap');
+  console.log(thanhpham_nhap);
+})
+ipcMain.on('read-xuat', async (event, objs) => {
+  linhkien_xuat = await database.readLinhkien('xuat');
+  console.log(linhkien_xuat);
 })
