@@ -118,21 +118,20 @@
                 cty: cty,
                 date: date,
                 dvtinh: dvtinh,
-                quantity: quantity,
+                quantity: parseInt(quantity, 10),
                 dongia: dongia,
                 thanhtien: thanhtien,
                 state: 'nhap'
             }
-            db.collection("linh-kien").add(obj).then(async (docRef) => {
-                console.log("Document written with id: ", docRef.id);
-
-                // Get all data in database
-                const electron = require('electron');
-                await electron.ipcRenderer.send('read-linhkien', {});
-                await form.submit();
-            }).catch((err) => {
-                console.error("Error adding document: ", err);
-            })
+            
+            const electron = require('electron');
+            electron.ipcRenderer.send('save-linhkien', obj);
+            electron.ipcRenderer.on('wrong-unit', (e, err) => {
+                console.log(err);
+                const dialog = electron.dialog;
+                dialog.showErrorBox('Wrong unit typed', err);
+            });
+            form.submit();
         })
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

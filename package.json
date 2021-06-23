@@ -13,6 +13,8 @@
     "electron": "^13.1.2"
   },
   "dependencies": {
+    "alert": "^5.0.10",
+    "dialogs": "^2.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "firebase": "^8.6.7",
     "firebase-admin": "^9.9.0"

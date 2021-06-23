@@ -113,21 +113,18 @@
                 cty: cty,
                 date: date,
                 dvtinh: dvtinh,
-                quantity: quantity,
+                quantity: parseInt(quantity, 10),
                 dongia: dongia,
                 thanhtien: thanhtien,
                 state: 'nhap'
             }
-            db.collection("thanh-pham").add(obj).then(async (docRef) => {
-                console.log("Document written with id: ", docRef.id);
 
-                // Get all data in database
-                const electron = require('electron');
-                await electron.ipcRenderer.send('read-thanhpham', {});
-                await form.submit();
-            }).catch((err) => {
-                console.error("Error adding document: ", err);
-            })
+            const electron = require('electron');
+            electron.ipcRenderer.send('save-thanhpham', obj);
+            electron.ipcRenderer.on('wrong-unit', (e, err) => {
+                alert(err);
+            });
+            form.submit();
         } 
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

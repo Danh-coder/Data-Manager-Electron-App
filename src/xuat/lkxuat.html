@@ -113,18 +113,20 @@
                 cty: cty,
                 date: date,
                 dvtinh: dvtinh,
-                quantity: quantity,
+                quantity: parseInt(quantity, 10),
                 dongia: dongia,
                 thanhtien: thanhtien,
                 state: 'xuat'
             }
+            // Save data in database
+            const electron = require('electron');
+            electron.ipcRenderer.send('xuat-linhkien', obj);
+            form.submit();
+
             db.collection("linh-kien").add(obj).then(async (docRef) => {
                 console.log("Document written with id: ", docRef.id);
 
-                // Get all data in database
-                const electron = require('electron');
-                await electron.ipcRenderer.send('read-xuat', {});
-                await form.submit();
+                
             }).catch((err) => {
                 console.error("Error adding document: ", err);
             })

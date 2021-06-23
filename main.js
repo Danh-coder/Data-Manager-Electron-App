@@ -50,15 +50,23 @@ app.on('window-all-closed', function () {
 // Get data 
 const database = require('./utils/database')
 var linhkien_nhap, thanhpham_nhap, linhkien_xuat, thanhpham_xuat;
-ipcMain.on('read-linhkien', async(event, objs) => {
+ipcMain.on('save-linhkien', async(event, obj) => {
+  //save to database
+  await database.saveLinhkien(obj);
+  //read data from database
   linhkien_nhap = await database.readLinhkien('nhap');
   console.log(linhkien_nhap);
 })
-ipcMain.on('read-thanhpham', async (event, objs) => {
+ipcMain.on('save-thanhpham', async (event, obj) => {
+  //save to database
+  await database.saveThanhpham(obj);
+  //read data from database
   thanhpham_nhap = await database.readThanhpham('nhap');
   console.log(thanhpham_nhap);
 })
-ipcMain.on('read-xuat', async (event, objs) => {
+ipcMain.on('xuat-linhkien', async (event, obj) => {
+  await database.xuat('linhkien', obj);
+
   linhkien_xuat = await database.readLinhkien('xuat');
   console.log(linhkien_xuat);
 })
