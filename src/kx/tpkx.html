@@ -26,12 +26,106 @@
             
 
     </nav>
-    
+    <form action="" style="margin-left: 5vw;">
+        <label for="type" >Chọn hình thức kết xuất</label>
+        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction()">
+            <option value="date">Ngày</option>
+            <option value="name">Sản phẩm</option>
+        </select>
+        <br>
+        <label for="" class="lbl-date">Ngày bắt đầu</label>
+        <input type="date" name="datestart" id="datestart" style="margin-left: 15px;">
+        <br>
+        <label for="" class="lbl-date-form" id="hmm">Ngày kết thúc</label>
+        <input type="date" name="dateend" id="dateend" style="margin-left: 15px;">
+        <input type="text" name="nameinp" id="nameinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
+    </form>
+
     <div class="row main-row">
         
-        
+
+        <div class="col-6" style="border-right: 1px solid black;">
+            <h1 style="text-align: center;">Nhập</h1>
+            <div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;">
+                <p>Ten hang</p>
+                
+                <p>Mã</p>
+                
+                <p>Số hợp đồng</p>
+                
+                <p>Sản phẩm</p>
+                
+                <p>Tên công ty nhập</p>
+                
+                <p>Ngày nhập</p>
+                
+                <p>Đơn vị tính</p>
+                
+                <p>Số lượng</p>
+                
+                <p>Đơn giá</p>
+                
+                <p>Thành tiền</p>
+                
+            </div>
+
+        </div>
+
+        <div class="col-6">
+            <h1 style="text-align: center;">Xuất</h1>
+            <div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;">
+                <p>Ten hang</p>
+                
+                <p>Mã</p>
+                
+                <p>Số hợp đồng</p>
+                
+                <p>Sản phẩm</p>
+                
+                <p>Tên công ty nhập</p>
+                
+                <p>Ngày nhập</p>
+                
+                <p>Đơn vị tính</p>
+                
+                <p>Số lượng</p>
+                
+                <p>Đơn giá</p>
+                
+                <p>Thành tiền</p>
+                
+            </div>
         
     </div>
+
+    <script>
+        var select = document.getElementById('type')
+        
+        function myFunction() {
+            console.log(select.value)
+            console.log(document.querySelector('.lbl-date-form').value)
+            if (select.value === 'name')
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'inline'
+                document.querySelector('.lbl-date').style.display ='none'
+
+                document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
+            
+            }
+            else
+            {
+                document.getElementById('nameinp').style.display = 'none'
+                document.getElementById('datestart').style.display = 'inline'
+            
+                document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
+            
+                document.querySelector('.lbl-date').style.display =''
+                document.getElementById('dateend').style.display = 'inline'
+            }
+        }
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
