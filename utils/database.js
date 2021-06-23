@@ -94,34 +94,30 @@ module.exports = {
             console.log(`Added to log-${type}: `, docRef.id);
         }
     },
-    readLinhkien: async (state) => {
+    readFollowingDate: async (state, type, {datestart, dateend}) => {
         var infos = [];
-        try {
-            var querySnapshot = await db.collection("log-linhkien").orderBy("date", "asc").get();
-            querySnapshot.forEach(doc => {
-                if (doc.data().state == state) {
-                    infos.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                }
-            });
-            return await(infos);
-        } finally {}
+        var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+        querySnapshot.forEach(doc => {
+            if (doc.data().state == state && datestart <= doc.data().date  && doc.data().date <= dateend) {
+                infos.push({
+                    id: doc.id,
+                    ...doc.data()
+                })
+            }
+        });
+        return await(infos);
     },
-    readThanhpham: async (state) => {
+    readFollowingName: async (state, type, {name}) => {
         var infos = [];
-        try {
-            var querySnapshot = await db.collection("log-thanhpham").orderBy("date", "asc").get();
-            querySnapshot.forEach(doc => {
-                if (doc.data().state == state) {
-                    infos.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                }
-            });
-            return await(infos);
-        } finally {}
+        var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+        querySnapshot.forEach(doc => {
+            if (doc.data().state == state && doc.data().tenhang == name) {
+                infos.push({
+                    id: doc.id,
+                    ...doc.data()
+                })
+            }
+        });
+        return await(infos);
     }
 }
