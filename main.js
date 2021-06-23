@@ -76,6 +76,6 @@ ipcMain.on('xuat-linhkien', async (event, obj) => {
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
 
-  linhkien_xuat = await database.readThanhpham('xuat');
-  console.log(linhkien_xuat);
+  thanhpham_xuat = await database.readThanhpham('xuat');
+  console.log(thanhpham_xuat);
 })
