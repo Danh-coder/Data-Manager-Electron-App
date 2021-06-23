@@ -30,7 +30,7 @@
     
         <form action="" class="form-group">
             <label for="tensp">Tên sản phẩm</label>
-            <input type="text" class="form-control" id="tensp" placeholder="Tên sản phẩm">
+            <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
             
             <label for="date">Ngày nhập</label>
             <input type="date" class="form-control" id="date" placeholder="Ngày nhập">
@@ -83,35 +83,25 @@
         const form = document.querySelector('form');
         function process() {
             const tenhang = document.getElementById('tenhang').value;
-            const partnum = document.getElementById('partnum').value;
+            const mcu = document.getElementById('mcu').value;
             const sohopdong = document.getElementById('sohopdong').value;
-            const sanpham = document.getElementById('sanpham').value;
-            const cty = document.getElementById('cty').value;
+            const chip = document.getElementById('chip').value;
             const date = document.getElementById('date').value;
-            const dvtinh = document.getElementById('dvtinh').value;
             const quantity = document.getElementById('quantity').value;
-            const dongia = document.getElementById('dongia').value;
-            const thanhtien = document.getElementById('thanhtien').value;
 
             const obj = {
                 tenhang: tenhang,
-                partnum: partnum,
-                sohopdong: sohopdong,
-                sanpham: sanpham,
-                cty: cty,
                 date: date,
-                dvtinh: dvtinh,
+                sohopdong: sohopdong,
+                dvtinh: 'none',
                 quantity: parseInt(quantity, 10),
-                dongia: dongia,
-                thanhtien: thanhtien,
+                mcu: mcu,
+                chip: chip,
                 state: 'nhap'
             }
-
+            // Save data in database
             const electron = require('electron');
             electron.ipcRenderer.send('save-thanhpham', obj);
-            electron.ipcRenderer.on('wrong-unit', (e, err) => {
-                alert(err);
-            });
             form.submit();
         } 
     </script>

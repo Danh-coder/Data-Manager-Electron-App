@@ -52,21 +52,30 @@ const database = require('./utils/database')
 var linhkien_nhap, thanhpham_nhap, linhkien_xuat, thanhpham_xuat;
 ipcMain.on('save-linhkien', async(event, obj) => {
   //save to database
-  await database.saveLinhkien(obj);
+  await database.save('linhkien', obj);
   //read data from database
   linhkien_nhap = await database.readLinhkien('nhap');
   console.log(linhkien_nhap);
 })
+
 ipcMain.on('save-thanhpham', async (event, obj) => {
   //save to database
-  await database.saveThanhpham(obj);
+  await database.save('thanhpham', obj);
   //read data from database
   thanhpham_nhap = await database.readThanhpham('nhap');
   console.log(thanhpham_nhap);
 })
+
 ipcMain.on('xuat-linhkien', async (event, obj) => {
   await database.xuat('linhkien', obj);
 
   linhkien_xuat = await database.readLinhkien('xuat');
+  console.log(linhkien_xuat);
+})
+
+ipcMain.on('xuat-thanhpham', async (event, obj) => {
+  await database.xuat('thanhpham', obj);
+
+  linhkien_xuat = await database.readThanhpham('xuat');
   console.log(linhkien_xuat);
 })

@@ -122,14 +122,6 @@
             const electron = require('electron');
             electron.ipcRenderer.send('xuat-linhkien', obj);
             form.submit();
-
-            db.collection("linh-kien").add(obj).then(async (docRef) => {
-                console.log("Document written with id: ", docRef.id);
-
-                
-            }).catch((err) => {
-                console.error("Error adding document: ", err);
-            })
         } 
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

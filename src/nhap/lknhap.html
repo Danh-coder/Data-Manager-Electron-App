@@ -126,11 +126,6 @@
             
             const electron = require('electron');
             electron.ipcRenderer.send('save-linhkien', obj);
-            electron.ipcRenderer.on('wrong-unit', (e, err) => {
-                console.log(err);
-                const dialog = electron.dialog;
-                dialog.showErrorBox('Wrong unit typed', err);
-            });
             form.submit();
         })
     </script>

@@ -30,7 +30,7 @@
     
         <form action="" class="form-group">
             <label for="tensp">Tên sản phẩm</label>
-            <input type="text" class="form-control" id="tensp" placeholder="Tên sản phẩm">
+            <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
             
             <label for="date">Ngày xuất</label>
             <input type="date" class="form-control" id="date" placeholder="Ngày nhập">
@@ -56,10 +56,30 @@
     </div>
 
     <script>
+        const form = document.querySelector('form');
         function process()
         {
-            alert('Success')
-            location.href='xuat.html'
+            const tenhang = document.getElementById('tenhang').value;
+            const mcu = document.getElementById('mcu').value;
+            const sohopdong = document.getElementById('sohopdong').value;
+            const chip = document.getElementById('chip').value;
+            const date = document.getElementById('date').value;
+            const quantity = document.getElementById('quantity').value;
+
+            const obj = {
+                tenhang: tenhang,
+                date: date,
+                sohopdong: sohopdong,
+                dvtinh: 'none',
+                quantity: parseInt(quantity, 10),
+                mcu: mcu,
+                chip: chip,
+                state: 'xuat'
+            }
+            // Save data in database
+            const electron = require('electron');
+            electron.ipcRenderer.send('xuat-thanhpham', obj);
+            form.submit();
         }
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
