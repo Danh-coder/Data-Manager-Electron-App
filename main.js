@@ -47,35 +47,48 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-// Get data 
+// Work with database
 const database = require('./utils/database')
-var linhkien_nhap, thanhpham_nhap, linhkien_xuat, thanhpham_xuat;
+//Nhap, xuat linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
-  //save to database
   await database.save('linhkien', obj);
-  //read data from database
-  linhkien_nhap = await database.readLinhkien('nhap');
-  console.log(linhkien_nhap);
 })
-
-ipcMain.on('save-thanhpham', async (event, obj) => {
-  //save to database
-  await database.save('thanhpham', obj);
-  //read data from database
-  thanhpham_nhap = await database.readThanhpham('nhap');
-  console.log(thanhpham_nhap);
-})
-
 ipcMain.on('xuat-linhkien', async (event, obj) => {
   await database.xuat('linhkien', obj);
-
-  linhkien_xuat = await database.readLinhkien('xuat');
-  console.log(linhkien_xuat);
 })
 
+//Nhap, xuat thanh pham
+ipcMain.on('save-thanhpham', async (event, obj) => {
+  await database.save('thanhpham', obj);
+})
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
+})
 
-  thanhpham_xuat = await database.readThanhpham('xuat');
-  console.log(thanhpham_xuat);
+//Ket xuat linh kien
+ipcMain.on('kxuat-linhkien-ngay', async (event, obj) => {
+  var nhap = await database.readFollowingDate('nhap', 'linhkien', obj);
+  var xuat = await database.readFollowingDate('xuat', 'linhkien', obj);
+
+  event.returnValue = {nhap, xuat};
+})
+ipcMain.on('kxuat-linhkien-ten', async (event, obj) => {
+  var nhap = await database.readFollowingName('nhap', 'linhkien', obj);
+  var xuat = await database.readFollowingName('xuat', 'linhkien', obj);
+
+  event.returnValue = {nhap, xuat};
+})
+
+//Ket xuat thanh pham
+ipcMain.on('kxuat-thanhpham-ngay', async (event, obj) => {
+  var nhap = await database.readFollowingDate('nhap', 'thanhpham', obj);
+  var xuat = await database.readFollowingDate('xuat', 'thanhpham', obj);
+
+  event.returnValue = {nhap, xuat};
+})
+ipcMain.on('kxuat-thanhpham-ten', async (event, obj) => {
+  var nhap = await database.readFollowingName('nhap', 'thanhpham', obj);
+  var xuat = await database.readFollowingName('xuat', 'thanhpham', obj);
+
+  event.returnValue = {nhap, xuat};
 })
