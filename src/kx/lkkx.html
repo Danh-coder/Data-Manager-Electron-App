@@ -31,6 +31,7 @@
         <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction()">
             <option value="date">Ngày</option>
             <option value="name">Sản phẩm</option>
+            <option value="all">Tất cả</option>
         </select>
         <br>
         <label for="" class="lbl-date">Ngày bắt đầu</label>
@@ -43,7 +44,7 @@
 
     <div class="row main-row">
         
-
+<!-- 
         <div class="col-6" id="nhap" style="border-right: 1px solid black;">
             <h1 style="text-align: center;">Nhập</h1>
 
@@ -51,7 +52,11 @@
 
         <div class="col-6" id="xuat">
             <h1 style="text-align: center;">Xuất</h1>
-        
+        </div> -->
+
+        <button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);">Xuất file excel</button>
+
+
     </div>
 
     <!-- Insert this line above script imports  -->
@@ -76,7 +81,7 @@
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
             
             }
-            else
+            else if (select.value === 'date')
             {
                 document.getElementById('nameinp').style.display = 'none'
                 document.getElementById('datestart').style.display = 'inline'
@@ -85,6 +90,15 @@
             
                 document.querySelector('.lbl-date').style.display =''
                 document.getElementById('dateend').style.display = 'inline'
+            }
+            else 
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'none'
+                document.querySelector('.lbl-date').style.display ='none'
+
+                document.getElementById('hmm').innerHTML = ''
             }
         }
 
