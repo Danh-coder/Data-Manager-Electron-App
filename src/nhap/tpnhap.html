@@ -28,7 +28,7 @@
     </nav>
     <div class="container">
     
-        <form action="" class="form-group">
+        <form id="save" action="" class="form-group">
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
             
@@ -55,33 +55,13 @@
         </div>
     </div>
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-analytics.js"></script>
-
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
     <script>
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        var firebaseConfig = {
-        apiKey: "AIzaSyB9-dEkmcl8UZxMGOuuNixbWOTV56dvuGg",
-        authDomain: "fir-dcb51.firebaseapp.com",
-        projectId: "fir-dcb51",
-        storageBucket: "fir-dcb51.appspot.com",
-        messagingSenderId: "646138430424",
-        appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
-        measurementId: "G-72YX6WP7VW"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-        var db = firebase.firestore();
-        const form = document.querySelector('form');
-        function process() {
+        function prepareObj() {
             const tenhang = document.getElementById('tenhang').value;
             const mcu = document.getElementById('mcu').value;
             const sohopdong = document.getElementById('sohopdong').value;
@@ -91,28 +71,69 @@
 
             const obj = {
                 tenhang: tenhang,
-                date: date,
+                mcu: mcu,
                 sohopdong: sohopdong,
+                chip: chip,
+                date: date,
                 dvtinh: 'none',
                 quantity: parseInt(quantity, 10),
-                mcu: mcu,
-                chip: chip,
                 state: 'nhap'
             }
-            // Save data in database
-            const electron = require('electron');
-            electron.ipcRenderer.send('save-thanhpham', obj);
-            form.submit();
-        } 
+            return obj;
+        }
+
+        const {ipcRenderer} = require('electron');
+        // Edit document also ////////////////////
+        ipcRenderer.on('edit-receive', (event, doc) => {
+            const form = $('form');
+            form.empty();
+            form.attr("id", 'edit')
+            const formContent = $(`
+                <input type="hidden" id="_id" value="${doc.id}">
+
+                <label for="tensp">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">
+                
+                <label for="date">Ngày nhập</label>
+                <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}">
+
+                <label for="sohopdong">Số hợp đồng</label>
+                <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" value="${doc.sohopdong}">
+                
+                <label for="mcu">MCU</label>
+                <input type="text" class="form-control" id="mcu" placeholder="MCU"  value="${doc.mcu}">
+
+                <label for="chip">Chip</label>
+                <input type="text" class="form-control" id="chip" placeholder="Chip" value="${doc.chip}">
+
+                <label for="quantity">Số lượng</label>
+                <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}">
+            `)
+            form.append(formContent);
+        })
+
+        function process() {
+            const form = document.querySelector('form');
+            var obj = prepareObj();
+            if (form.id == "save") {
+                ipcRenderer.send('save-thanhpham', obj);
+                return true;
+            } 
+            if (form.id == "edit") {
+                obj.id = document.getElementById('_id').value;
+                var canSubmit = ipcRenderer.sendSync('edit-nhap-thanhpham', obj);
+                if (canSubmit) { form.action = "./chinhsua/cstp.html"; form.submit(); }
+                else return false;
+            }
+        }
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
 </body>
 </html>

@@ -4,10 +4,10 @@ const path = require('path')
 const { readXuat } = require('./utils/database')
 
 
-
-function createWindow () {
+var mainWindow;
+function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     title: "Data Manager",
@@ -24,7 +24,6 @@ function createWindow () {
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()
-
 }
 
 // This method will be called when Electron has finished
@@ -49,7 +48,7 @@ app.on('window-all-closed', function () {
 
 // Work with database
 const database = require('./utils/database')
-//Nhap, xuat linh kien
+// Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
   await database.save('linhkien', obj);
 })
@@ -57,38 +56,100 @@ ipcMain.on('xuat-linhkien', async (event, obj) => {
   await database.xuat('linhkien', obj);
 })
 
-//Nhap, xuat thanh pham
+  // Nhap ////////////////////
+ipcMain.on('doc-nhap-linhkien-all', async (event, obj) => {
+  var nhap = await database.readAll('nhap', 'linhkien');
+
+  event.returnValue = nhap;
+});
+ipcMain.on('doc-nhap-linhkien-ngay', async (event, obj) => {
+  var nhap = await database.readFollowingDate('nhap', 'linhkien', obj);
+
+  event.returnValue = nhap;
+})
+ipcMain.on('doc-nhap-linhkien-ten', async (event, obj) => {
+  var nhap = await database.readFollowingName('nhap', 'linhkien', obj);
+
+  event.returnValue = nhap;
+})
+ipcMain.on('edit-nhap-linhkien', async (event, obj) => {
+  const success = await database.edit('nhap', 'linhkien', obj);
+  event.returnValue = success;
+})
+  //Xuat ////////////////
+ipcMain.on('doc-xuat-linhkien-all', async (event, obj) => {
+  var xuat = await database.readAll('xuat', 'linhkien');
+
+  event.returnValue = xuat;
+});
+ipcMain.on('doc-xuat-linhkien-ngay', async (event, obj) => {
+  var xuat = await database.readFollowingDate('xuat', 'linhkien', obj);
+
+  event.returnValue = xuat;
+})
+ipcMain.on('doc-xuat-linhkien-ten', async (event, obj) => {
+  var xuat = await database.readFollowingName('xuat', 'linhkien', obj);
+
+  event.returnValue = xuat;
+})
+ipcMain.on('edit-xuat-linhkien', async (event, obj) => {
+  const success = await database.edit('xuat', 'linhkien', obj);
+  event.returnValue = success;
+})
+
+// Thanh pham
 ipcMain.on('save-thanhpham', async (event, obj) => {
   await database.save('thanhpham', obj);
 })
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
 })
+  // Nhap //////////////////
+ipcMain.on('doc-nhap-thanhpham-all', async (event, obj) => {
+  var nhap = await database.readAll('nhap', 'thanhpham');
 
-//Ket xuat linh kien
-ipcMain.on('kxuat-linhkien-ngay', async (event, obj) => {
-  var nhap = await database.readFollowingDate('nhap', 'linhkien', obj);
-  var xuat = await database.readFollowingDate('xuat', 'linhkien', obj);
-
-  event.returnValue = {nhap, xuat};
-})
-ipcMain.on('kxuat-linhkien-ten', async (event, obj) => {
-  var nhap = await database.readFollowingName('nhap', 'linhkien', obj);
-  var xuat = await database.readFollowingName('xuat', 'linhkien', obj);
-
-  event.returnValue = {nhap, xuat};
-})
-
-//Ket xuat thanh pham
-ipcMain.on('kxuat-thanhpham-ngay', async (event, obj) => {
+  event.returnValue = nhap;
+});
+ipcMain.on('doc-nhap-thanhpham-ngay', async (event, obj) => {
   var nhap = await database.readFollowingDate('nhap', 'thanhpham', obj);
+
+  event.returnValue = nhap;
+})
+ipcMain.on('doc-nhap-thanhpham-ten', async (event, obj) => {
+  var nhap = await database.readFollowingName('nhap', 'thanhpham', obj);
+
+  event.returnValue = nhap;
+})
+ipcMain.on('edit-nhap-thanhpham', async (event, obj) => {
+  const success = await database.edit('nhap', 'thanhpham', obj);
+  event.returnValue = success;
+})
+
+  // Xuat ////////////////////
+ipcMain.on('doc-xuat-thanhpham-all', async (event, obj) => {
+  var xuat = await database.readAll('xuat', 'thanhpham');
+
+  event.returnValue = xuat;
+});
+ipcMain.on('doc-xuat-thanhpham-ngay', async (event, obj) => {
   var xuat = await database.readFollowingDate('xuat', 'thanhpham', obj);
 
-  event.returnValue = {nhap, xuat};
+  event.returnValue = xuat;
 })
-ipcMain.on('kxuat-thanhpham-ten', async (event, obj) => {
-  var nhap = await database.readFollowingName('nhap', 'thanhpham', obj);
+ipcMain.on('doc-xuat-thanhpham-ten', async (event, obj) => {
   var xuat = await database.readFollowingName('xuat', 'thanhpham', obj);
 
-  event.returnValue = {nhap, xuat};
+  event.returnValue = xuat;
+})
+ipcMain.on('edit-xuat-thanhpham', async (event, obj) => {
+  const success = await database.edit('xuat', 'thanhpham', obj);
+  event.returnValue = success;
+})
+
+// Edit file in general ///////////////////////
+ipcMain.on('edit-send', async (event, obj) => {
+  let doc = await database.readFollowingId(obj);
+  mainWindow.webContents.once('dom-ready', () => {
+    mainWindow.webContents.send('edit-receive', doc);
+  });
 })

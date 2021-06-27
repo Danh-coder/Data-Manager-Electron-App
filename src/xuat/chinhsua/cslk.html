@@ -51,18 +51,9 @@
     <div class="row main-row">
         
 
-        <div class="col-12" id="nhap" style="border-right: 1px solid black;">
+        <div class="col-12" id="xuat" style="border-right: 1px solid black;">
             <h1 style="text-align: center;">Chỉnh sửa xuất linh kiện điện tử</h1>
-            <div style="border: 1px solid black; padding-left: 15px; padding-top: 15px; margin-top: 15px;">
-                <button style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>
-                <p>Test 1 </p>
-                <p>Test 2</p>
-            </div>
-            <div style="border: 1px solid black; padding-left: 15px; padding-top: 15px; margin-top: 15px;">
-                <button style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>
-                <p>Test 1 </p>
-                <p>Test 2</p>
-            </div>
+            
         </div>
 
         
@@ -111,59 +102,54 @@
             }
         }
 
-        //include electron package
-        const {ipcRenderer} = require('electron');
+       //include electron package
+       const {ipcRenderer} = require('electron');
         var docs;
+
         function print() {
-            var box = $('#nhap');
-            $('#nhap div').remove();
-            docs.nhap.forEach(doc => {
-                var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
-                var tenhang = $('<p></p>').html('Ten hang: ' + doc.tenhang);
-                var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
-                var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                var cty = $('<p></p>').html('Tên công ty Xuất: ' + doc.cty);
-                var date = $('<p></p>').html('Ngày Xuất: ' + doc.date);
-                var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
-                var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
-                var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien);
-
-                block.append(tenhang, partnum, sohopdong, sanpham, cty, date, dvtinh, quantity, dongia, thanhtien);
-                box.append(block);
-            });
-
-            box = $('#xuat');
+            var box = $('#xuat');
             $('#xuat div').remove();
-            docs.xuat.forEach(doc => {
+            docs.forEach(doc => {
                 var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
                 var tenhang = $('<p></p>').html('Ten hang: ' + doc.tenhang);
                 var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
                 var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
                 var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                var cty = $('<p></p>').html('Tên công ty Xuất: ' + doc.cty);
-                var date = $('<p></p>').html('Ngày Xuất: ' + doc.date);
+                var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
+                var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
                 var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
                 var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
                 var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
                 var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien);
+                var button = $(`<button onclick="redirect('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
 
-                block.append(tenhang, partnum, sohopdong, sanpham, cty, date, dvtinh, quantity, dongia, thanhtien);
+                block.append(button, tenhang, partnum, sohopdong, sanpham, cty, date, dvtinh, quantity, dongia, thanhtien);
                 box.append(block);
             });
         }
+
+        //Redirect to edit file
+        function redirect(id) {
+            ipcRenderer.send('edit-send', {type: 'linhkien', id: id});
+            location.href='../lkxuat.html';
+        }
+
+        // Option All
+        docs = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+        print();
+
+        //Other options
         function processDate() {
             var datestart = document.getElementById('datestart').value;
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
-                docs = ipcRenderer.sendSync('kxuat-linhkien-ngay', {datestart, dateend});
+                docs = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
                 print();
             }
         }
         function processName() {
             var name = document.getElementById('nameinp').value;
-            docs = ipcRenderer.sendSync('kxuat-linhkien-ten', {name});
+            docs = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
             print();
             return false;
         }

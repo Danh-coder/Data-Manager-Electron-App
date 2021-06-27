@@ -54,6 +54,34 @@ module.exports = {
             console.log(`Added to log-${type}: `, docRef.id);
         }
     },
+    edit: async (state, type, {id, ...body}) => {
+        const docRef = await db.collection(`log-${type}`).doc(id).get();
+        var success = true;
+        var delta = body.quantity - docRef.data().quantity;
+        if (state == 'xuat') delta = -delta;
+        
+        //Update the ton-... storage as well
+        const database = db.collection(`ton-${type}`);
+        const querySnapshot = await database.where('tenhang','==',body.tenhang).get();
+        querySnapshot.forEach(async(doc) => {
+            if (doc.data().dvtinh == body.dvtinh || doc.data().quantity == docRef.data().quantity) {
+                var newQuantity = (doc.data().dvtinh == body.dvtinh) ? doc.data().quantity + delta : body.quantity;
+                await db.collection(`log-${type}`).doc(id).update(body);
+                await database.doc(doc.id).update({
+                    dvtinh: body.dvtinh,
+                    quantity: newQuantity
+                })
+                console.log(`Updated log-${type}`);
+                console.log(`Updated ton-${type}`);
+            }
+            else {
+                dialog.showErrorBox("Can't edit data", "Please use the correct unit: " + doc.data().dvtinh);
+                success = false;
+            }
+        })
+
+        return success;
+    },
     xuat: async(type, body) => {
         var canAdd = true, isEmpty = true;
         const database = db.collection(`ton-${type}`);
@@ -94,6 +122,20 @@ module.exports = {
             console.log(`Added to log-${type}: `, docRef.id);
         }
     },
+    readAll: async (state, type) => {
+        const database = db.collection(`log-${type}`);
+        const querySnapshot = await database.orderBy('date', 'asc').get();
+        var infos = [];
+        querySnapshot.forEach(async(doc) => {
+            if (doc.data().state == state) {
+                infos.push({
+                    id: doc.id,
+                    ...doc.data()
+                })
+            }
+        })
+        return await (infos);
+    },
     readFollowingDate: async (state, type, {datestart, dateend}) => {
         var infos = [];
         var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
@@ -119,5 +161,13 @@ module.exports = {
             }
         });
         return await(infos);
+    },
+    readFollowingId: async ({type, id}) => {
+        const doc = await db.collection(`log-${type}`).doc(id).get();
+        const obj = {
+            id: doc.id,
+            ...doc.data()
+        }
+        return await (obj);
     }
 }
