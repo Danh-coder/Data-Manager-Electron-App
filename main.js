@@ -46,14 +46,18 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-// Work with database
+// Work with database, excel file
 const database = require('./utils/database')
+const createExcelFile = require('./utils/createExcel');
 // Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
   await database.save('linhkien', obj);
 })
 ipcMain.on('xuat-linhkien', async (event, obj) => {
   await database.xuat('linhkien', obj);
+})
+ipcMain.on('excel-linhkien', async (event, state) => {
+  await createExcelFile('linhkien', state[0], state[1]);
 })
 
   // Nhap ////////////////////
@@ -109,6 +113,9 @@ ipcMain.on('save-thanhpham', async (event, obj) => {
 })
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
+})
+ipcMain.on('excel-thanhpham', async (event, state) => {
+  await createExcelFile('thanhpham', state[0], state[1]);
 })
 
   // Nhap //////////////////
