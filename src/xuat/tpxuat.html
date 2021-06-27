@@ -117,13 +117,12 @@
             var obj = prepareObj();
             if (form.id == "save") {
                 ipcRenderer.send('xuat-thanhpham', obj);
-                return true;
+                form.submit();
             } 
             if (form.id == "edit") {
                 obj.id = document.getElementById('_id').value;
                 var canSubmit = ipcRenderer.sendSync('edit-xuat-thanhpham', obj);
                 if (canSubmit) { form.action = "./chinhsua/cstp.html"; form.submit(); }
-                else return false;
             }
         }
     </script>

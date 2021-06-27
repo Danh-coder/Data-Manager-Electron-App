@@ -76,6 +76,9 @@ ipcMain.on('edit-nhap-linhkien', async (event, obj) => {
   const success = await database.edit('nhap', 'linhkien', obj);
   event.returnValue = success;
 })
+ipcMain.on('xoa-nhap-linhkien', async (event, id) => {
+  await database.delete('nhap', 'linhkien', id);
+})
   //Xuat ////////////////
 ipcMain.on('doc-xuat-linhkien-all', async (event, obj) => {
   var xuat = await database.readAll('xuat', 'linhkien');
@@ -96,6 +99,9 @@ ipcMain.on('edit-xuat-linhkien', async (event, obj) => {
   const success = await database.edit('xuat', 'linhkien', obj);
   event.returnValue = success;
 })
+ipcMain.on('xoa-xuat-linhkien', async (event, id) => {
+  await database.delete('xuat', 'linhkien', id);
+})
 
 // Thanh pham
 ipcMain.on('save-thanhpham', async (event, obj) => {
@@ -104,6 +110,7 @@ ipcMain.on('save-thanhpham', async (event, obj) => {
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
 })
+
   // Nhap //////////////////
 ipcMain.on('doc-nhap-thanhpham-all', async (event, obj) => {
   var nhap = await database.readAll('nhap', 'thanhpham');
@@ -123,6 +130,9 @@ ipcMain.on('doc-nhap-thanhpham-ten', async (event, obj) => {
 ipcMain.on('edit-nhap-thanhpham', async (event, obj) => {
   const success = await database.edit('nhap', 'thanhpham', obj);
   event.returnValue = success;
+})
+ipcMain.on('xoa-nhap-thanhpham', async (event, id) => {
+  await database.delete('nhap', 'thanhpham', id);
 })
 
   // Xuat ////////////////////
@@ -144,6 +154,9 @@ ipcMain.on('doc-xuat-thanhpham-ten', async (event, obj) => {
 ipcMain.on('edit-xuat-thanhpham', async (event, obj) => {
   const success = await database.edit('xuat', 'thanhpham', obj);
   event.returnValue = success;
+})
+ipcMain.on('xoa-xuat-thanhpham', async (event, id) => {
+  await database.delete('xuat', 'thanhpham', id);
 })
 
 // Edit file in general ///////////////////////

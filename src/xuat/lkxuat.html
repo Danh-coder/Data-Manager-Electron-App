@@ -148,6 +148,7 @@
             var obj = prepareObj();
             if (form.id == "save") {
                 ipcRenderer.send('xuat-linhkien', obj);
+                form.submit();
             } 
             if (form.id == "edit") {
                 obj.id = document.getElementById('_id').value;

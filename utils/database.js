@@ -82,6 +82,27 @@ module.exports = {
 
         return success;
     },
+    delete: async (state, type, id) => {
+        var docRef = await db.collection(`log-${type}`).doc(id).get();
+        var quantity = docRef.data().quantity;
+        quantity = (state == 'xuat') ? -quantity : quantity;
+        await db.collection(`log-${type}`).doc(id).delete();
+        console.log(`Deleted log-${type}`);
+
+        const querySnapshot = await db.collection(`ton-${type}`).where('tenhang', '==', docRef.data().tenhang).get();
+        querySnapshot.forEach(async(doc) => {
+            if (doc.data().quantity == quantity) {
+                await db.collection(`ton-${type}`).doc(doc.id).delete();
+                console.log(`Deleted ton-${type}`);
+            }
+            else {
+                await db.collection(`ton-${type}`).doc(doc.id).update({
+                    quantity: doc.data().quantity - quantity
+                })
+                console.log(`Updated ton-${type}`);
+            }
+        })
+    },
     xuat: async(type, body) => {
         var canAdd = true, isEmpty = true;
         const database = db.collection(`ton-${type}`);
