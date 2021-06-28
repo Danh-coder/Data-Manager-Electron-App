@@ -28,7 +28,7 @@
     </nav>
     <form action="" style="margin-left: 5vw;" onsubmit="return processName()">
         <label for="type" >Chọn hình thức kết xuất</label>
-        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction()">
+        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
             <option value="date">Ngày</option>
             <option value="name">Sản phẩm</option>
             <option value="all">Tất cả</option>
@@ -54,7 +54,7 @@
             <h1 style="text-align: center;">Xuất</h1>
         </div> -->
 
-        <button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);">Xuất file excel</button>
+        <button onclick="exportExcel()" style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);">Xuất file excel</button>
 
 
     </div>
@@ -104,59 +104,29 @@
 
         //include electron package
         const {ipcRenderer} = require('electron');
-        var docs;
-        function print() {
-            var box = $('#nhap');
-            $('#nhap div').remove();
-            docs.nhap.forEach(doc => {
-                var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
-                var tenhang = $('<p></p>').html('Ten hang: ' + doc.tenhang);
-                var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
-                var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
-                var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
-                var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
-                var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
-                var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien);
-
-                block.append(tenhang, partnum, sohopdong, sanpham, cty, date, dvtinh, quantity, dongia, thanhtien);
-                box.append(block);
-            });
-
-            box = $('#xuat');
-            $('#xuat div').remove();
-            docs.xuat.forEach(doc => {
-                var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
-                var tenhang = $('<p></p>').html('Ten hang: ' + doc.tenhang);
-                var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
-                var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
-                var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
-                var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
-                var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
-                var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien);
-
-                block.append(tenhang, partnum, sohopdong, sanpham, cty, date, dvtinh, quantity, dongia, thanhtien);
-                box.append(block);
-            });
+        var nhaps, xuats;
+        function processAll() {
+            if (select.value === 'all') {
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+            }
         }
         function processDate() {
             var datestart = document.getElementById('datestart').value;
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
-                docs = ipcRenderer.sendSync('kxuat-linhkien-ngay', {datestart, dateend});
-                print();
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
             }
         }
         function processName() {
             var name = document.getElementById('nameinp').value;
-            docs = ipcRenderer.sendSync('kxuat-linhkien-ten', {name});
-            print();
+            nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
+            xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
             return false;
+        }
+        function exportExcel() {
+            ipcRenderer.send('excel-linhkien', [nhaps, xuats]);
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

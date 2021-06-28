@@ -1,4 +1,57 @@
-module.exports = function createNewExcelFile(state, type, docs)
+function printLinhkien(sheet, arr) {
+    sheet.columns = [
+        { header: 'Tên Hàng', key: 'tenhang', width: 20},
+        { header: 'Part Number', key: 'partnum', width: 20},
+        { header: 'Sổ Hợp Đồng', key: 'sohopdong', width: 20},
+        { header: 'Sản Phẩm', key: 'sanpham', width: 20},
+        { header: 'Công Ty Nhập', key: 'cty', width: 20},
+        { header: 'Ngày Nhập', key: 'date', width: 20},
+        { header: 'Đơn Vị Tính', key: 'dvtinh', width: 20},
+        { header: 'Số Lượng', key: 'quantity', width: 20},
+        { header: 'Đơn Giá', key: 'dongia', width: 20},
+        { header: 'Thành Tiền', key: 'thanhtien', width: 20},
+    ]
+
+    // Add rows in the above header
+    arr.forEach(doc => {
+        sheet.addRow({
+            tenhang: doc.tenhang,
+            partnum: doc.partnum,
+            sohopdong: doc.sohopdong,
+            sanpham: doc.sanpham,
+            cty: doc.cty,
+            date: doc.date,
+            dvtinh: doc.dvtinh,
+            quantity: doc.quantity,
+            dongia: doc.dongia,
+            thanhtien: doc.thanhtien,
+        })
+    })
+}
+function printThanhpham(sheet, arr) {
+    sheet.columns = [
+        { header: 'Tên Hàng', key: 'tenhang', width: 20},
+        { header: 'MCU', key: 'mcu', width: 20},
+        { header: 'Sổ Hợp Đồng', key: 'sohopdong', width: 20},
+        { header: 'Chip', key: 'chip', width: 20},
+        { header: 'Ngày Nhập', key: 'date', width: 20},
+        { header: 'Số Lượng', key: 'quantity', width: 20},
+    ]
+
+    // Add rows in the above header
+    arr.forEach(doc => {
+        sheet.addRow({
+            tenhang: doc.tenhang,
+            mcu: doc.mcu,
+            sohopdong: doc.sohopdong,
+            chip: doc.chip,
+            date: doc.date,
+            quantity: doc.quantity
+        })
+    })
+}
+
+module.exports = function createNewExcelFile(type, nhaps, xuats)
 {
     var Excel = require('exceljs');
     // A new Excel Work Book
@@ -11,41 +64,22 @@ module.exports = function createNewExcelFile(state, type, docs)
     workbook.modified = new Date();
     workbook.lastPrinted = new Date();
 
-    // Create a sheet
-    var sheet = workbook.addWorksheet(state + type);
     // A table header
-    if (type == 'linhkien') {
-        sheet.columns = [
-            { header: 'Tên Hàng', key: 'tenhang'},
-            { header: 'Part Number', key: 'partnum'},
-            { header: 'Sổ Hợp Đồng', key: 'sohopdong'},
-            { header: 'Sản Phẩm', key: 'sanpham'},
-            { header: 'Công Ty Nhập', key: 'cty'},
-            { header: 'Ngày Nhập', key: 'date'},
-            { header: 'Đơn Vị Tính', key: 'dvtinh'},
-            { header: 'Số Lượng', key: 'quantity'},
-            { header: 'Đơn Giá', key: 'dongia'},
-            { header: 'Thành Tiền', key: 'thanhtien'},
-        ]
-
-        // Add rows in the above header
-        docs.forEach(doc => {
-            
-        })
-        sheet.addRow({id: 1, course: 'HTML', url:'https://vlemonn.com/tutorial/html' });
-        sheet.addRow({id: 2, course: 'Java Script', url: 'https://vlemonn.com/tutorial/java-script'});
-        sheet.addRow({id: 3, course: 'Electron JS', url: 'https://vlemonn.com/tutorial/electron-js'});
-        sheet.addRow({id: 4, course: 'Node JS', url: 'https://vlemonn.com/tutorial/node-js'});
-    }
+    var sheet;
     if (type == 'thanhpham') {
-        sheet.columns = [
-            { header: 'Tên Hàng', id: 'tenhang'},
-            { header: 'MCU', id: 'mcu'},
-            { header: 'Sổ Hợp Đồng', id: 'sohopdong'},
-            { header: 'Chip', id: 'chip'},
-            { header: 'Ngày Nhập', id: 'date'},
-            { header: 'Số Lượng', id: 'quantity'},
-        ]
+        // Create a sheet
+        sheet = workbook.addWorksheet('nhap-thanhpham');
+        printThanhpham(sheet, nhaps);
+        // Create a sheet
+        sheet = workbook.addWorksheet('xuat-thanhpham');
+        printThanhpham(sheet, xuats);
+    }
+    if (type == 'linhkien') {
+        // Create a sheet
+        sheet = workbook.addWorksheet('nhap-linhkien');
+        printLinhkien(sheet, nhaps);
+        sheet = workbook.addWorksheet('xuat-linhkien');
+        printLinhkien(sheet, xuats);
     }
 
     // Save Excel on Hard Disk
