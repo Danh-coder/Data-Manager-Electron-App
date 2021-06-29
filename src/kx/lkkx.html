@@ -26,7 +26,7 @@
             
 
     </nav>
-    <form action="" style="margin-left: 5vw;" onsubmit="return processName()">
+    <form action="" style="margin-left: 5vw;">
         <label for="type" >Chọn hình thức kết xuất</label>
         <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
             <option value="date">Ngày</option>
@@ -126,9 +126,9 @@
             nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
             xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
             tons = ipcRenderer.sendSync('doc-ton-linhkien', {name});
-            return false;
         }
         function exportExcel() {
+            if (select.value === 'name') processName();
             ipcRenderer.send('excel-linhkien', [nhaps, xuats, tons]);
         }
     </script>
