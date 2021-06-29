@@ -51,7 +51,7 @@ function printThanhpham(sheet, arr) {
     })
 }
 
-module.exports = function createNewExcelFile(type, nhaps, xuats)
+module.exports = function createNewExcelFile(type, nhaps, xuats, tons)
 {
     var Excel = require('exceljs');
     // A new Excel Work Book
@@ -73,6 +73,11 @@ module.exports = function createNewExcelFile(type, nhaps, xuats)
         // Create a sheet
         sheet = workbook.addWorksheet('xuat-thanhpham');
         printThanhpham(sheet, xuats);
+        // Create a sheet
+        if (tons != undefined) {
+            sheet = workbook.addWorksheet('ton-thanhpham');
+            printThanhpham(sheet, tons);
+        }
     }
     if (type == 'linhkien') {
         // Create a sheet
@@ -80,6 +85,10 @@ module.exports = function createNewExcelFile(type, nhaps, xuats)
         printLinhkien(sheet, nhaps);
         sheet = workbook.addWorksheet('xuat-linhkien');
         printLinhkien(sheet, xuats);
+        if (tons != undefined) {
+            sheet = workbook.addWorksheet('ton-linhkien');
+            printLinhkien(sheet, tons);
+        }
     }
 
     // Save Excel on Hard Disk

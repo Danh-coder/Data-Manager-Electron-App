@@ -102,11 +102,12 @@
 
         //include electron package
         const {ipcRenderer} = require('electron');
-        var nhaps, xuats;
+        var nhaps, xuats, tons;
         function processAll() {
             if (select.value === 'all') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-all', {});
                 xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-all', {});
+                tons = undefined;
             }
         }
         function processDate() {
@@ -115,16 +116,18 @@
             if (datestart != '' && dateend != '') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-ngay', {datestart, dateend});
                 xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-ngay', {datestart, dateend});
+                tons = undefined;
             }
         }
         function processName() {
             var name = document.getElementById('nameinp').value;
             nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
             xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
+            tons = ipcRenderer.sendSync('doc-ton-thanhpham', {name});
             return false;
         }
         function exportExcel() {
-            ipcRenderer.send('excel-thanhpham', [nhaps, xuats]);
+            ipcRenderer.send('excel-thanhpham', [nhaps, xuats, tons]);
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

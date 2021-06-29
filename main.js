@@ -56,8 +56,12 @@ ipcMain.on('save-linhkien', async(event, obj) => {
 ipcMain.on('xuat-linhkien', async (event, obj) => {
   await database.xuat('linhkien', obj);
 })
+ipcMain.on('doc-ton-linhkien', async (event, {name}) => {
+  const tons = await database.readStorage('linhkien', name);
+  event.returnValue = tons;
+})
 ipcMain.on('excel-linhkien', async (event, state) => {
-  await createExcelFile('linhkien', state[0], state[1]);
+  await createExcelFile('linhkien', state[0], state[1], state[2]);
 })
 
   // Nhap ////////////////////
@@ -114,8 +118,12 @@ ipcMain.on('save-thanhpham', async (event, obj) => {
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   await database.xuat('thanhpham', obj);
 })
+ipcMain.on('doc-ton-thanhpham', async (event, {name}) => {
+  const tons = await database.readStorage('thanhpham', name);
+  event.returnValue = tons;
+})
 ipcMain.on('excel-thanhpham', async (event, state) => {
-  await createExcelFile('thanhpham', state[0], state[1]);
+  await createExcelFile('thanhpham', state[0], state[1], state[2]);
 })
 
   // Nhap //////////////////
