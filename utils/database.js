@@ -193,7 +193,10 @@ module.exports = {
     },
     readStorage: async (type, name) => {
         var infos = [];
-        const querySnapshot = await db.collection(`ton-${type}`).where('tenhang', '==', name).get();
+        var querySnapshot;
+        if (name == '') querySnapshot = await db.collection(`ton-${type}`).get();
+        else querySnapshot = await db.collection(`ton-${type}`).where('tenhang', '==', name).get();
+
         querySnapshot.forEach(doc => {
             if (doc.data().quantity != 0) infos.push(doc.data());
         })

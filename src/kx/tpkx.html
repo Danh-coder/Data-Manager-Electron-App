@@ -122,7 +122,8 @@
             if (select.value === 'all') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-all', {});
                 xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-all', {});
-                tons = undefined;
+                tons = ipcRenderer.sendSync('doc-ton-thanhpham', {name: ''});
+                print();
             }
         }
         function processDate() {
