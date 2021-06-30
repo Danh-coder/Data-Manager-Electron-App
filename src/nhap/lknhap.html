@@ -108,7 +108,7 @@
         ipcRenderer.on('edit-receive', (event, doc) => {
             const form = $('form');
             form.empty();
-            form.attr("id", 'edit')
+            form.attr("id", 'edit');
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
 

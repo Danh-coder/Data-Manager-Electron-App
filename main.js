@@ -17,7 +17,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
-    }
+    },
   })
   Menu.setApplicationMenu(null)
   mainWindow.loadFile('src/index.html')
@@ -177,7 +177,5 @@ ipcMain.on('xoa-xuat-thanhpham', async (event, id) => {
 // Edit file in general ///////////////////////
 ipcMain.on('edit-send', async (event, obj) => {
   let doc = await database.readFollowingId(obj);
-  mainWindow.webContents.once('dom-ready', () => {
-    mainWindow.webContents.send('edit-receive', doc);
-  });
+  mainWindow.webContents.send('edit-receive', doc);
 })

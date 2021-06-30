@@ -33,7 +33,7 @@
     </nav>
     <form action="" style="margin-left: 5vw;" onsubmit="return processName()">
         <label for="type" >Chọn hình thức hiển thị</label>
-        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction()">
+        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
             
             <option value="date">Ngày</option>
             <option value="name">Sản phẩm</option>
@@ -142,8 +142,12 @@
         }
 
         // Option All
-        docs = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
-        print();
+        function processAll() {
+            if (select.value == 'all') {
+                docs = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                print();
+            }
+        }
 
         //Other options
         function processDate() {
