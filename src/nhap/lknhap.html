@@ -57,7 +57,7 @@
             <input type="number" class="form-control" id="dongia" placeholder="Đơn giá" required>
             
             <label for="thanhtien">Thành tiền</label>
-            <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" required>
+            <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
             <div class="form-group row" style="margin: 30px 0;">
                 <input id="sbm-btn" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
                 <button class="col-6 form-control" onclick="location.href='nhap.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
@@ -75,6 +75,14 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script>
+        var thanhtien = document.getElementById('thanhtien').value;
+        var formChange = document.getElementById('save')
+        formChange.addEventListener('change', (e) => {
+            thanhtien = document.getElementById('dongia').value *document.getElementById('quantity').value 
+            document.getElementById('thanhtien').placeholder = document.getElementById('dongia').value *document.getElementById('quantity').value
+        })
+
+
         function prepareObj() {
             const tenhang = document.getElementById('tenhang').value;
             const partnum = document.getElementById('partnum').value;
@@ -85,8 +93,8 @@
             const dvtinh = document.getElementById('dvtinh').value;
             const quantity = document.getElementById('quantity').value;
             const dongia = document.getElementById('dongia').value;
-            const thanhtien = document.getElementById('thanhtien').value;
-
+            
+            
             const obj = {
                 tenhang: tenhang,
                 partnum: partnum,
