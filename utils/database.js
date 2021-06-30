@@ -190,5 +190,13 @@ module.exports = {
             ...doc.data()
         }
         return await (obj);
+    },
+    readStorage: async (type, name) => {
+        var infos = [];
+        const querySnapshot = await db.collection(`ton-${type}`).where('tenhang', '==', name).get();
+        querySnapshot.forEach(doc => {
+            if (doc.data().quantity != 0) infos.push(doc.data());
+        })
+        return await (infos);
     }
 }
