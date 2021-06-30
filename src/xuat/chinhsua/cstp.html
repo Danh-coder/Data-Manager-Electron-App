@@ -140,7 +140,7 @@
         // Option All
         function processAll() {
             if (select.value == 'all') {
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-all', {});
                 print();
             }
         }
