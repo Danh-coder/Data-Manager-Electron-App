@@ -61,7 +61,7 @@ ipcMain.on('doc-ton-linhkien', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-linhkien', async (event, state) => {
-  await createExcelFile('linhkien', state[0], state[1], state[2]);
+  await createExcelFile('linhkien', state[0], state[1]);
 })
 
   // Nhap ////////////////////
@@ -123,7 +123,7 @@ ipcMain.on('doc-ton-thanhpham', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-thanhpham', async (event, state) => {
-  await createExcelFile('thanhpham', state[0], state[1], state[2]);
+  await createExcelFile('thanhpham', state[0], state[1]);
 })
 
   // Nhap //////////////////

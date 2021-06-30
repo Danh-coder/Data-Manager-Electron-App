@@ -26,7 +26,7 @@
             
 
     </nav>
-    <form action="" style="margin-left: 5vw;">
+    <form action="" style="margin-left: 5vw;" onsubmit="return processName()">
         <label for="type" >Chọn hình thức kết xuất</label>
         <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
             <option value="date">Ngày</option>
@@ -44,13 +44,12 @@
 
     <div class="row main-row">
         
-<!-- 
-        <div class="col-6" id="nhap" style="border-right: 1px solid black;">
-            <h1 style="text-align: center;">Nhập</h1>
+        <div class="col-6" id="ton" style="border-right: 1px solid black;">
+            <h1 style="text-align: center;">Tồn</h1>
 
         </div>
 
-        <div class="col-6" id="xuat">
+        <!-- <div class="col-6" id="xuat">
             <h1 style="text-align: center;">Xuất</h1>
         </div> -->
 
@@ -105,6 +104,22 @@
         //include electron package
         const {ipcRenderer} = require('electron');
         var nhaps, xuats, tons;
+
+        function print() {
+            var box = $('#ton');
+            $('#ton div').remove();
+
+            tons.forEach(doc => {
+                var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
+                var tenhang = $('<p></p>').html('Ten hang: ' + doc.tenhang);
+                var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
+                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
+
+                block.append(tenhang, dvtinh, quantity);
+                box.append(block);
+            });
+        }
+
         function processAll() {
             if (select.value === 'all') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
@@ -126,10 +141,11 @@
             nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
             xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
             tons = ipcRenderer.sendSync('doc-ton-linhkien', {name});
+            print();
+            return false;
         }
         function exportExcel() {
-            if (select.value === 'name') processName();
-            ipcRenderer.send('excel-linhkien', [nhaps, xuats, tons]);
+            ipcRenderer.send('excel-linhkien', [nhaps, xuats]);
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
