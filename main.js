@@ -54,7 +54,9 @@ ipcMain.on('save-linhkien', async(event, obj) => {
   await database.save('linhkien', obj);
 })
 ipcMain.on('xuat-linhkien', async (event, obj) => {
-  await database.xuat('linhkien', obj);
+  var success = await database.xuat('linhkien', obj);
+
+  event.returnValue = success;
 })
 ipcMain.on('doc-ton-linhkien', async (event, {name}) => {
   const tons = await database.readStorage('linhkien', name);
@@ -116,7 +118,9 @@ ipcMain.on('save-thanhpham', async (event, obj) => {
   await database.save('thanhpham', obj);
 })
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
-  await database.xuat('thanhpham', obj);
+  const success = await database.xuat('thanhpham', obj);
+
+  event.returnValue = success;
 })
 ipcMain.on('doc-ton-thanhpham', async (event, {name}) => {
   const tons = await database.readStorage('thanhpham', name);
@@ -177,5 +181,7 @@ ipcMain.on('xoa-xuat-thanhpham', async (event, id) => {
 // Edit file in general ///////////////////////
 ipcMain.on('edit-send', async (event, obj) => {
   let doc = await database.readFollowingId(obj);
-  mainWindow.webContents.send('edit-receive', doc);
+  mainWindow.webContents.once('dom-ready', () => {
+    mainWindow.webContents.send('edit-receive', doc);
+  })
 })
