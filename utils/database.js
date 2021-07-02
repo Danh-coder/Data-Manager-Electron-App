@@ -74,14 +74,21 @@ const edit = async (state, type, {id, ...body}) => {
         const querySnapshot = await database.where('tenhang','==',body.tenhang).get();
         querySnapshot.forEach(async(doc) => {
             if (doc.data().dvtinh == body.dvtinh || doc.data().quantity == docRef.data().quantity) {
-                var newQuantity = (doc.data().dvtinh == body.dvtinh) ? doc.data().quantity + delta : body.quantity;
-                await db.collection(`log-${type}`).doc(id).update(body);
-                await database.doc(doc.id).update({
-                    dvtinh: body.dvtinh,
-                    quantity: newQuantity
-                })
-                console.log(`Updated log-${type}`);
-                console.log(`Updated ton-${type}`);
+                if (state == 'xuat' && doc.data().quantity + delta < 0) {
+                    let err = 'This quantity is over what we have in the storage, which is only: ' + (doc.data().quantity + docRef.data().quantity) + " " + doc.data().dvtinh;
+                    dialog.showErrorBox("Can't edit data", err);
+                    success = false;
+                }
+                else {
+                    var newQuantity = (doc.data().dvtinh == body.dvtinh) ? doc.data().quantity + delta : body.quantity;
+                    await db.collection(`log-${type}`).doc(id).update(body);
+                    await database.doc(doc.id).update({
+                        dvtinh: body.dvtinh,
+                        quantity: newQuantity
+                    })
+                    console.log(`Updated log-${type}`);
+                    console.log(`Updated ton-${type}`);
+                }
             }
             else {
                 dialog.showErrorBox("Can't edit data", "Please use the correct unit: " + doc.data().dvtinh);
