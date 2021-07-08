@@ -85,16 +85,19 @@
 
 
         function prepareObj() {
-            const tenhang = document.getElementById('tenhang').value;
-            const partnum = document.getElementById('partnum').value;
-            const sohopdong = document.getElementById('sohopdong').value;
-            const sanpham = document.getElementById('sanpham').value;
-            const cty = document.getElementById('cty').value;
-            const date = document.getElementById('date').value;
-            const dvtinh = document.getElementById('dvtinh').value;
-            const quantity = document.getElementById('quantity').value;
-            const dongia = document.getElementById('dongia').value;
-            
+            var tenhang = document.getElementById('tenhang').value;
+            var partnum = document.getElementById('partnum').value;
+            var sohopdong = document.getElementById('sohopdong').value;
+            var sanpham = document.getElementById('sanpham').value;
+            var cty = document.getElementById('cty').value;
+            var date = document.getElementById('date').value;
+            var dvtinh = document.getElementById('dvtinh').value;
+            var quantity = document.getElementById('quantity').value;
+            var dongia = document.getElementById('dongia').value;
+
+            if (dongia == "") dongia = "0";
+            if (quantity == "") quantity = "0";
+            if (thanhtien == "") thanhtien = "0";
             
             const obj = {
                 tenhang: tenhang,

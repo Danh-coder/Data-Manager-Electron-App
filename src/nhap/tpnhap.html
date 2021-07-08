@@ -62,12 +62,14 @@
         crossorigin="anonymous"></script>
     <script>
         function prepareObj() {
-            const tenhang = document.getElementById('tenhang').value;
-            const mcu = document.getElementById('mcu').value;
-            const sohopdong = document.getElementById('sohopdong').value;
-            const chip = document.getElementById('chip').value;
-            const date = document.getElementById('date').value;
-            const quantity = document.getElementById('quantity').value;
+            var tenhang = document.getElementById('tenhang').value;
+            var mcu = document.getElementById('mcu').value;
+            var sohopdong = document.getElementById('sohopdong').value;
+            var chip = document.getElementById('chip').value;
+            var date = document.getElementById('date').value;
+            var quantity = document.getElementById('quantity').value;
+
+            if (quantity == "") quantity = "0";
 
             const obj = {
                 tenhang: tenhang,

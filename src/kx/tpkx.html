@@ -67,8 +67,6 @@
         var select = document.getElementById('type')
         
         function myFunction() {
-            console.log(select.value)
-            console.log(document.querySelector('.lbl-date-form').value)
             if (select.value === 'name')
             {
                 document.getElementById('datestart').style.display = 'none'
@@ -137,6 +135,8 @@
         }
         function processName() {
             var name = document.getElementById('nameinp').value;
+            name = $.trim(name);
+
             nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
             xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
             tons = ipcRenderer.sendSync('doc-ton-thanhpham', {name});
