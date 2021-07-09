@@ -1,4 +1,5 @@
 const {BrowserWindow, ipcMain, dialog} = require('electron');
+const popup = require('./popup');
 const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -12,7 +13,7 @@ const firebaseConfig = {
     messagingSenderId: "646138430424",
     appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
     measurementId: "G-72YX6WP7VW"
-  };
+};
 
 firebase.initializeApp(firebaseConfig);
 
@@ -51,6 +52,7 @@ const save = async (type, body) => {
     if (canAdd) {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
+        popup('info', 'Success', 'Save data successfully');
         return true;
     }
     else return false;
@@ -88,6 +90,7 @@ const edit = async (state, type, {id, ...body}) => {
                     })
                     console.log(`Updated log-${type}`);
                     console.log(`Updated ton-${type}`);
+                    popup('info', 'Success', 'Save data successfully');
                 }
             }
             else {
@@ -158,6 +161,7 @@ const xuat = async(type, body) => {
     if (canAdd) {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
+        popup('info', 'Success', 'Save data successfully');
         return true;
     }
     else return false;
@@ -200,6 +204,7 @@ const readFollowingName = async (state, type, {name}) => {
             })
         }
     });
+    popup('info', 'Info', `Found: ${infos.length} in ${state}`);
     return await(infos);
 }
 const readFollowingId = async ({type, id}) => {

@@ -1,3 +1,5 @@
+const popup = require('./popup');
+
 function printLinhkien(sheet, arr) {
     sheet.columns = [
         { header: 'Tên Hàng', key: 'tenhang', width: 20},
@@ -87,5 +89,6 @@ module.exports = function createNewExcelFile(type, nhaps, xuats)
     .then(function() {
         // Success Message
         console.log('File excel saved');
+        popup('info', 'Success', 'File Excel is exported successfully');
     });
 }
