@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css" />
-
+    <link rel="stylesheet" href="oldcss/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
@@ -18,25 +18,62 @@
     <title>Tax</title>
 </head>
 <body>
-    <div class="row main-row">
+    <nav class="navbar navbar-light" style="padding: 0 !important;">
         
-        <div class="col-4 main nhap">
-            <a href="nhap/nhap.html">    
-                <h1>Nhập</h1>
-            </a>
+        <a class="navbar-brand" href="#" style="font-weight: 400;">Dư Thịnh</a>
+            
+        <div class="nav-icon">
+            <a class="nav-link" href="index.html">Home</a>
+        
+            <a class="nav-link" href="all.html">Nhập</a>
+        
+            <a class="nav-link" href="contact.html">Xuất</a>
+        
+            <a class="nav-link" href="#">Kết xuất</a>
+                
+            
+        </div>
+
+    </nav>
+        <div class="row" style="width: 100%; margin-top: 100px;">
+            
+            <div class="col-4">
+                <div style="background-color: #A77222; border-radius: 2%; width: 300px; height: 300px; flex-direction: column; display: flex; margin-left: auto; margin-right: auto;">
+                    <h1 style="text-align: center; color: white; margin-top: 20px;">Nhập</h1>
+                    <a href="nhap/lknhap.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 60px;">Linh kiện điện tử</a>
+                    <a href="nhap/tpnhap.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 25px;">Thành phẩm</a>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div style="background-color: #3E84C5; border-radius: 2%; width: 300px; height: 300px; flex-direction: column; display: flex; margin-left: auto; margin-right: auto;">
+                    <h1 style="text-align: center; color: white; margin-top: 20px;">Xuất</h1>
+                    <a href="xuat/lkxuat.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 60px;">Linh kiện điện tử</a>
+                    <a href="xuat/tpxuat.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 25px;">Thành phẩm</a>
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div style="background-color: #DBCF64; border-radius: 2%; width: 300px; height: 300px; flex-direction: column; display: flex; margin-left: auto; margin-right: auto;">
+                    <h1 style="text-align: center; color: white; margin-top: 20px;">Kết xuất</h1>
+                    <a href="kx/lkkx.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 60px;">Linh kiện điện tử</a>
+                    <a href="kx/tpkx.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 25px;">Thành phẩm</a>
+                </div>
+            </div>
+            
         </div>
         
-        <div class="col-4 main xuat">
-            <a href="xuat/xuat.html">    
-                <h1>Xuất</h1>
-            </a>
+        <div class="row" style="width: 100%; margin-top: 100px;">
+            
+            <div class="col-4">
+                <div style="background-color: #1f4775; border-radius: 2%; width: 300px; height: 300px; flex-direction: column; display: flex; margin-left: auto; margin-right: auto;">
+                    <h1 style="text-align: center; color: white; margin-top: 20px;">Chỉnh sửa</h1>
+                    <a href="nhap/chinhsua/cslk.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 60px;">Linh kiện điện tử</a>
+                    <a href="nhap/chinhsua/cstp.html" style="margin-left: 25px; color: white; font-size: 30px; margin-top: 25px;">Thành phẩm</a>
+                </div>
+            </div>
+
         </div>
-        <div class="col-4 main kx">
-            <a href="kx/kx.html">    
-                <h1>Kết xuất</h1>
-            </a>
-        </div>
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

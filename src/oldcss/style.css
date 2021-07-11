@@ -57,6 +57,7 @@
     text-transform: uppercase;
     margin-left: 20px;
     margin-right: 20px;
+    color: black !important;
 
   }
   .far {
@@ -70,8 +71,11 @@
     color: black;
   }
   .nav-icon {
+    
     position: absolute;
     right: 0;
+    display: flex;
+    justify-content: space-between;
   }
 
   /* product */
