@@ -20,15 +20,26 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-xl navbar-light" style="padding: 0 !important;">
+    <nav class="navbar navbar-light" style="padding: 0 !important;">
         
-        <a class="navbar-brand" href="../index.html" style="font-weight: 400;">Home</a>
+        <a class="navbar-brand" href="../index.html" style="font-weight: 400;">Back</a>
             
+        <div class="nav-icon">
+            <a class="nav-link" href="index.html">Home</a>
+        
+            <a class="nav-link" href="#">Nhập</a>
+        
+            <a class="nav-link" href="#">Xuất</a>
+        
+            <a class="nav-link" href="#">Kết xuất</a>
+                
             
+        </div>
 
     </nav>
     <div class="container">
     
+        <h1>Xuất linh kiện thành phẩm</h1>
         <form id="save" action="" class="form-group">
             <label for="tenhang">Tên hàng</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng">
@@ -64,7 +75,7 @@
 
         <div class="row" style="margin: 30px 0;">
             <input onclick="process()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
-            <button class="col-6 form-control" onclick="location.href='xuat.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
+            <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
     </div>
 
