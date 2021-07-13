@@ -24,11 +24,10 @@ const SuggestKeywords = (name) => {
         },
         onSelect: function(item) {
             input.value = item.label;
-            processName();
         },
         minLength: 0,
         showOnFocus: true,
         emptyMsg: "No items found",
-        disableAutoSelect: true
+        disableAutoSelect: true,
 });
 }
