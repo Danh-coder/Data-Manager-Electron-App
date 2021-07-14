@@ -181,7 +181,7 @@
             if (form.id == "edit") {
                 obj.id = document.getElementById('_id').value;
                 var canSubmit = ipcRenderer.sendSync('edit-nhap-linhkien', obj);
-                if (canSubmit) { form.action = "./chinhsua/cslk.html"; form.submit(); }
+                if (canSubmit) { form.action = "../chinhsua/cslk.html"; form.submit(); }
             }
         }
     </script>

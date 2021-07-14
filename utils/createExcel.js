@@ -52,8 +52,24 @@ function printThanhpham(sheet, arr) {
         })
     })
 }
+function printTon(sheet, arr) {
+    sheet.columns = [
+        { header: 'Tên Hàng', key: 'tenhang', width: 20},
+        { header: 'Số Lượng', key: 'quantity', width: 20},
+        { header: 'Đơn Vị Tính', key: 'dvtinh', width: 20},
+    ]
 
-module.exports = function createNewExcelFile(type, nhaps, xuats)
+    // Add rows in the above header
+    arr.forEach(doc => {
+        sheet.addRow({
+            tenhang: doc.tenhang,
+            quantity: doc.quantity,
+            dvtinh: doc.dvtinh
+        })
+    })
+}
+
+module.exports = function createNewExcelFile(type, nhaps, xuats, tons)
 {
     var Excel = require('exceljs');
     // A new Excel Work Book
@@ -75,13 +91,24 @@ module.exports = function createNewExcelFile(type, nhaps, xuats)
         // Create a sheet
         sheet = workbook.addWorksheet('xuat-thanhpham');
         printThanhpham(sheet, xuats);
+        //Create a sheet
+        if (tons != undefined) {
+            sheet = workbook.addWorksheet('ton-thanhpham');
+            printTon(sheet, tons);
+        }
     }
     if (type == 'linhkien') {
         // Create a sheet
         sheet = workbook.addWorksheet('nhap-linhkien');
         printLinhkien(sheet, nhaps);
+        //Create a sheet
         sheet = workbook.addWorksheet('xuat-linhkien');
         printLinhkien(sheet, xuats);
+        //Create a sheet
+        if (tons != undefined) {
+            sheet = workbook.addWorksheet('ton-linhkien');
+            printTon(sheet, tons);
+        }
     }
 
     // Save Excel on Hard Disk

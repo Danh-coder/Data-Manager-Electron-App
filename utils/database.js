@@ -53,6 +53,18 @@ const save = async (type, body) => {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
+
+        //Add keywords
+        var keyNames = Object.keys(body);
+        keyNames.forEach(key => {
+            if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+                return;
+            
+            db.collection('keywords').doc(key).update({
+                values: firebase.firestore.FieldValue.arrayUnion(body[key])
+            })
+        })
+
         return true;
     }
     else return false;
@@ -91,6 +103,20 @@ const edit = async (state, type, {id, ...body}) => {
                     console.log(`Updated log-${type}`);
                     console.log(`Updated ton-${type}`);
                     popup('info', 'Success', 'Save data successfully');
+
+                    //Add keywords
+                    var keyNames = Object.keys(body);
+                    keyNames.forEach(key => {
+                        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+                            return;
+                        
+                        db.collection('keywords').doc(key).update({
+                            values: firebase.firestore.FieldValue.arrayRemove(docRef[key])
+                        })
+                        db.collection('keywords').doc(key).update({
+                            values: firebase.firestore.FieldValue.arrayUnion(body[key])
+                        })
+                    })
                 }
             }
             else {
@@ -121,6 +147,18 @@ const del = async (state, type, id) => {
             })
             console.log(`Updated ton-${type}`);
         }
+    })
+
+    //Remove Keywords
+    var body = docRef.data();
+    var keyNames = Object.keys(body);
+    keyNames.forEach(key => {
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+            return;
+        
+        db.collection('keywords').doc(key).update({
+            values: firebase.firestore.FieldValue.arrayRemove(body[key])
+        })
     })
 }
 const xuat = async(type, body) => {
@@ -162,6 +200,18 @@ const xuat = async(type, body) => {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
+
+        //Add keywords
+        var keyNames = Object.keys(body);
+        keyNames.forEach(key => {
+            if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+                return;
+            
+            db.collection('keywords').doc(key).update({
+                values: firebase.firestore.FieldValue.arrayUnion(body[key])
+            })
+        })
+
         return true;
     }
     else return false;

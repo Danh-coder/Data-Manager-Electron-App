@@ -21,6 +21,7 @@
     "electron-packager": "^15.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "exceljs": "^4.2.1",
+    "file-saver": "^2.0.5",
     "firebase": "^8.6.7",
     "firebase-admin": "^9.9.0",
     "remote": "^0.2.6"

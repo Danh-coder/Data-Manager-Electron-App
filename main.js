@@ -23,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile('src/index.html')
 
 //   Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -63,7 +63,7 @@ ipcMain.on('doc-ton-linhkien', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-linhkien', async (event, state) => {
-  await createExcelFile('linhkien', state[0], state[1]);
+  await createExcelFile('linhkien', state[0], state[1], state[2]);
 })
 
   // Nhap ////////////////////
@@ -127,7 +127,7 @@ ipcMain.on('doc-ton-thanhpham', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-thanhpham', async (event, state) => {
-  await createExcelFile('thanhpham', state[0], state[1]);
+  await createExcelFile('thanhpham', state[0], state[1], state[2]);
 })
 
   // Nhap //////////////////

@@ -1,9 +1,9 @@
 const autocomplete = require('autocompleter');
-const Excel = require('../../utils/editExcel');
+const Keywords = require('../../utils/keywords');
 
 var info;
 (async () => {
-    info = await Excel.readKeywordsThanhpham();
+    info = await Keywords.readThanhpham();
     SuggestKeywords('tenhang');
     SuggestKeywords('mcu');
     SuggestKeywords('sohopdong');
@@ -25,11 +25,16 @@ const SuggestKeywords = (name) => {
             var suggestions;
             if (text.length = 0) suggestions = arr;
             // you can also use AJAX requests instead of preloaded data
-            else suggestions = arr.filter(n => n.label.toLowerCase().startsWith(text))
+            else suggestions = arr.filter(n => n.toLowerCase().startsWith(text))
             update(suggestions);
         },
         onSelect: function(item) {
-            input.value = item.label;
+            input.value = item;
+        },
+        render: function(item, currentValue){
+            const itemElement = document.createElement("div");
+            itemElement.textContent = item;
+            return itemElement;
         },
         showOnFocus: true,
         minLength: 0,

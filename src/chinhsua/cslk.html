@@ -63,14 +63,14 @@
     <div class="row main-row">
         
 
-        <div class="col-12" id="nhap" style="border-right: 1px solid black;">
+        <div class="col-12" style="border-right: 1px solid black;">
             <h1 style="text-align: center;">Chỉnh sửa linh kiện điện tử</h1>
 
             <div class="row" style="margin-top: 50px;">
-                <div class="col-6" style="text-align: center; border-right: 1px black solid;">
+                <div id="nhap" class="col-6" style="text-align: center; border-right: 1px black solid;">
                     <h3>Nhập</h3>
                 </div>
-                <div class="col-6" style="text-align: center;">
+                <div id="xuat" class="col-6" style="text-align: center;">
                     <h3>Xuất</h3>
                 </div>
             </div>
@@ -126,9 +126,9 @@
         const {ipcRenderer} = require('electron');
         var docs;
 
-        function print() {
-            var box = $('#nhap');
-            $('#nhap div').remove();
+        function print(state) {
+            var box = $(`#${state}`);
+            $(`#${state} div`).remove();
             docs.forEach(doc => {
                 var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
                 var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
@@ -164,7 +164,9 @@
         function processAll() {
             if (select.value == 'all') {
                 docs = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
-                print();
+                print('nhap');
+                docs = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+                print('xuat');
             }
         }
 
@@ -174,7 +176,9 @@
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
                 docs = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
-                print();
+                print('nhap')
+                docs = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
+                print('xuat');
             }
         }
         function processName() {
@@ -182,7 +186,9 @@
             name = $.trim(name);
 
             docs = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
-            print();
+            print('nhap');
+            docs = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
+            print('xuat');
             return false;
         }
     </script>
