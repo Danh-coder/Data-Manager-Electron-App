@@ -1,4 +1,6 @@
 const Excel = require('exceljs');
+const Dialogs = require('dialogs');
+const dialogs = Dialogs();
 var workbook = new Excel.Workbook();
 
 const readExcel = (name) => {
@@ -38,8 +40,14 @@ const readKeywordsThanhpham = async () => {
     }
 }
 
-const addKeyword = () => {
+const addKeyword = async (sheet, name) => {
+    await workbook.xlsx.readFile('keywords.xlsx');
+    var worksheet = workbook.getWorksheet(sheet);
+    worksheet.addRow([name]);
+    await workbook.xlsx.writeFile('keywords.xlsx');
 
+    //popup in renderer side
+    await dialogs.alert('Add Keywords successfully');
 }
 
 module.exports = {
