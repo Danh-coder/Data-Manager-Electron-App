@@ -20,8 +20,8 @@ input.onchange = async (e) => {
 const processExcelFile = () => {
     const worksheet = workbook.getWorksheet('Danh mục VTHH');
 
-    var partnumColumn = worksheet.getColumn(2);
-    var tenhangColumn = worksheet.getColumn(1);
+    var tenhangColumn = worksheet.getColumn(2);
+    var partnumColumn = worksheet.getColumn(1);
     var dvtinhColumn = worksheet.getColumn(4);
 
     partnumColumn = partnumColumn.values;
