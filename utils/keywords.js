@@ -34,10 +34,10 @@ const readLinhkien = async () => {
 
 const readThanhpham = async () => {
     var tenhang, mcu, sohopdong, chip;
-    tenhang = read('tenhang');
-    mcu = read('mcu');
-    sohopdong = read('sohopdong');
-    chip = read('chip');
+    tenhang = await read('tenhang');
+    mcu = await read('mcu');
+    sohopdong = await read('sohopdong');
+    chip = await read('chip');
     return {
         tenhang, mcu, sohopdong, chip
     }
