@@ -20,14 +20,15 @@ const read = async (name) => {
 }
 
 const readLinhkien = async () => {
-    var tenhang_partnum, sohopdong, sanpham, cty, dvtinh;
+    var tenhang, tenhang_partnum, sohopdong, sanpham, cty, dvtinh;
     tenhang_partnum = await read('tenhang + partnum');
+    tenhang = await read('tenhang');
     sohopdong = await read('sohopdong');
     sanpham = await read('sanpham');
     cty = await read('cty');
     dvtinh = await read('dvtinh');
     return {
-        tenhang_partnum, sohopdong, sanpham, cty, dvtinh
+        tenhang, tenhang_partnum, sohopdong, sanpham, cty, dvtinh
     }
 }
 

@@ -4,7 +4,7 @@ const Keywords = require('../../utils/keywords');
 var info;
 (async () => {
     info = await Keywords.readLinhkien();
-    SuggestKeywordsSpecial('tenhang');
+    SuggestKeywords('tenhang');
     SuggestKeywordsSpecial('partnum');
     SuggestKeywords('sohopdong');
     SuggestKeywords('sanpham');
@@ -15,6 +15,7 @@ var info;
 const SuggestKeywords = (name) => {
     var input = document.getElementById(name);
     var arr;
+    if (name == 'tenhang') arr = info.tenhang;
     if (name == 'sohopdong') arr = info.sohopdong;
     if (name == 'sanpham') arr = info.sanpham;
     if (name == 'cty') arr = info.cty;
@@ -32,7 +33,6 @@ const SuggestKeywords = (name) => {
         },
         onSelect: function(item) {
             input.value = item;
-            console.log(input.id);
         },
         render: function(item, currentValue){
             const itemElement = document.createElement("div");
@@ -53,7 +53,7 @@ const SuggestKeywordsSpecial = (name) => {
         input: input,
         fetch: function(text, update) {
             text = text.toLowerCase();
-            var suggestions = [];
+            var suggestions;
             if (text.length == 0) suggestions = arr;
             // you can also use AJAX requests instead of preloaded data
             else suggestions = arr.filter(n => n[name].toLowerCase().startsWith(text))
