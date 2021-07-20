@@ -19,6 +19,68 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
+// -------------------------------------Keywords Processes-------------------------------------
+const addKeywordLinhkien = (body) => {
+    db.collection('keywords').doc('tenhang + partnum').update({
+        values: firebase.firestore.FieldValue.arrayUnion({
+            tenhang: body.tenhang,
+            partnum: body.partnum
+        })
+    })
+
+    var keyNames = Object.keys(body);
+    keyNames.forEach(key => {
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+            return;
+        
+        db.collection('keywords').doc(key).update({
+            values: firebase.firestore.FieldValue.arrayUnion(body[key])
+        })
+    })
+}
+const addKeywordThanhpham = (body) => {
+    var keyNames = Object.keys(body);
+    keyNames.forEach(key => {
+        if (key == 'state' || key == 'quantity' || key == 'date')
+            return;
+        
+        db.collection('keywords').doc(key).update({
+            values: firebase.firestore.FieldValue.arrayUnion(body[key])
+        })
+    })
+}
+const removeKeywordLinhkien = (body) => {
+    //Remove pair tenhang-partnum
+    db.collection('keywords').doc('tenhang + partnum').update({
+        values: firebase.firestore.FieldValue.arrayRemove({
+            tenhang: body.tenhang,
+            partnum: body.partnum
+        })
+    })
+
+    var keyNames = Object.keys(body);
+    keyNames.forEach(key => {
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+            return;
+        
+        db.collection('keywords').doc(key).update({
+            values: firebase.firestore.FieldValue.arrayRemove(body[key])
+        })
+    })
+}
+const removeKeywordThanhpham = (body) => {
+    var keyNames = Object.keys(body);
+    keyNames.forEach(key => {
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+            return;
+        
+        db.collection('keywords').doc(key).update({
+            values: firebase.firestore.FieldValue.arrayRemove(body[key])
+        })
+    })
+}
+
+// -------------------------------------Database processes--------------------------------------
 const save = async (type, body) => {
     const database = db.collection(`ton-${type}`);
     //Add data to ton-... database and check if can add data to log-... or not
@@ -55,15 +117,8 @@ const save = async (type, body) => {
         popup('info', 'Success', 'Save data successfully');
 
         //Add keywords
-        var keyNames = Object.keys(body);
-        keyNames.forEach(key => {
-            if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
-                return;
-            
-            db.collection('keywords').doc(key).update({
-                values: firebase.firestore.FieldValue.arrayUnion(body[key])
-            })
-        })
+        if (type == 'linhkien') addKeywordLinhkien(body);
+        else addKeywordThanhpham(body);
 
         return true;
     }
@@ -105,18 +160,14 @@ const edit = async (state, type, {id, ...body}) => {
                     popup('info', 'Success', 'Save data successfully');
 
                     //Add keywords
-                    var keyNames = Object.keys(body);
-                    keyNames.forEach(key => {
-                        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
-                            return;
-                        
-                        db.collection('keywords').doc(key).update({
-                            values: firebase.firestore.FieldValue.arrayRemove(docRef[key])
-                        })
-                        db.collection('keywords').doc(key).update({
-                            values: firebase.firestore.FieldValue.arrayUnion(body[key])
-                        })
-                    })
+                    if (type == 'linhkien') {
+                        removeKeywordLinhkien(docRef.data());
+                        addKeywordLinhkien(body);
+                    }
+                    else {
+                        removeKeywordThanhpham(docRef.data());
+                        addKeywordThanhpham(body);
+                    }
                 }
             }
             else {
@@ -151,15 +202,8 @@ const del = async (state, type, id) => {
 
     //Remove Keywords
     var body = docRef.data();
-    var keyNames = Object.keys(body);
-    keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
-            return;
-        
-        db.collection('keywords').doc(key).update({
-            values: firebase.firestore.FieldValue.arrayRemove(body[key])
-        })
-    })
+    if (type == 'linhkien') removeKeywordLinhkien(body);
+    else removeKeywordThanhpham(body);
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
@@ -202,15 +246,8 @@ const xuat = async(type, body) => {
         popup('info', 'Success', 'Save data successfully');
 
         //Add keywords
-        var keyNames = Object.keys(body);
-        keyNames.forEach(key => {
-            if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
-                return;
-            
-            db.collection('keywords').doc(key).update({
-                values: firebase.firestore.FieldValue.arrayUnion(body[key])
-            })
-        })
+        if (type == 'linhkien') addKeywordLinhkien(body);
+        else addKeywordThanhpham(body);
 
         return true;
     }

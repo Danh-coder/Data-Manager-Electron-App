@@ -3,7 +3,7 @@ const Keywords = require('../../utils/keywords');
 
 var info;
 (async () => {
-    info = await Keywords.readLinhkien();
+    info = await Keywords.readThanhpham();
     SuggestKeywords('nameinp');
 })()
 
@@ -17,7 +17,7 @@ const SuggestKeywords = (name) => {
         fetch: function(text, update) {
             text = text.toLowerCase();
             var suggestions;
-            if (text.length = 0) suggestions = arr;
+            if (text.length == 0) suggestions = arr;
             // you can also use AJAX requests instead of preloaded data
             else suggestions = arr.filter(n => n.toLowerCase().startsWith(text))
             update(suggestions);
