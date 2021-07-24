@@ -21,6 +21,7 @@ const processExcelFile = () => {
     const worksheet = workbook.getWorksheet(1);
 
     var keyPair = []; //Containing tenhang and partnum values as pairs
+    //var added = {}; //Mark if the tenhang has been already added to the array ==> Avoid adding similar tenhangs
     var tenhangColumn = worksheet.getColumn(2);
     var partnumColumn = worksheet.getColumn(1);
     var dvtinhColumn = worksheet.getColumn(3);
@@ -41,15 +42,26 @@ const processExcelFile = () => {
             //Change to the proper values to add to the database successfully
             tenhangColumn[i] = (tenhangColumn[i] == undefined ? "" : tenhangColumn[i]);
             partnumColumn[i] = (partnumColumn[i] == undefined ? "" : partnumColumn[i]);
-            //Save pair to the array
+
             keyPair.push({
                 tenhang: tenhangColumn[i],
                 partnum: partnumColumn[i]
             })
+
+            // if (added[tenhangColumn[i]] == undefined) { //Not added to keyPair yet
+            //     //Save pair to the array
+            //     keyPair.push({
+            //         tenhang: tenhangColumn[i],
+            //         partnum: partnumColumn[i]
+            //     })
+            //     //Mark tenhang has been added
+            //     added[tenhangColumn[i]] = true;
+            // } 
         }
     }
     Keywords.addKeyword('tenhang + partnum', keyPair);
     Keywords.addKeyword('tenhang', tenhangColumn);
+    Keywords.addKeyword('partnum', partnumColumn);
 
     dvtinhColumn = dvtinhColumn.values;
     dvtinhColumn.shift(); dvtinhColumn.shift();

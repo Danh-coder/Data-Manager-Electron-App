@@ -30,7 +30,7 @@ const addKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -60,7 +60,7 @@ const removeKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
             return;
         
         db.collection('keywords').doc(key).update({
