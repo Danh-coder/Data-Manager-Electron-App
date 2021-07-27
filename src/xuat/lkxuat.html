@@ -41,12 +41,12 @@
     
         <h1>Xuất linh kiện thành phẩm</h1>
         <form id="save" action="" class="form-group">
+            <label for="partnum">Part number</label>
+            <input type="text" class="form-control" id="partnum" placeholder="Part number">
+            
             <label for="tenhang">Tên hàng</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng">
             
-            <label for="partnum">Part number</label>
-            <input type="text" class="form-control" id="partnum" placeholder="Part number">
-
             <label for="sohopdong">Số hợp đồng</label>
             <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng">
             
@@ -134,12 +134,12 @@
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
 
-                <label for="tenhang">Tên hàng</label>
-                <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng" value="${doc.tenhang}" required>
-
                 <label for="partnum">Part number</label>
                 <input type="text" class="form-control" id="partnum" placeholder="Part number" value="${doc.partnum}" required>
 
+                <label for="tenhang">Tên hàng</label>
+                <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng" value="${doc.tenhang}" required>
+               
                 <label for="sohopdong">Số hợp đồng</label>
                 <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" value="${doc.sohopdong}" required>
 

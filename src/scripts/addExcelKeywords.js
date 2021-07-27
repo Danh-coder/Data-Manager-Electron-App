@@ -47,21 +47,10 @@ const processExcelFile = () => {
                 tenhang: tenhangColumn[i],
                 partnum: partnumColumn[i]
             })
-
-            // if (added[tenhangColumn[i]] == undefined) { //Not added to keyPair yet
-            //     //Save pair to the array
-            //     keyPair.push({
-            //         tenhang: tenhangColumn[i],
-            //         partnum: partnumColumn[i]
-            //     })
-            //     //Mark tenhang has been added
-            //     added[tenhangColumn[i]] = true;
-            // } 
         }
     }
     Keywords.addKeyword('tenhang + partnum', keyPair);
     Keywords.addKeyword('tenhang', tenhangColumn);
-    Keywords.addKeyword('partnum', partnumColumn);
 
     dvtinhColumn = dvtinhColumn.values;
     dvtinhColumn.shift(); dvtinhColumn.shift();

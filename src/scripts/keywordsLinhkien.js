@@ -5,7 +5,7 @@ var info;
 (async () => {
     info = await Keywords.readLinhkien();
     SuggestKeywordsSpecial('tenhang');
-    SuggestKeywords('partnum');
+    SuggestKeywordsSpecial('partnum');
     SuggestKeywords('sohopdong');
     SuggestKeywords('sanpham');
     SuggestKeywords('cty');
@@ -15,7 +15,6 @@ var info;
 const SuggestKeywords = (name) => {
     var input = document.getElementById(name);
     var arr;
-    if (name == 'partnum') arr = info.partnum;
     if (name == 'sohopdong') arr = info.sohopdong;
     if (name == 'sanpham') arr = info.sanpham;
     if (name == 'cty') arr = info.cty;
@@ -47,7 +46,10 @@ const SuggestKeywords = (name) => {
 
 const SuggestKeywordsSpecial = (name) => {
     var input = document.getElementById(name);
-    var arr = info.tenhang_partnum;
+    var arr = JSON.parse( JSON.stringify(info.tenhang_partnum)); //Only copy values of the 'info' variable
+    if (name == 'tenhang') {
+        arr = deleteSimilarTenhang(arr); //Show all suggestions in partnum input
+    }
 
     autocomplete({
         input: input,
@@ -57,7 +59,6 @@ const SuggestKeywordsSpecial = (name) => {
             if (text.length == 0) suggestions = arr;
             // you can also use AJAX requests instead of preloaded data
             else suggestions = arr.filter(n => n[name].toLowerCase().startsWith(text))
-            suggestions = deleteSimilarTenhang(suggestions);
 
             update(suggestions);
         },
