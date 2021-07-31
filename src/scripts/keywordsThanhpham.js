@@ -18,8 +18,6 @@ const SuggestKeywords = (name) => {
     if (name == 'sohopdong') arr = info.sohopdong;
     if (name == 'chip') arr = info.chip;
 
-    console.log(arr);
-
     autocomplete({
         input: input,
         fetch: function(text, update) {

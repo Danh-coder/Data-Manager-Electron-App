@@ -65,7 +65,10 @@
             <h1 style="text-align: center;">Xuất</h1> -->
         <button onclick="exportExcel()" style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);">Xuất file excel</button>
 
-
+        <div id="sheet-buttons">
+        </div>
+        <div class="col-12" id="grid" style="visibility: hidden;">
+        </div>
     </div>
 
     <!-- Insert this line above script imports  -->
@@ -74,6 +77,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/canvas-datagrid"></script>
+    <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/keywordsName.js"></script>
     <script>
         var select = document.getElementById('type')
@@ -156,6 +161,7 @@
             return false;
         }
         function exportExcel() {
+            printExcel(nhaps, xuats, tons, 'Thanhpham'); //Print datas as an excel file on the program
             ipcRenderer.send('excel-thanhpham', [nhaps, xuats, tons]);
         }
     </script>
