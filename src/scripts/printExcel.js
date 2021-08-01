@@ -41,8 +41,8 @@ var displayLinhkien = (arr) => {
     var tmp = [];
     arr.forEach(product => {
         var row = {
-            col1: product.tenhang,
-            col2: product.partnum,
+            col1: product.partnum,
+            col2: product.tenhang,
             col3: product.sohopdong,
             col4: product.sanpham,
             col5: product.cty,
@@ -58,11 +58,11 @@ var displayLinhkien = (arr) => {
     //Rename the header of each column
     grid.schema = [
         {
-            title: 'Tên Hàng',
+            title: 'Part Number',
             name: 'col1',
         },
         {
-            title: 'Part Number',
+            title: 'Tên Hàng',
             name: 'col2',
         },
         {

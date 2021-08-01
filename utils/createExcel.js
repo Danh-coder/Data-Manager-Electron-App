@@ -2,8 +2,8 @@ const popup = require('./popup');
 
 function printLinhkien(sheet, arr) {
     sheet.columns = [
-        { header: 'Tên Hàng', key: 'tenhang', width: 20},
         { header: 'Part Number', key: 'partnum', width: 20},
+        { header: 'Tên Hàng', key: 'tenhang', width: 20},
         { header: 'Sổ Hợp Đồng', key: 'sohopdong', width: 20},
         { header: 'Sản Phẩm', key: 'sanpham', width: 20},
         { header: 'Công Ty Nhập', key: 'cty', width: 20},
@@ -17,8 +17,8 @@ function printLinhkien(sheet, arr) {
     // Add rows in the above header
     arr.forEach(doc => {
         sheet.addRow({
-            tenhang: doc.tenhang,
             partnum: doc.partnum,
+            tenhang: doc.tenhang,
             sohopdong: doc.sohopdong,
             sanpham: doc.sanpham,
             cty: doc.cty,
