@@ -1,10 +1,16 @@
+// Grid Table Setup
 var _grid = document.getElementById('grid');
 var grid = canvasDatagrid({
     parentNode: _grid
 });
 grid.style.height = '100%';
 grid.style.width = '100%';
+// Firestore Database Setup
+const firebase = require("firebase");
+require("firebase/firestore");
+const db = firebase.firestore();
 
+//Print excel in ketxuat
 var printExcel = (nhaps, xuats, tons, type) => {
     if (nhaps == undefined && xuats == undefined) return;
 
@@ -19,7 +25,6 @@ var printExcel = (nhaps, xuats, tons, type) => {
     //Print the first spreedsheet also the 'Nhập' one
     $('#sheet-buttons button').first().trigger('click');
 }
-
 var createBtn = (name, type) => {
     var buttons = $('#sheet-buttons');
     var btn = $('<button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);"></button>').html(name);
@@ -30,10 +35,26 @@ var createBtn = (name, type) => {
     buttons.append(btn);
 }
 
+//Print recent submissions in nhap,xuat
+var printRecentSubmissions = async (type, state) => {
+    var submissions = ipcRenderer.sendSync('recent-submissions');
+    var arr = await filter(type, state, submissions);
+    if (type == 'linhkien') displayLinhkien(arr);
+    if (type == 'thanhpham') displayThanhpham(arr);
+}
+var filter = async (type, state, submissions) => {
+    var arr = [];
+    for (var index = submissions.length - 1; index >= 0; index--) {
+        var id = submissions[index];
+        const doc = await db.collection(`log-${type}`).doc(id).get(); //Get document from log-... collection in database 
+        if (doc.data().state == state) arr.push(doc.data());
+    }
+    return arr;
+}
+
 var resize = () => {
     _grid.style.height = (window.innerHeight - 150) + 'px';
 }
-
 var displayLinhkien = (arr) => {
     _grid.style.visibility = 'visible';
     resize(); //make the grid more good-looking

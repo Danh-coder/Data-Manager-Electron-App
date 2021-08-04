@@ -80,6 +80,17 @@ const removeKeywordThanhpham = (body) => {
     })
 }
 
+// ---------------------------------Recent Submissions Processes---------------------------------
+var recent = [];
+const addSubmission = (id) => {
+    recent.push(id);
+}
+const deleteSubmission = (id) => {
+    var index = recent.indexOf(id);
+    if (index >= 0) recent.splice(index, 1);
+}
+
+
 // -------------------------------------Database processes--------------------------------------
 const save = async (type, body) => {
     const database = db.collection(`ton-${type}`);
@@ -119,6 +130,8 @@ const save = async (type, body) => {
         //Add keywords
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
+        //Now it's the most recent submission
+        addSubmission(docRef.id);
 
         return true;
     }
@@ -168,6 +181,9 @@ const edit = async (state, type, {id, ...body}) => {
                         removeKeywordThanhpham(docRef.data());
                         addKeywordThanhpham(body);
                     }
+                    //Now it's the most recent submission
+                    deleteSubmission(id); //Remove id from recent submission list
+                    addSubmission(id); //Repush it to the end of the list
                 }
             }
             else {
@@ -204,6 +220,8 @@ const del = async (state, type, id) => {
     var body = docRef.data();
     if (type == 'linhkien') removeKeywordLinhkien(body);
     else removeKeywordThanhpham(body);
+    //If it is a recent submission, it won't be that anymore
+    deleteSubmission(docRef.id);
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
@@ -248,6 +266,8 @@ const xuat = async(type, body) => {
         //Add keywords
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
+        //Now it's a recent submission
+        addSubmission(docRef.id);
 
         return true;
     }
@@ -323,5 +343,6 @@ module.exports = {
     readFollowingDate: readFollowingDate,
     readFollowingName: readFollowingName,
     readFollowingId: readFollowingId,
-    readStorage: readStorage
+    readStorage: readStorage,
+    recentSubmissions: recent,
 }

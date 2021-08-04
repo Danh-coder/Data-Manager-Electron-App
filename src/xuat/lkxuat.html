@@ -77,6 +77,10 @@
             <input onclick="process()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
+
+        <div id="grid">
+            
+        </div>
     </div>
 
     <!-- Insert this line above script imports  -->
@@ -85,7 +89,13 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="../scripts/keywordsLinhkien.js"></script>
+    <script src="https://unpkg.com/canvas-datagrid"></script>
+    <script src="../scripts/printExcel.js"></script>
     <script>
+        const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
+        // Print recent submissions when first enter the page
+        printRecentSubmissions('linhkien', 'xuat');
+        
         var thanhtien = document.getElementById('thanhtien').value;
         var formChange = document.querySelector('form')
         formChange.addEventListener('change', (e) => {
@@ -125,7 +135,6 @@
             return obj;
         }
 
-        const {ipcRenderer} = require('electron');
         // Edit document also ////////////////////
         ipcRenderer.on('edit-receive', (event, doc) => {
             const form = $('form');

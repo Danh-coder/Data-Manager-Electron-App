@@ -51,10 +51,11 @@ const database = require('./utils/database')
 const createExcelFile = require('./utils/createExcel');
 // Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
-  await database.save('linhkien', obj);
+  const success = await database.save('linhkien', obj);
+  event.returnValue = success;
 })
 ipcMain.on('xuat-linhkien', async (event, obj) => {
-  var success = await database.xuat('linhkien', obj);
+  const success = await database.xuat('linhkien', obj);
 
   event.returnValue = success;
 })
@@ -115,7 +116,8 @@ ipcMain.on('xoa-xuat-linhkien', async (event, id) => {
 
 // Thanh pham
 ipcMain.on('save-thanhpham', async (event, obj) => {
-  await database.save('thanhpham', obj);
+  const success = await database.save('thanhpham', obj);
+  event.returnValue = success;
 })
 ipcMain.on('xuat-thanhpham', async (event, obj) => {
   const success = await database.xuat('thanhpham', obj);
@@ -184,4 +186,9 @@ ipcMain.on('edit-send', async (event, obj) => {
   mainWindow.webContents.once('dom-ready', () => {
     mainWindow.webContents.send('edit-receive', doc);
   })
+})
+// Pass recent submissions from backend to frontend processes
+ipcMain.on('recent-submissions', (event) => {
+  const submissions = database.recentSubmissions;
+  event.returnValue = submissions;
 })
