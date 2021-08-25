@@ -41,6 +41,8 @@
     
         <h1>Xuất linh kiện thành phẩm</h1>
         <form id="save" action="" class="form-group">
+            <input type="hidden" id="submissionDate" value="not added yet">
+
             <label for="partnum">Part number</label>
             <input type="text" class="form-control" id="partnum" placeholder="Part number">
             
@@ -114,10 +116,12 @@
             var dvtinh = document.getElementById('dvtinh').value;
             var quantity = document.getElementById('quantity').value;
             var dongia = document.getElementById('dongia').value;
+            var submissionDate = document.getElementById('submissionDate').value;
 
             if (dongia == "") dongia = "0";
             if (quantity == "") quantity = "0";
             if (thanhtien == "") thanhtien = "0";
+            if (submissionDate == "not added yet") submissionDate = new Date().toDateString();
 
             const obj = {
                 tenhang: tenhang,
@@ -130,6 +134,7 @@
                 quantity: parseInt(quantity, 10),
                 dongia: parseInt(dongia, 10),
                 thanhtien: parseInt(thanhtien, 10),
+                submissionDate: submissionDate,
                 state: 'xuat'
             }
             return obj;
@@ -142,6 +147,7 @@
             form.attr("id", 'edit')
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
+                <input type="hidden" id="submissionDate" value="${doc.submissionDate}">
 
                 <label for="partnum">Part number</label>
                 <input type="text" class="form-control" id="partnum" placeholder="Part number" value="${doc.partnum}" required>

@@ -47,7 +47,7 @@ var filter = async (type, state, submissions) => {
     for (var index = submissions.length - 1; index >= 0; index--) {
         var id = submissions[index];
         const doc = await db.collection(`log-${type}`).doc(id).get(); //Get document from log-... collection in database 
-        if (doc.data().state == state) arr.push(doc.data());
+        if (doc.data() != undefined && doc.data().state == state) arr.push(doc.data());
     }
     return arr;
 }

@@ -41,6 +41,8 @@
     
         <h1>Nhập thành phẩm</h1>
         <form id="save" action="" class="form-group">
+            <input type="hidden" id="submissionDate" value="not added yet">
+
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
             
@@ -91,8 +93,10 @@
             var chip = document.getElementById('chip').value;
             var date = document.getElementById('date').value;
             var quantity = document.getElementById('quantity').value;
+            var submissionDate = document.getElementById('submissionDate').value;
 
             if (quantity == "") quantity = "0";
+            if (submissionDate == "not added yet") submissionDate = new Date().toDateString();
 
             const obj = {
                 tenhang: tenhang,
@@ -102,6 +106,7 @@
                 date: date,
                 dvtinh: 'none',
                 quantity: parseInt(quantity, 10),
+                submissionDate: submissionDate,
                 state: 'nhap'
             }
             return obj;
@@ -114,6 +119,7 @@
             form.attr("id", 'edit')
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
+                <input type="hidden" id="submissionDate" value="${doc.submissionDate}">
 
                 <label for="tensp">Tên sản phẩm</label>
                 <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">

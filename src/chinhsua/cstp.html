@@ -135,11 +135,15 @@
                 var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
                 var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
 
-                var button;
-                if (state == 'nhap') button = $(`<button onclick="redirect('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
-                if (state == 'xuat') button = $(`<button onclick="redirect2('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
-                var butto = $(`<button onclick="redirect1('${doc.id}')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
-
+                var button, butto;
+                if (state == 'nhap') {
+                    button = $(`<button onclick="redirect('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
+                    butto = $(`<button onclick="redirect1('${doc.id}')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
+                }
+                if (state == 'xuat') {
+                    button = $(`<button onclick="redirect2('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
+                    butto = $(`<button onclick="redirect3('${doc.id}')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
+                }
                 block.append(butto, button, tenhang, mcu, sohopdong, chip, date, quantity);
                 box.append(block);
             });
@@ -157,6 +161,10 @@
         function redirect2(id) {
             ipcRenderer.send('edit-send', {type: 'thanhpham', id: id});
             location.href='../xuat/tpxuat.html';
+        }
+        function redirect3(id) {
+            ipcRenderer.send('xoa-xuat-thanhpham', id);
+            location.href='./cstp.html';
         }
 
         // Option All

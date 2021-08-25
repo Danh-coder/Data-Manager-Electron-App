@@ -30,7 +30,7 @@ const addKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -41,7 +41,7 @@ const addKeywordLinhkien = (body) => {
 const addKeywordThanhpham = (body) => {
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'quantity' || key == 'date')
+        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -60,7 +60,7 @@ const removeKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -71,7 +71,7 @@ const removeKeywordLinhkien = (body) => {
 const removeKeywordThanhpham = (body) => {
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date')
+        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
