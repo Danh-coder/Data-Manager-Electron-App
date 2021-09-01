@@ -8,8 +8,8 @@ var mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 621,
+    width: 1366,
+    height: 768,
     title: "Data Manager",
     minHeight:500,
     minWidth:600,
