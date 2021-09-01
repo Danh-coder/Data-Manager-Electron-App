@@ -16,7 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://kraaden.github.io/autocomplete/autocomplete.css">
-    <title>Tax</title>
+    <title>Data Manager</title>
 </head>
 <body>
 
@@ -39,40 +39,48 @@
     </nav>
     <div class="container">
     
-        <h1>Xuất linh kiện thành phẩm</h1>
+        <h1>Xuất linh kiện thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
         <form id="save" action="" class="form-group">
-            <input type="hidden" id="submissionDate" value="not added yet">
+            <div class="row">
+                <input type="hidden" id="submissionDate" value="not added yet">
+                
+                <div class="col-6">
+                    <label for="partnum">Part number</label>
+                    <input type="text" class="form-control" id="partnum" placeholder="Part number" required>
+                        
+                    <label for="sohopdong">Số hợp đồng</label>
+                    <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" required>
 
-            <label for="partnum">Part number</label>
-            <input type="text" class="form-control" id="partnum" placeholder="Part number">
-            
-            <label for="tenhang">Tên hàng</label>
-            <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng">
-            
-            <label for="sohopdong">Số hợp đồng</label>
-            <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng">
-            
-            <label for="sanpham">Sản phẩm</label>
-            <input type="text" class="form-control" id="sanpham" placeholder="Sản phẩm">
+                    <label for="cty">Công ty nhập</label>
+                    <input type="text" class="form-control" id="cty" placeholder="Công ty nhập" required>
 
-            <label for="cty">Công ty xuất</label>
-            <input type="text" class="form-control" id="cty" placeholder="Công ty xuất">
+                    <label for="dvtinh">Đơn vị tính</label>
+                    <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
-            <label for="date">Ngày nhập</label>
-            <input type="date" class="form-control" id="date" placeholder="Ngày nhập">
+                    <label for="dongia">Đơn giá</label>
+                    <input type="number" class="form-control" id="dongia" placeholder="Đơn giá" required>
+    
+                </div>
 
-            <label for="dvtinh">Đơn vị tính</label>
-            <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính">
+                <div class="col-6">
 
-            <label for="quantity">Số lượng</label>
-            <input type="number" class="form-control" id="quantity" placeholder="Số lượng">
+                    <label for="tenhang">Tên hàng</label>
+                    <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng" required>
+                        
+                    <label for="sanpham">Sản phẩm</label>
+                    <input type="text" class="form-control" id="sanpham" placeholder="Sản phẩm" required>
 
-            <label for="dongia">Đơn giá</label>
-            <input type="number" class="form-control" id="dongia" placeholder="Đơn giá">
-            
-            <label for="thanhtien">Thành tiền</label>
-            <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
-
+                    <label for="date">Ngày nhập</label>
+                    <input type="date" class="form-control" id="date" placeholder="Ngày xuất" required>
+    
+                    <label for="quantity">Số lượng</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Số lượng" required>
+    
+                    <label for="thanhtien">Thành tiền</label>
+                    <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
+    
+                </div>
+            </div>
         </form>
 
         <div class="row" style="margin: 30px 0;">
