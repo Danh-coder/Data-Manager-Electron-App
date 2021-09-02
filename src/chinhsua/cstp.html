@@ -42,11 +42,12 @@
         </div>
 
     </nav>
-    <form action="" style="margin-left: 5vw;" onsubmit="return processName()">
+    <form action="" style="margin-left: 5vw;">
         <label for="type" >Chọn hình thức hiển thị</label>
         <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
             <option value="date">Ngày</option>
             <option value="name">Sản phẩm</option>
+            <option value="sohopdong">Sổ hợp đồng</option>
             <option value="all">Tất cả</option>
             
         </select>
@@ -57,6 +58,7 @@
         <label for="" class="lbl-date-form" id="hmm">Ngày kết thúc</label>
         <input type="date" name="dateend" id="dateend" style="margin-left: 15px;" onchange="processDate()">
         <input type="text" name="nameinp" id="nameinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
+        <input type="text" name="shdinp" id="shdinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
     </form>
 
     <div class="row main-row">
@@ -83,7 +85,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="../scripts/keywordsName.js"></script>
+    <script src="../scripts/keywordsInputs.js"></script>
     <script>
         var select = document.getElementById('type')
         
@@ -93,14 +95,27 @@
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
                 document.getElementById('nameinp').style.display = 'inline'
+                document.getElementById('shdinp').style.display = 'none'
                 document.querySelector('.lbl-date').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
             
             }
+            else if (select.value === 'sohopdong')
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'none'
+                document.getElementById('shdinp').style.display = 'inline'
+                document.querySelector('.lbl-date').style.display ='none'
+
+                document.getElementById('hmm').innerHTML = 'Nhập sổ hợp đồng'
+            
+            }
             else if (select.value === 'date')
             {
                 document.getElementById('nameinp').style.display = 'none'
+                document.getElementById('shdinp').style.display = 'none'
                 document.getElementById('datestart').style.display = 'inline'
             
                 document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
@@ -113,6 +128,7 @@
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
                 document.getElementById('nameinp').style.display = 'none'
+                document.getElementById('shdinp').style.display = 'none'
                 document.querySelector('.lbl-date').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = ''
@@ -167,6 +183,16 @@
             location.href='./cstp.html';
         }
 
+        //Submit form when press Enter
+        $('form').each(function() {
+            $(this).find('input').keypress(function(e) {
+                // Enter pressed?
+                if(e.which == 10 || e.which == 13) {
+                    processTextInputs();
+                }
+            });
+        });
+
         // Option All
         function processAll() {
             if (select.value == 'all') {
@@ -188,15 +214,25 @@
                 print('xuat');
             }
         }
-        function processName() {
-            var name = document.getElementById('nameinp').value;
-            name = $.trim(name);
+        function processTextInputs() {
+            if (select.value === "name") {
+                var name = document.getElementById('nameinp').value;
+                name = $.trim(name);
 
-            docs = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
-            print('nhap');
-            docs = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
-            print('xuat');
-            return false;
+                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
+                print('nhap');
+                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
+                print('xuat');
+            }
+            if (select.value === 'sohopdong') {
+                var sohopdong = document.getElementById('shdinp').value;
+                sohopdong = $.trim(sohopdong);
+
+                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-sohopdong', {sohopdong});
+                print('nhap');
+                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-sohopdong', {sohopdong});
+                print('xuat');
+            }
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

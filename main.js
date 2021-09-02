@@ -23,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile('src/index.html')
 
 //   Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -83,6 +83,11 @@ ipcMain.on('doc-nhap-linhkien-ten', async (event, obj) => {
 
   event.returnValue = nhap;
 })
+ipcMain.on('doc-nhap-linhkien-sohopdong', async (event, obj) => {
+  var nhap = await database.readFollowingSohopdong('nhap', 'linhkien', obj);
+
+  event.returnValue = nhap;
+})
 ipcMain.on('edit-nhap-linhkien', async (event, obj) => {
   const success = await database.edit('nhap', 'linhkien', obj);
   event.returnValue = success;
@@ -103,6 +108,11 @@ ipcMain.on('doc-xuat-linhkien-ngay', async (event, obj) => {
 })
 ipcMain.on('doc-xuat-linhkien-ten', async (event, obj) => {
   var xuat = await database.readFollowingName('xuat', 'linhkien', obj);
+
+  event.returnValue = xuat;
+})
+ipcMain.on('doc-xuat-linhkien-sohopdong', async (event, obj) => {
+  var xuat = await database.readFollowingSohopdong('xuat', 'linhkien', obj);
 
   event.returnValue = xuat;
 })
@@ -148,6 +158,11 @@ ipcMain.on('doc-nhap-thanhpham-ten', async (event, obj) => {
 
   event.returnValue = nhap;
 })
+ipcMain.on('doc-nhap-thanhpham-sohopdong', async (event, obj) => {
+  var nhap = await database.readFollowingSohopdong('nhap', 'thanhpham', obj);
+
+  event.returnValue = nhap;
+})
 ipcMain.on('edit-nhap-thanhpham', async (event, obj) => {
   const success = await database.edit('nhap', 'thanhpham', obj);
   event.returnValue = success;
@@ -169,6 +184,11 @@ ipcMain.on('doc-xuat-thanhpham-ngay', async (event, obj) => {
 })
 ipcMain.on('doc-xuat-thanhpham-ten', async (event, obj) => {
   var xuat = await database.readFollowingName('xuat', 'thanhpham', obj);
+
+  event.returnValue = xuat;
+})
+ipcMain.on('doc-xuat-thanhpham-sohopdong', async (event, obj) => {
+  var xuat = await database.readFollowingSohopdong('xuat', 'thanhpham', obj);
 
   event.returnValue = xuat;
 })

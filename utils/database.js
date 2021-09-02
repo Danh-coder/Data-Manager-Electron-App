@@ -314,6 +314,20 @@ const readFollowingName = async (state, type, {name}) => {
     popup('info', 'Info', `Found: ${infos.length} in ${state}`);
     return await(infos);
 }
+const readFollowingSohopdong = async (state, type, {sohopdong}) => {
+    var infos = [];
+    var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+    querySnapshot.forEach(doc => {
+        if (doc.data().state == state && doc.data().sohopdong == sohopdong) {
+            infos.push({
+                id: doc.id,
+                ...doc.data()
+            })
+        }
+    });
+    popup('info', 'Info', `Found: ${infos.length} in ${state}`);
+    return await(infos);
+}
 const readFollowingId = async ({type, id}) => {
     const doc = await db.collection(`log-${type}`).doc(id).get();
     const obj = {
@@ -342,6 +356,7 @@ module.exports = {
     readAll: readAll,
     readFollowingDate: readFollowingDate,
     readFollowingName: readFollowingName,
+    readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
     readStorage: readStorage,
     recentSubmissions: recent,
