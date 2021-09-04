@@ -1,7 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const { readXuat } = require('./utils/database')
 
 
 var mainWindow;
