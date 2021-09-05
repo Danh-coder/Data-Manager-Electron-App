@@ -94,9 +94,11 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script>
+        // Initialize global variables
+        // Via localStorage
         if (localStorage.submissionCount == undefined) localStorage.submissionCount = 0; 
         if (localStorage.reviews == undefined) 
-            localStorage.reviews = JSON.stringify({ //Initialize object of a localStorage variable
+            localStorage.reviews = JSON.stringify({ //Initializing localStorage object is more complex than usual
                 linhkien: [],
                 thanhpham: []
             })
