@@ -36,18 +36,15 @@ var createBtn = (name, type) => {
 }
 
 //Print recent submissions in nhap,xuat
-var printRecentSubmissions = async (type, state) => {
-    var submissions = ipcRenderer.sendSync('recent-submissions');
-    var arr = await filter(type, state, submissions);
+var printReviews = async (type, state) => {
+    var arr = filter(type, state, reviews);
     if (type == 'linhkien') displayLinhkien(arr);
     if (type == 'thanhpham') displayThanhpham(arr);
 }
-var filter = async (type, state, submissions) => {
+var filter = (type, state, reviews) => {
     var arr = [];
-    for (var index = submissions.length - 1; index >= 0; index--) {
-        var id = submissions[index];
-        const doc = await db.collection(`log-${type}`).doc(id).get(); //Get document from log-... collection in database 
-        if (doc.data() != undefined && doc.data().state == state) arr.push(doc.data());
+    for (var index = 0; index < reviews[type].length; index++) {
+        if (reviews[type][index].state == state) arr.push(reviews[type][index]);
     }
     return arr;
 }

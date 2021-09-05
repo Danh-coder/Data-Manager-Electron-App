@@ -84,8 +84,9 @@
         </form>
 
         <div class="row" style="margin: 30px 0;">
-            <input onclick="process()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
-            <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
+            <input onclick="submit()" type="submit" value="Thêm" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
+            <input onclick="addReview('linhkien')" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <button class="col-4 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
         <div id="grid">
@@ -101,10 +102,11 @@
     <script src="../scripts/keywordsLinhkien.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
+    <script src="../scripts/reviews.js"></script>
     <script>
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         // Print recent submissions when first enter the page
-        printRecentSubmissions('linhkien', 'xuat');
+        printReviews('linhkien', 'xuat');
         
         var thanhtien = document.getElementById('thanhtien').value;
         var formChange = document.querySelector('form')
@@ -201,17 +203,32 @@
             thanhtien = doc.thanhtien.toString();
         })
 
-        function process() {
+        function submit() {
             const form = document.querySelector('form');
-            var obj = prepareObj();
             if (form.id == "save") {
-                var canSubmit = ipcRenderer.sendSync('xuat-linhkien', obj);
-                if (canSubmit) form.submit();
+                //Submit all previous reviews
+                var index = 0;
+                while (index < reviews['linhkien'].length) { //Inside the array
+                    if (reviews['linhkien'][index].state == 'xuat') {
+                        var canSubmit = ipcRenderer.sendSync('xuat-linhkien', reviews['linhkien'][index]);
+                        if (canSubmit) {
+                            submissionCount = Number(submissionCount) + 1;
+                            removeReview('linhkien', index);
+                        }
+                        else index++; //Skip element
+                    }
+                    else index++; //Skip that element
+                }
+
+                location.reload(); //Reload page
             } 
             if (form.id == "edit") {
+                var obj = prepareObj();
                 obj.id = document.getElementById('_id').value;
                 var canSubmit = ipcRenderer.sendSync('edit-xuat-linhkien', obj);
-                if (canSubmit) { form.action = "../chinhsua/cslk.html"; form.submit(); }
+                if (canSubmit) { 
+                    form.action = "../chinhsua/cslk.html"; form.submit(); 
+                }
             }
         }
     </script>
