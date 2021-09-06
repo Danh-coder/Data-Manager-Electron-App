@@ -206,8 +206,8 @@ ipcMain.on('edit-send', async (event, obj) => {
     mainWindow.webContents.send('edit-receive', doc);
   })
 })
-// Pass recent submissions from backend to frontend processes
-ipcMain.on('recent-submissions', (event) => {
-  const submissions = database.recentSubmissions;
+// Count linhkien submissions
+ipcMain.on('countSubmissions', async (event) => {
+  const submissions = await database.countSubmissions();
   event.returnValue = submissions;
 })

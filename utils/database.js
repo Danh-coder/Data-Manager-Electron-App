@@ -80,16 +80,25 @@ const removeKeywordThanhpham = (body) => {
     })
 }
 
-// ---------------------------------Recent Submissions Processes---------------------------------
-var recent = [];
-const addSubmission = (id) => {
-    recent.push(id);
+// ---------------------------------Submission Counting---------------------------------
+const countSubmissions = async () => {
+    const doc = await db.collection('ton-linhkien').doc('submissionCount').get();
+    return doc.data().values;
 }
-const deleteSubmission = (id) => {
-    var index = recent.indexOf(id);
-    if (index >= 0) recent.splice(index, 1);
+const increaseSubmissionCount = async () => {
+    var countRef = db.collection('log-linhkien').doc('submissionCount');
+    const doc = await countRef.get();
+    countRef.update({
+        value: doc.data().value + 1
+    })
 }
-
+const decreaseSubmissionCount = async () => {
+    var countRef = db.collection('log-linhkien').doc('submissionCount');
+    const doc = await countRef.get();
+    countRef.update({
+        value: doc.data().value - 1
+    })
+}
 
 // -------------------------------------Database processes--------------------------------------
 const save = async (type, body) => {
@@ -130,8 +139,8 @@ const save = async (type, body) => {
         //Add keywords
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
-        //Now it's the most recent submission
-        addSubmission(docRef.id);
+        //Now one more submission is done
+        if (type == 'linhkien') await increaseSubmissionCount(); //Only for linhkien documents
 
         return true;
     }
@@ -145,7 +154,12 @@ const edit = async (state, type, {id, ...body}) => {
         if (state == 'nhap') success = await save(type, body);
         if (state == 'xuat') success = await xuat(type, body);
         // Delete old document
-        if (success) del(state, type, id);
+        if (success) {
+            await del(state, type, id);
+
+            // Don't count this submission if it's linhkien editing
+            if (type == 'linhkien') await decreaseSubmissionCount();
+        }
     }
     else {
         var delta = body.quantity - docRef.data().quantity;
@@ -181,9 +195,6 @@ const edit = async (state, type, {id, ...body}) => {
                         removeKeywordThanhpham(docRef.data());
                         addKeywordThanhpham(body);
                     }
-                    //Now it's the most recent submission
-                    deleteSubmission(id); //Remove id from recent submission list
-                    addSubmission(id); //Repush it to the end of the list
                 }
             }
             else {
@@ -220,8 +231,6 @@ const del = async (state, type, id) => {
     var body = docRef.data();
     if (type == 'linhkien') removeKeywordLinhkien(body);
     else removeKeywordThanhpham(body);
-    //If it is a recent submission, it won't be that anymore
-    deleteSubmission(docRef.id);
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
@@ -266,8 +275,8 @@ const xuat = async(type, body) => {
         //Add keywords
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
-        //Now it's a recent submission
-        addSubmission(docRef.id);
+        //Now one more submission is done
+        if (type == 'linhkien') increaseSubmissionCount(); //Only for linhkien documents
 
         return true;
     }
@@ -359,5 +368,5 @@ module.exports = {
     readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
     readStorage: readStorage,
-    recentSubmissions: recent,
+    countSubmissions: countSubmissions,
 }

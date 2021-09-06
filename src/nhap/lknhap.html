@@ -216,10 +216,7 @@
                 while (index < reviews['linhkien'].length) { //Inside the array
                     if (reviews['linhkien'][index].state == 'nhap') {
                         var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['linhkien'][index]);
-                        if (canSubmit) {
-                            submissionCount = Number(submissionCount) + 1;
-                            removeReview('linhkien', index);
-                        }
+                        if (canSubmit) removeReview('linhkien', index);
                         else index++; //Skip element
                     }
                     else index++; //Skip that element

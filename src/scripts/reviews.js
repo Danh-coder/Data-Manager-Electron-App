@@ -1,9 +1,7 @@
 var reviews = JSON.parse(localStorage.getItem('reviews'));
-var submissionCount = localStorage.getItem('submissionCount');
 
 function updateLocalStorage() {
     localStorage.reviews = JSON.stringify(reviews);
-    localStorage.submissionCount = submissionCount;
 }
 
 function addReview(type) {
