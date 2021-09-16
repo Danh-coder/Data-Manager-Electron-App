@@ -40,7 +40,7 @@
 
     </nav>
     <div class="container" style="position: relative; padding: 0 !important;">
-        <h1 style="margin-top: 50px;">Nhập linh kiện thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
+        <h1 style="margin-top: 50px;">Nhập linh kiện thành phẩm <span id="datetime" style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
         <p class="clearfix" id="stthopdong" style="font-size: 15px; right: 0; margin-top: 5px;position: absolute;">Hợp đồng số :</p>
         <form style="margin-top: 15px;" id="save" action="" class="form-group" onsubmit="return process()">
 
@@ -251,6 +251,12 @@
                 }
             }
         }
+        
+        
+
+        var dt = new Date();
+        document.getElementById("datetime").innerHTML = "Ngày thực nhập : " + (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
+    
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
