@@ -82,8 +82,8 @@ const removeKeywordThanhpham = (body) => {
 
 // ---------------------------------Submission Counting---------------------------------
 const countSubmissions = async () => {
-    const doc = await db.collection('ton-linhkien').doc('submissionCount').get();
-    return doc.data().values;
+    const doc = await db.collection('log-linhkien').doc('submissionCount').get();
+    return doc.data().value;
 }
 const increaseSubmissionCount = async () => {
     var countRef = db.collection('log-linhkien').doc('submissionCount');
