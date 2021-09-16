@@ -63,7 +63,7 @@
 
         </form>
 
-        <div class="row" style="margin: 30px 0;">
+        <div class="row" id="buttonContainer" style="margin: 30px 0;">
             <input onclick="submit()" type="submit" value="Thêm" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
             <input onclick="addReview('thanhpham')" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-4 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
@@ -143,6 +143,17 @@
                 <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}">
             `)
             form.append(formContent);
+
+            //Change buttons too
+            const buttonContainer = $('#buttonContainer');
+            buttonContainer.empty();
+            buttonContainer.append(`
+                <input onclick="submit()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
+                <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
+            `)
+
+            //Hidden excel table and submit button
+            document.getElementById('grid').style.display = 'none';
         })
 
         function submit() {
