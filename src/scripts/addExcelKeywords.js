@@ -37,6 +37,7 @@ const processExcelFile = () => {
             //Remove item out of array
             tenhangColumn.splice(i, 1);
             partnumColumn.splice(i, 1);
+            i--;
         }
         else {
             //Change to the proper values to add to the database successfully
@@ -51,13 +52,16 @@ const processExcelFile = () => {
     }
     Keywords.addKeyword('tenhang + partnum', keyPair);
     Keywords.addKeyword('tenhang', tenhangColumn);
+    Keywords.addKeyword('partnum', partnumColumn);
 
     dvtinhColumn = dvtinhColumn.values;
     dvtinhColumn.shift(); dvtinhColumn.shift();
     // Remove undefined items in array
     for (let i = 0; i < dvtinhColumn.length; i++) {
-        if (dvtinhColumn[i] == undefined) 
+        if (dvtinhColumn[i] == undefined) {
             dvtinhColumn.splice(i, 1);
+            i--;
+        }
     }
     Keywords.addKeyword('dvtinh', dvtinhColumn);
 

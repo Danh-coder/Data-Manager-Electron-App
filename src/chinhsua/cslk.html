@@ -226,9 +226,10 @@
                 var name = document.getElementById('nameinp').value;
                 name = $.trim(name);
 
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
+                //Search documents via products' partnums
+                docs = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
+                docs = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
                 print('xuat');
             }
             if (select.value === 'sohopdong') {

@@ -153,8 +153,8 @@
                 date: date,
                 dvtinh: dvtinh,
                 quantity: parseInt(quantity, 10),
-                dongia: parseInt(dongia, 10),
-                thanhtien: parseInt(thanhtien, 10),
+                dongia: (parseInt(dongia * 10000, 10) / 10000).toFixed(4),
+                thanhtien: (parseInt(thanhtien * 10000, 10) / 10000).toFixed(4),
                 submissionDate: submissionDate,
                 state: 'nhap'
             }

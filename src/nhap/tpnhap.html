@@ -42,6 +42,7 @@
         <h1>Nhập thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
         <form id="save" action="" class="form-group">
             <input type="hidden" id="submissionDate" value="not added yet">
+            <input type="hidden" id="partnum">
 
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
@@ -91,6 +92,7 @@
 
         function prepareObj() {
             var tenhang = document.getElementById('tenhang').value;
+            var partnum = document.getElementById('partnum').value;
             var mcu = document.getElementById('mcu').value;
             var sohopdong = document.getElementById('sohopdong').value;
             var chip = document.getElementById('chip').value;
@@ -103,6 +105,7 @@
 
             const obj = {
                 tenhang: tenhang,
+                partnum: partnum,
                 mcu: mcu,
                 sohopdong: sohopdong,
                 chip: chip,
@@ -123,6 +126,7 @@
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
                 <input type="hidden" id="submissionDate" value="${doc.submissionDate}">
+                <input type="hidden" id="partnum" value="${doc.partnum}">
 
                 <label for="tensp">Tên sản phẩm</label>
                 <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">

@@ -181,8 +181,8 @@
                 var name = document.getElementById('nameinp').value;
                 name = $.trim(name);
 
-                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
-                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
+                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-partnum', {name});
+                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-partnum', {name});
                 tons = ipcRenderer.sendSync('doc-ton-thanhpham', {name});
                 print();
             }

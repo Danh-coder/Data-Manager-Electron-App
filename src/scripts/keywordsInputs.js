@@ -3,7 +3,7 @@ const Keywords = require('../../utils/keywords');
 
 var info;
 (async () => {
-    info = await Keywords.readThanhpham();
+    info = await Keywords.readLinhkien();
     SuggestKeywords('nameinp');
     SuggestKeywords('shdinp');
 })()
@@ -11,7 +11,7 @@ var info;
 const SuggestKeywords = (name) => {
     var input = document.getElementById(name);
     var arr;
-    if (name == 'nameinp') arr = info.tenhang;
+    if (name == 'nameinp') arr = info.partnum;
     if (name == 'shdinp') arr = info.sohopdong;
 
     autocomplete({
