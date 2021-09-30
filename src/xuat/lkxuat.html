@@ -40,7 +40,7 @@
     <div class="container" style="position: relative; padding: 0 !important;">
     
         <h1>Xuất linh kiện thành phẩm <span id="datetime" style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
-        <p class="clearfix" id="stthopdong" style="font-size: 15px; right: 0; margin-top: 5px;position: absolute;">Hợp đồng số :</p>
+        <p class="clearfix" id="stthopdong" style="font-size: 15px; right: 0; margin-top: 5px;position: absolute;">Phiếu nhập số :</p>
         <form style="margin-top: 15px;" id="save" action="" class="form-group">
             <div class="row">
                 <input type="hidden" id="submissionDate" value="not added yet">
@@ -59,7 +59,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="number" class="form-control" id="dongia" placeholder="Đơn giá" required>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" required>
     
                 </div>
 
@@ -75,10 +75,10 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày xuất" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="number" class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="quantity" placeholder="Số lượng" required>
     
                     <label for="thanhtien">Thành tiền</label>
-                    <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
     
                 </div>
             </div>
@@ -180,7 +180,7 @@
                         <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" value="${doc.dvtinh}" required>
 
                         <label for="dongia">Đơn giá</label>
-                        <input type="number" class="form-control" id="dongia" placeholder="Đơn giá" value="${doc.dongia.toString()}" required>
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" value="${doc.dongia.toString()}" required>
         
                     </div>
 
@@ -196,10 +196,10 @@
                         <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}" required>
         
                         <label for="quantity">Số lượng</label>
-                        <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}" required>
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}" required>
         
                         <label for="thanhtien">Thành tiền</label>
-                        <input type="number" class="form-control" id="thanhtien" placeholder="${doc.thanhtien.toString()}" disabled> 
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="thanhtien" placeholder="${doc.thanhtien.toString()}" disabled> 
         
                     </div>
                 </div>
