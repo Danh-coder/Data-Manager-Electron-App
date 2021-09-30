@@ -30,7 +30,7 @@ const addKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum' || key == 'submissionDate')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -39,6 +39,13 @@ const addKeywordLinhkien = (body) => {
     })
 }
 const addKeywordThanhpham = (body) => {
+    db.collection('keywords').doc('tenhang + partnum').update({
+        values: firebase.firestore.FieldValue.arrayUnion({
+            tenhang: body.tenhang,
+            partnum: body.partnum
+        })
+    })
+
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
         if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
@@ -60,7 +67,7 @@ const removeKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'partnum' || key == 'submissionDate')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -69,6 +76,14 @@ const removeKeywordLinhkien = (body) => {
     })
 }
 const removeKeywordThanhpham = (body) => {
+    //Remove pair tenhang-partnum
+    db.collection('keywords').doc('tenhang + partnum').update({
+        values: firebase.firestore.FieldValue.arrayRemove({
+            tenhang: body.tenhang,
+            partnum: body.partnum
+        })
+    })
+
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
         if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
@@ -123,6 +138,7 @@ const save = async (type, body) => {
     if (isEmpty) {
         obj = {
             tenhang: body.tenhang,
+            partnum: body.partnum,
             quantity: body.quantity,
             dvtinh: body.dvtinh
         }
@@ -309,11 +325,11 @@ const readFollowingDate = async (state, type, {datestart, dateend}) => {
     });
     return await(infos);
 }
-const readFollowingName = async (state, type, {name}) => {
+const readFollowingPartnum = async (state, type, {name}) => {
     var infos = [];
     var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
     querySnapshot.forEach(doc => {
-        if (doc.data().state == state && doc.data().tenhang == name) {
+        if (doc.data().state == state && doc.data().partnum == name) {
             infos.push({
                 id: doc.id,
                 ...doc.data()
@@ -349,7 +365,7 @@ const readStorage = async (type, name) => {
     var infos = [];
     var querySnapshot;
     if (name == '') querySnapshot = await db.collection(`ton-${type}`).get();
-    else querySnapshot = await db.collection(`ton-${type}`).where('tenhang', '==', name).get();
+    else querySnapshot = await db.collection(`ton-${type}`).where('partnum', '==', name).get();
 
     querySnapshot.forEach(doc => {
         if (doc.data().quantity != 0) infos.push(doc.data());
@@ -364,7 +380,7 @@ module.exports = {
     xuat: xuat,
     readAll: readAll,
     readFollowingDate: readFollowingDate,
-    readFollowingName: readFollowingName,
+    readFollowingPartnum: readFollowingPartnum,
     readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
     readStorage: readStorage,

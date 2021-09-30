@@ -77,8 +77,8 @@ ipcMain.on('doc-nhap-linhkien-ngay', async (event, obj) => {
 
   event.returnValue = nhap;
 })
-ipcMain.on('doc-nhap-linhkien-ten', async (event, obj) => {
-  var nhap = await database.readFollowingName('nhap', 'linhkien', obj);
+ipcMain.on('doc-nhap-linhkien-partnum', async (event, obj) => {
+  var nhap = await database.readFollowingPartnum('nhap', 'linhkien', obj);
 
   event.returnValue = nhap;
 })
@@ -105,8 +105,8 @@ ipcMain.on('doc-xuat-linhkien-ngay', async (event, obj) => {
 
   event.returnValue = xuat;
 })
-ipcMain.on('doc-xuat-linhkien-ten', async (event, obj) => {
-  var xuat = await database.readFollowingName('xuat', 'linhkien', obj);
+ipcMain.on('doc-xuat-linhkien-partnum', async (event, obj) => {
+  var xuat = await database.readFollowingPartnum('xuat', 'linhkien', obj);
 
   event.returnValue = xuat;
 })
@@ -152,8 +152,8 @@ ipcMain.on('doc-nhap-thanhpham-ngay', async (event, obj) => {
 
   event.returnValue = nhap;
 })
-ipcMain.on('doc-nhap-thanhpham-ten', async (event, obj) => {
-  var nhap = await database.readFollowingName('nhap', 'thanhpham', obj);
+ipcMain.on('doc-nhap-thanhpham-partnum', async (event, obj) => {
+  var nhap = await database.readFollowingPartnum('nhap', 'thanhpham', obj);
 
   event.returnValue = nhap;
 })
@@ -181,8 +181,8 @@ ipcMain.on('doc-xuat-thanhpham-ngay', async (event, obj) => {
 
   event.returnValue = xuat;
 })
-ipcMain.on('doc-xuat-thanhpham-ten', async (event, obj) => {
-  var xuat = await database.readFollowingName('xuat', 'thanhpham', obj);
+ipcMain.on('doc-xuat-thanhpham-partnum', async (event, obj) => {
+  var xuat = await database.readFollowingPartnum('xuat', 'thanhpham', obj);
 
   event.returnValue = xuat;
 })

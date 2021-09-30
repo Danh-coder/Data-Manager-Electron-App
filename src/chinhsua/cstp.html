@@ -219,9 +219,9 @@
                 var name = document.getElementById('nameinp').value;
                 name = $.trim(name);
 
-                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-ten', {name});
+                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-partnum', {name});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-ten', {name});
+                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-partnum', {name});
                 print('xuat');
             }
             if (select.value === 'sohopdong') {

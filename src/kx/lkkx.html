@@ -179,8 +179,8 @@
                 var name = document.getElementById('nameinp').value;
                 name = $.trim(name);
 
-                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ten', {name});
-                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ten', {name});
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
                 tons = ipcRenderer.sendSync('doc-ton-linhkien', {name});
                 print();
             }
