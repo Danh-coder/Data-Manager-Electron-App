@@ -96,7 +96,8 @@
     <script>
         // Initialize global variables
         // Via localStorage
-        if (localStorage.reviews == undefined) 
+        const updated = (localStorage.reviews && localStorage['reviews'].hasOwnProperty('nhapLinhkien'));
+        if (!updated) 
             localStorage.reviews = JSON.stringify({ //Initializing localStorage object is more complex than usual
                 nhapLinhkien: [],
                 xuatLinhkien: [],
