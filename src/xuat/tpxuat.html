@@ -38,10 +38,10 @@
 
     </nav>
     <div class="container">
-        <h1>Xuất thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
+        <h1>Xuất thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập: <span id="datetime"></span></span></h1>
     
         <form id="save" action="" class="form-group">
-            <input type="hidden" id="submissionDate" value="not added yet">
+            <input type="hidden" id="partnum">
 
             <label for="tensp">Tên sản phẩm</label>
             <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm">
@@ -65,7 +65,7 @@
 
         <div class="row" id="buttonContainer" style="margin: 30px 0;">
             <input onclick="submit()" type="submit" value="Thêm" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
-            <input onclick="addReview('thanhpham')" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('xuatThanhpham')" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-4 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -86,22 +86,27 @@
     <script>
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         // Print recent submissions when first enter the page
-        printReviews('thanhpham', 'xuat');
+        printReviews('xuatThanhpham');
+
+        // Update the date today
+        var dt = new Date();
+        document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
 
         function prepareObj() {
             var tenhang = document.getElementById('tenhang').value;
+            var partnum = document.getElementById('partnum').value;
             var mcu = document.getElementById('mcu').value;
             var sohopdong = document.getElementById('sohopdong').value;
             var chip = document.getElementById('chip').value;
             var date = document.getElementById('date').value;
             var quantity = document.getElementById('quantity').value;
-            var submissionDate = document.getElementById('submissionDate').value;
+            var submissionDate = document.getElementById('datetime').innerHTML;
 
             if (quantity == "") quantity = "0";
-            if (submissionDate == "not added yet") submissionDate = new Date().toDateString();
 
             const obj = {
                 tenhang: tenhang,
+                partnum: partnum,
                 mcu: mcu,
                 sohopdong: sohopdong,
                 chip: chip,
@@ -116,12 +121,14 @@
 
         // Edit document also ////////////////////
         ipcRenderer.on('edit-receive', (event, doc) => {
+            document.getElementById('datetime').innerHTML = doc.submissionDate;
+
             const form = $('form');
             form.empty();
             form.attr("id", 'edit')
             const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
-                <input type="hidden" id="submissionDate" value="${doc.submissionDate}">
+                <input type="hidden" id="partnum" value="${doc.partnum}">
 
                 <label for="tensp">Tên sản phẩm</label>
                 <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">
@@ -160,12 +167,9 @@
             if (form.id == "save") {
                 //Submit all previous reviews
                 var index = 0;
-                while (index < reviews['thanhpham'].length) { //Inside the array
-                    if (reviews['thanhpham'][index].state == 'xuat') {
-                        var canSubmit = ipcRenderer.sendSync('xuat-thanhpham', reviews['thanhpham'][index]);
-                        if (canSubmit) removeReview('thanhpham', index);
-                        else index++; //Skip element
-                    }
+                while (index < reviews['xuatThanhpham'].length) { //Inside the array
+                    var canSubmit = ipcRenderer.sendSync('xuat-thanhpham', reviews['xuatThanhpham'][index]);
+                    if (canSubmit) removeReview('xuatThanhpham', index);
                     else index++; //Skip element
                 }
 

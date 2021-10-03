@@ -67,11 +67,11 @@
         <div class="col-12" style="border-right: 1px solid black;">
             <h1 style="text-align: center;">Chỉnh sửa thành phẩm</h1>
             <div class="row" style="margin-top: 50px;">
-                <div class="col-6" id="nhap" style="text-align: center; border-right: 1px black solid;">
-                    <h3>Nhập</h3>
+                <div id="nhap" class="col-6" style="border-right: 1px black solid;">
+                    <h3 style="text-align: center;">Nhập</h3>
                 </div>
-                <div class="col-6" id="xuat" style="text-align: center;">
-                    <h3>Xuất</h3>
+                <div id="xuat" class="col-6">
+                    <h3 style="text-align: center;">Xuất</h3>
                 </div>
             </div>
         </div>
@@ -89,49 +89,55 @@
     <script>
         var select = document.getElementById('type')
         
-        function myFunction() {
+        function myFunction() { //change searching options
+            //Clear recent searches
+            $(`#nhap div`).remove();
+            $(`#xuat div`).remove();
+
             if (select.value === 'name')
             {
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
                 document.getElementById('nameinp').style.display = 'inline'
-                document.getElementById('shdinp').style.display = 'none'
                 document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
-            
+                document.getElementById('nameinp').value = ''; //Empty input
             }
             else if (select.value === 'sohopdong')
             {
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
                 document.getElementById('nameinp').style.display = 'none'
-                document.getElementById('shdinp').style.display = 'inline'
                 document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='inline'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sổ hợp đồng'
-            
+                document.getElementById('shdinp').value = ''; //Empty input
             }
             else if (select.value === 'date')
             {
                 document.getElementById('nameinp').style.display = 'none'
-                document.getElementById('shdinp').style.display = 'none'
+                document.getElementById('shdinp').style.display ='none'
                 document.getElementById('datestart').style.display = 'inline'
+                document.getElementById('datestart').value = ''
             
                 document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
             
                 document.querySelector('.lbl-date').style.display =''
                 document.getElementById('dateend').style.display = 'inline'
+                document.getElementById('dateend').value = ''; //Empty input
             }
-            else 
+            else //All search
             {
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
                 document.getElementById('nameinp').style.display = 'none'
-                document.getElementById('shdinp').style.display = 'none'
                 document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='none'
 
-                document.getElementById('hmm').innerHTML = ''
+                document.getElementById('hmm').innerHTML = ''; //Empty input
             }
         }
 

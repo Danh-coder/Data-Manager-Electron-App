@@ -39,13 +39,12 @@
     </nav>
     <div class="container" style="position: relative; padding: 0 !important;">
     
-        <h1>Xuất linh kiện thành phẩm <span id="datetime" style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : 01/09/2018</span></h1>
-        <p class="clearfix" id="stthopdong" style="font-size: 15px; right: 0; margin-top: 5px;position: absolute;">Phiếu nhập số :</p>
+        <h1>Xuất linh kiện thành phẩm <span style="font-size: 15px; float: right; margin-top: 15px;">Ngày thực nhập : <span id="datetime"></span></span></h1>
+        <p class="clearfix" style="font-size: 15px; right: 0; margin-top: 5px;position: absolute;">Phiếu nhập số : <span id="stthopdong"></span></p>
         <form style="margin-top: 15px;" id="save" action="" class="form-group">
-            <div class="row">
-                <input type="hidden" id="submissionDate" value="not added yet">
-                
+            <div class="row">                
                 <div class="col-6">
+
                     <label for="partnum">Part number</label>
                     <input type="text" class="form-control" id="partnum" placeholder="Part number" required>
                         
@@ -59,7 +58,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" required>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" required>
     
                 </div>
 
@@ -75,17 +74,17 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày xuất" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="quantity" placeholder="Số lượng" required>
     
                     <label for="thanhtien">Thành tiền</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
     
                 </div>
             </div>
         </form>
 
         <div class="row" id="buttonContainer" style="margin: 30px 0;">
-            <input onclick="addReview('linhkien')" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('xuatLinhkien')" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -108,11 +107,11 @@
     <script>
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         // Print recent submissions when first enter the page
-        printReviews('linhkien', 'xuat');
+        printReviews('xuatLinhkien');
 
         //Print the number of submissions
         var submissionCount = ipcRenderer.sendSync('countSubmissions');
-        document.getElementById('stthopdong').innerHTML = `Hợp đồng số : ${submissionCount}`;
+        document.getElementById('stthopdong').innerHTML = submissionCount;
         
         var thanhtien = document.getElementById('thanhtien').value;
         var formChange = document.querySelector('form')
@@ -123,6 +122,7 @@
         })
 
         function prepareObj() {
+            var stthopdong = document.getElementById('stthopdong').innerHTML;
             var tenhang = document.getElementById('tenhang').value;
             var partnum = document.getElementById('partnum').value;
             var sohopdong = document.getElementById('sohopdong').value;
@@ -132,14 +132,14 @@
             var dvtinh = document.getElementById('dvtinh').value;
             var quantity = document.getElementById('quantity').value;
             var dongia = document.getElementById('dongia').value;
-            var submissionDate = document.getElementById('submissionDate').value;
+            var submissionDate = document.getElementById('datetime').innerHTML;
 
             if (dongia == "") dongia = "0";
             if (quantity == "") quantity = "0";
             if (thanhtien == "") thanhtien = "0";
-            if (submissionDate == "not added yet") submissionDate = new Date().toDateString();
-
+            
             const obj = {
+                stthopdong: parseInt(stthopdong, 10),
                 tenhang: tenhang,
                 partnum: partnum,
                 sohopdong: sohopdong,
@@ -158,13 +158,15 @@
 
         // Edit document also ////////////////////
         ipcRenderer.on('edit-receive', (event, doc) => {
+            document.getElementById('datetime').innerHTML = doc.submissionDate;
+            document.getElementById('stthopdong').innerHTML = doc.stthopdong;
+
             const form = $('form');
             form.empty();
             form.attr("id", 'edit')
             const formContent = $(`
                 <div class="row">
                     <input type="hidden" id="_id" value="${doc.id}">
-                    <input type="hidden" id="submissionDate" value="${doc.submissionDate}">
 
                     <div class="col-6">
                         <label for="partnum">Part number</label>
@@ -180,7 +182,7 @@
                         <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" value="${doc.dvtinh}" required>
 
                         <label for="dongia">Đơn giá</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" value="${doc.dongia.toString()}" required>
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" value="${doc.dongia.toString()}" required>
         
                     </div>
 
@@ -196,10 +198,10 @@
                         <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}" required>
         
                         <label for="quantity">Số lượng</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}" required>
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}" required>
         
                         <label for="thanhtien">Thành tiền</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" class="form-control" id="thanhtien" placeholder="${doc.thanhtien.toString()}" disabled> 
+                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="thanhtien" placeholder="${doc.thanhtien.toString()}" disabled> 
         
                     </div>
                 </div>
@@ -226,13 +228,10 @@
             if (form.id == "save") {
                 //Submit all previous reviews
                 var index = 0;
-                while (index < reviews['linhkien'].length) { //Inside the array
-                    if (reviews['linhkien'][index].state == 'xuat') {
-                        var canSubmit = ipcRenderer.sendSync('xuat-linhkien', reviews['linhkien'][index]);
-                        if (canSubmit) removeReview('linhkien', index);
-                        else index++; //Skip element
-                    }
-                    else index++; //Skip that element
+                while (index < reviews['xuatLinhkien'].length) { //Inside the array
+                    var canSubmit = ipcRenderer.sendSync('xuat-linhkien', reviews['xuatLinhkien'][index]);
+                    if (canSubmit) removeReview('xuatLinhkien', index);
+                    else index++; //Skip element
                 }
 
                 location.reload(); //Reload page
@@ -249,7 +248,23 @@
 
 
         var dt = new Date();
-        document.getElementById("datetime").innerHTML = "Ngày thực nhập : " + (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
+        document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
+
+        $(document).on("dblclick", "#stthopdong", function()
+        {
+
+            var current = $(this).text();
+            $("#stthopdong").html('<textarea class="form-control" id="newcont" rows="2">'+current+'</textarea>');
+            $("#newcont").focus();
+
+            $("#newcont").focus(function() {
+                console.log('in');
+            }).blur(function() {
+                var newcont = $("#newcont").val();
+                $("#stthopdong").text(newcont);
+            });
+
+        })
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"

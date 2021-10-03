@@ -30,7 +30,7 @@ const addKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -48,7 +48,7 @@ const addKeywordThanhpham = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
+        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -67,7 +67,7 @@ const removeKeywordLinhkien = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate')
+        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -86,7 +86,7 @@ const removeKeywordThanhpham = (body) => {
 
     var keyNames = Object.keys(body);
     keyNames.forEach(key => {
-        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate')
+        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
         db.collection('keywords').doc(key).update({
@@ -100,11 +100,10 @@ const countSubmissions = async () => {
     const doc = await db.collection('log-linhkien').doc('submissionCount').get();
     return doc.data().value;
 }
-const increaseSubmissionCount = async () => {
+const increaseSubmissionCount = async (current) => { //stthopdong is editable
     var countRef = db.collection('log-linhkien').doc('submissionCount');
-    const doc = await countRef.get();
     countRef.update({
-        value: doc.data().value + 1
+        value: current + 1
     })
 }
 const decreaseSubmissionCount = async () => {
@@ -156,7 +155,7 @@ const save = async (type, body) => {
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
         //Now one more submission is done
-        if (type == 'linhkien') await increaseSubmissionCount(); //Only for linhkien documents
+        if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
 
         return true;
     }
@@ -292,7 +291,7 @@ const xuat = async(type, body) => {
         if (type == 'linhkien') addKeywordLinhkien(body);
         else addKeywordThanhpham(body);
         //Now one more submission is done
-        if (type == 'linhkien') increaseSubmissionCount(); //Only for linhkien documents
+        if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
 
         return true;
     }

@@ -1,18 +1,23 @@
-var reviews = JSON.parse(localStorage.getItem('reviews'));
+var reviews = JSON.parse(localStorage.getItem('reviews')); //Get localStorage objects' values
 
 function updateLocalStorage() {
     localStorage.reviews = JSON.stringify(reviews);
 }
 
-function addReview(type) {
+function addReview(key) {
     var obj = prepareObj();
 
-    reviews[type].push(obj);
+    reviews[key].push(obj);
     updateLocalStorage();
     location.reload(); //Reload page
 }
 
-function removeReview(type, index) {
-    reviews[type].splice(index, 1); //Remove it from the array
+function removeReview(key, index) {
+    reviews[key].splice(index, 1); //Remove it from the array
+    updateLocalStorage();
+}
+
+function updateReview(key, index, obj) {
+    Object.assign(reviews[key][index], obj); //Edit multiple values of an object
     updateLocalStorage();
 }
