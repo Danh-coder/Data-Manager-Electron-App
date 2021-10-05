@@ -118,6 +118,35 @@
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
     <script>
+
+
+                
+
+        var dt = new Date();
+        document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
+    
+        function setTwoNumberDecimal(event) {
+            this.value = parseFloat(this.value).toFixed(4);
+        }
+
+        $(document).on("dblclick", "#stthopdong", function()
+        {
+
+            var current = $(this).text();
+            $("#stthopdong").html('<input class="form-control" id="newcont" value = '+current+'>');
+            
+
+            $("#newcont").focus();
+
+            $("#newcont").focus(function() {
+                console.log('in');
+            }).blur(function() {
+                var newcont = $("#newcont").val();
+                $("#stthopdong").text(newcont);
+            });
+
+        })
+
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
 
         // Print reviews when first enter the page
@@ -265,30 +294,7 @@
             }
         }
         
-        
 
-        var dt = new Date();
-        document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
-    
-        function setTwoNumberDecimal(event) {
-            this.value = parseFloat(this.value).toFixed(4);
-        }
-
-        $(document).on("dblclick", "#stthopdong", function()
-        {
-
-            var current = $(this).text();
-            $("#stthopdong").html('<textarea class="form-control" id="newcont" rows="2">'+current+'</textarea>');
-            $("#newcont").focus();
-
-            $("#newcont").focus(function() {
-                console.log('in');
-            }).blur(function() {
-                var newcont = $("#newcont").val();
-                $("#stthopdong").text(newcont);
-            });
-
-        })
 
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
