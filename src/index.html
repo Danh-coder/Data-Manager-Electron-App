@@ -94,9 +94,9 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script>
-        // Initialize global variables
+        // Initialize/Update global variables
         // Via localStorage
-        const updated = (localStorage.reviews && localStorage['reviews'].hasOwnProperty('nhapLinhkien'));
+        const updated = (localStorage.reviews && JSON.parse(localStorage.getItem('reviews')).hasOwnProperty('nhapLinhkien'));
         if (!updated) 
             localStorage.reviews = JSON.stringify({ //Initializing localStorage object is more complex than usual
                 nhapLinhkien: [],

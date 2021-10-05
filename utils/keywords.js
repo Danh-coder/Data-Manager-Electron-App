@@ -43,6 +43,7 @@ const readThanhpham = async () => {
     }
 }
 
+// Add, remove keywords via aspects
 const addKeyword = async (aspect, values) => {
     await keywords.doc(aspect).update({
         values: firebase.firestore.FieldValue.arrayUnion(...values)

@@ -2,15 +2,29 @@ const autocomplete = require('autocompleter');
 const Keywords = require('../../utils/keywords');
 
 var info;
-(async () => {
+const autoSuggest = async () => {
     info = await Keywords.readLinhkien();
-    SuggestKeywordsSpecial('tenhang');
-    SuggestKeywordsSpecial('partnum');
+
     SuggestKeywords('sohopdong');
     SuggestKeywords('sanpham');
     SuggestKeywords('cty');
     SuggestKeywords('dvtinh');
-})()
+    SuggestKeywordsSpecial('tenhang');
+    SuggestKeywordsSpecial('partnum');
+}
+
+//Add keyword after adding a review
+const addKeyword = async () => {
+    var obj = prepareObj();
+    await ipcRenderer.send('addKeyword-linhkien', obj);
+    // await autoSuggest();
+    location.reload();
+}
+
+//Suggest keywords after entering a page
+(async () => {
+    await autoSuggest();
+})() ;
 
 const SuggestKeywords = (name) => {
     var input = document.getElementById(name);

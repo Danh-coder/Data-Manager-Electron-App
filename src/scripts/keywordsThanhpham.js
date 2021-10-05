@@ -10,6 +10,14 @@ var info;
     SuggestKeywords('chip');
 })()
 
+//Add keyword after adding a review
+const addKeyword = async () => {
+    var obj = prepareObj();
+    await ipcRenderer.send('addKeyword-thanhpham', obj);
+    // await autoSuggest();
+    location.reload();
+}
+
 const SuggestKeywords = (name) => {
     var input = document.getElementById(name);
     var arr;
