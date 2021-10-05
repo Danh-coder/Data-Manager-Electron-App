@@ -274,7 +274,9 @@
         {
 
             var current = $(this).text();
-            $("#stthopdong").html('<textarea class="form-control" id="newcont" rows="2">'+current+'</textarea>');
+            $("#stthopdong").html('<input class="form-control" id="newcont" value = '+current+'>');
+            
+
             $("#newcont").focus();
 
             $("#newcont").focus(function() {
