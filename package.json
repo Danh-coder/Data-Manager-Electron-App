@@ -1,7 +1,7 @@
 {
   "name": "tax",
-  "productName": "Tax app",
-  "version": "1.0.0",
+  "productName": "Data Manager",
+  "version": "1.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -12,13 +12,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    
+    "electron": "^13.5.1",
+    "electron-builder": "^22.11.7"
+  },
   "dependencies": {
     "alert": "^5.0.10",
     "autocomplete": "0.0.1",
     "autocompleter": "^6.1.0",
     "dialogs": "^2.0.1",
-    "electron": "^13.1.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^4.3.9",
     "exceljs": "^4.2.1",
@@ -29,7 +32,7 @@
     "remote": "^0.2.6"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/svenriksen/tax.git"
+    "type": "git",
+    "url": "https://github.com/svenriksen/tax.git"
   }
 }
