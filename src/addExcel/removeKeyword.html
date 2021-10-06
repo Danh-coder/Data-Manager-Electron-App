@@ -42,15 +42,15 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="partnum" onchange="pasteResult('partnum');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="partnumResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('partnum')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -61,15 +61,15 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="tenhang" onchange="pasteResult('tenhang');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="tenhangResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('tenhang')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -79,15 +79,15 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="sohopdong" onchange="pasteResult('sohopdong');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="sohopdongResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('sohopdong')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -98,15 +98,15 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="cty" onchange="pasteResult('cty');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="ctyResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('cty')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -118,25 +118,25 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="dvtinh" onchange="pasteResult('dvtinh');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="dvtinhResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('dvtinh')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Insert this line after script imports -->
-    <script>if (window.module) module = window.module;</script>
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-    <script src="../scripts/addExcelKeywords.js"></script>
+    <script src="../scripts/keywordsInputs.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -146,6 +146,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script>
+        const pasteResult = (aspect) => {
+            document.getElementById(`${aspect}Result`).innerHTML = document.getElementById(aspect).value;
+        }
+
+
+    </script>
 
     <!-- Insert this line after script imports -->
     <script>if (window.module) module = window.module;</script>
