@@ -386,4 +386,5 @@ module.exports = {
     addKeywordLinhkien: addKeywordLinhkien,
     addKeywordThanhpham: addKeywordThanhpham,
     countSubmissions: countSubmissions,
+    increaseSubmissionCount: increaseSubmissionCount,
 }

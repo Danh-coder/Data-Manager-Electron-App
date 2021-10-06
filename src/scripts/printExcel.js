@@ -35,6 +35,21 @@ var createBtn = (name, type) => {
     buttons.append(btn);
 }
 
+//Update grid data when editing documents
+const updateEdition = () => {
+    //Mainly update thanhtien, dongia, quantity when one is edited
+    if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
+        grid.data[0]['dongia'] = (parseInt(grid.data[0]['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+        grid.data[0]['thanhtien'] = grid.data[0]['quantity'] * grid.data[0]['dongia']; //Change quantity or dongia will affect thanhtien
+        grid.data[0]['thanhtien'] = (parseInt(grid.data[0]['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+    }
+}
+const getEditedDocument = () => {
+    var obj = JSON.parse(JSON.stringify(grid.data[0])); //Only copy values
+    obj.quantity = parseInt(obj.quantity, 10); //Not affect grid.data
+    return obj;
+}
+
 //Print reviews in nhap,xuat
 var memKey; //Store state, type of current page
 var printReviews = (key) => {
@@ -57,8 +72,10 @@ grid.addEventListener('click', function (e) { //Remove review when click the del
     }
 });
 grid.addEventListener('endedit', function (e) { //Update review after finish editing
-    if (!e.cell || e.cell.rowIndex < 0) { return; }
+    if (!e.cell || e.cell.rowIndex < 0 || memKey == undefined) { return; }
+    if (grid.schema[0].title != 'Xóa' && memKey != undefined) { updateEdition(); return;} //Only for chinhsua editions
 
+    //Nhap, xuat editions
     var newObj = JSON.parse( JSON.stringify(grid.data[e.cell.rowIndex])); //Only copy values
     delete newObj['col0']; //Don't include delete button
 
@@ -83,16 +100,16 @@ var displayLinhkien = (arr) => {
     var tmp = [];
     arr.forEach(product => {
         var row = {
-            col1: product.partnum,
-            col2: product.tenhang,
-            col3: product.sohopdong,
-            col4: product.sanpham,
-            col5: product.cty,
-            col6: product.date,
-            col7: product.dvtinh,
-            col8: product.quantity,
-            col9: product.dongia,
-            col10: product.thanhtien
+            partnum: product.partnum,
+            tenhang: product.tenhang,
+            sohopdong: product.sohopdong,
+            sanpham: product.sanpham,
+            cty: product.cty,
+            date: product.date,
+            dvtinh: product.dvtinh,
+            quantity: product.quantity,
+            dongia: product.dongia,
+            thanhtien: product.thanhtien
         }
         tmp.push(row);
     });
@@ -101,45 +118,45 @@ var displayLinhkien = (arr) => {
     grid.schema = [
         {
             title: 'Part Number',
-            name: 'col1',
+            name: 'partnum',
         },
         {
             title: 'Tên Hàng',
-            name: 'col2',
+            name: 'tenhang',
         },
         {
             title: 'Sổ Hợp Đồng',
-            name: 'col3',
+            name: 'sohopdong',
         },
         {
             title: 'Sản Phẩm',
-            name: 'col4',
+            name: 'sanpham',
         },
         {
             title: 'Công Ty Nhập',
-            name: 'col5',
+            name: 'cty',
         },
         {
             title: 'Ngày Nhập',
-            name: 'col6',
+            name: 'date',
         },
         {
             title: 'Đơn Vị Tính',
-            name: 'col7',
+            name: 'dvtinh',
         },
         {
             title: 'Số Lượng',
-            name: 'col8',
+            name: 'quantity',
             type: 'number'
         },
         {
             title: 'Đơn giá',
-            name: 'col9',
+            name: 'dongia',
             type: 'number'
         },
         {
             title: 'Thành Tiền',
-            name: 'col10',
+            name: 'thanhtien',
             type: 'number'
         },
     ]
@@ -151,12 +168,12 @@ var displayThanhpham = (arr) => {
     var tmp = [];
     arr.forEach(product => {
         var row = {
-            col1: product.tenhang,
-            col2: product.mcu,
-            col3: product.sohopdong,
-            col4: product.chip,
-            col5: product.date,
-            col6: product.quantity,
+            tenhang: product.tenhang,
+            mcu: product.mcu,
+            sohopdong: product.sohopdong,
+            chip: product.chip,
+            date: product.date,
+            quantity: product.quantity,
         }
         tmp.push(row);
     });
@@ -165,27 +182,27 @@ var displayThanhpham = (arr) => {
     grid.schema = [
         {
             title: 'Tên Hàng',
-            name: 'col1',
+            name: 'tenhang',
         },
         {
             title: 'MCU',
-            name: 'col2',
+            name: 'mcu',
         },
         {
             title: 'Sổ Hợp Đồng',
-            name: 'col3',
+            name: 'sohopdong',
         },
         {
             title: 'Chip',
-            name: 'col4',
+            name: 'chip',
         },
         {
             title: 'Ngày Nhập',
-            name: 'col5',
+            name: 'date',
         },
         {
             title: 'Số Lượng',
-            name: 'col6',
+            name: 'quantity',
             type: 'number'
         },
     ]

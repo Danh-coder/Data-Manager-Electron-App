@@ -110,9 +110,6 @@
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
     <script>
-
-
-        
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
 
@@ -137,9 +134,6 @@
 
         })
 
-
-
-
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         // Print recent submissions when first enter the page
         printReviews('xuatLinhkien');
@@ -147,6 +141,11 @@
         //Print the number of submissions
         var submissionCount = ipcRenderer.sendSync('countSubmissions');
         document.getElementById('stthopdong').innerHTML = submissionCount;
+
+        //Update submissionCount after changing its value
+        $('#stthopdong').on('DOMSubtreeModified',function(){ //Detect changing span value
+            ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
+        })   
         
         var thanhtien = document.getElementById('thanhtien').value;
         var formChange = document.querySelector('form')
@@ -197,51 +196,12 @@
             document.getElementById('stthopdong').innerHTML = doc.stthopdong;
 
             const form = $('form');
-            form.empty();
-            form.attr("id", 'edit')
-            const formContent = $(`
-                <div class="row">
-                    <input type="hidden" id="_id" value="${doc.id}">
-
-                    <div class="col-6">
-                        <label for="partnum">Part number</label>
-                        <input type="text" class="form-control" id="partnum" placeholder="Part number" value="${doc.partnum}" required>
-                            
-                        <label for="sohopdong">Số hợp đồng</label>
-                        <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" value="${doc.sohopdong}" required>
-
-                        <label for="cty">Công ty nhập</label>
-                        <input type="text" class="form-control" id="cty" placeholder="Công ty nhập" value="${doc.cty}" required>
-
-                        <label for="dvtinh">Đơn vị tính</label>
-                        <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" value="${doc.dvtinh}" required>
-
-                        <label for="dongia">Đơn giá</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="dongia" placeholder="Đơn giá" value="${doc.dongia.toString()}" required>
-        
-                    </div>
-
-                    <div class="col-6">
-
-                        <label for="tenhang">Tên hàng</label>
-                        <input type="text" class="form-control" id="tenhang" placeholder="Tên hàng" value="${doc.tenhang}" required>
-                            
-                        <label for="sanpham">Sản phẩm</label>
-                        <input type="text" class="form-control" id="sanpham" placeholder="Sản phẩm" value="${doc.sanpham}" required>
-
-                        <label for="date">Ngày nhập</label>
-                        <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}" required>
-        
-                        <label for="quantity">Số lượng</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}" required>
-        
-                        <label for="thanhtien">Thành tiền</label>
-                        <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)" class="form-control" id="thanhtien" placeholder="${doc.thanhtien.toString()}" disabled> 
-        
-                    </div>
-                </div>
+            form.attr("id", 'edit');
+            $('form .row').append(`
+                <input type="hidden" id="_id" value="${doc.id}">
             `)
-            form.append(formContent);
+
+            displayLinhkien([doc]); //Display document via grid
 
             //Change buttons too
             const buttonContainer = $('#buttonContainer');
@@ -251,11 +211,8 @@
                 <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             `)
 
-            //Hidden excel table and submit button
-            document.getElementById('grid').style.display = 'none';
+            //Hidden submit button
             document.getElementById('button2').style.display = 'none';
-
-            thanhtien = doc.thanhtien.toString();
         })
 
         function submit() {
@@ -276,7 +233,8 @@
                 printReviews('xuatLinhkien'); //Update grid
             } 
             if (form.id == "edit") {
-                var obj = prepareObj();
+                // var obj = prepareObj();
+                var obj = getEditedDocument(); //via grid.data
                 obj.id = document.getElementById('_id').value;
                 var canSubmit = ipcRenderer.sendSync('edit-xuat-linhkien', obj);
                 if (canSubmit) { 

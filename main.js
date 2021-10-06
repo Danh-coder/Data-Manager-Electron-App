@@ -224,10 +224,13 @@ ipcMain.on('countSubmissions', async (event) => {
   const submissions = await database.countSubmissions();
   event.returnValue = submissions;
 })
+ipcMain.on('updateSubmissionCount', async (event, value) => {
+  await database.increaseSubmissionCount(value - 1); //(value - 1) + 1 = value
+})
 
 
 
-
+// Auto update
 autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('update_available');
 });
