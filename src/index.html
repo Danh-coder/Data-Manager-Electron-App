@@ -16,6 +16,21 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
         rel="stylesheet" />
     <title>Data Manager</title>
+    <style>
+        #notification {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 200px;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+        .hidden {
+        display: none;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-light" style="padding: 0 !important;">
@@ -84,6 +99,17 @@
             </div>
         </div>
 
+
+
+    <div id="notification" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">
+            Close
+        </button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">
+            Restart
+        </button>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -104,6 +130,29 @@
                 nhapThanhpham: [],
                 xuatThanhpham: []
             })
+
+
+            const notification = document.getElementById('notification');
+            const message = document.getElementById('message');
+            const restartButton = document.getElementById('restart-button');
+            ipcRenderer.on('update_available', () => {
+            ipcRenderer.removeAllListeners('update_available');
+            message.innerText = 'A new update is available. Downloading now...';
+            notification.classList.remove('hidden');
+            });
+            ipcRenderer.on('update_downloaded', () => {
+            ipcRenderer.removeAllListeners('update_downloaded');
+            message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+            restartButton.classList.remove('hidden');
+            notification.classList.remove('hidden');
+            });
+
+            function closeNotification() {
+            notification.classList.add('hidden');
+            }
+            function restartApp() {
+            ipcRenderer.send('restart_app');
+            }
     </script>
 </body>
 </html>
