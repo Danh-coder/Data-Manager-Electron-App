@@ -86,6 +86,11 @@
         var select = document.getElementById('type')
         
         function myFunction() {
+            //Clear recent searches and spreadsheets
+            document.getElementById('grid').style.visibility = 'hidden';
+            $('#sheet-buttons').empty();
+            $('#ton div').remove();
+
             if (select.value === 'name')
             {
                 document.getElementById('datestart').style.display = 'none'
@@ -95,7 +100,7 @@
                 document.querySelector('.lbl-date').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
-            
+                processTextInputs();
             }
             else if (select.value === 'sohopdong')
             {
@@ -106,7 +111,7 @@
                 document.querySelector('.lbl-date').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
-            
+                processTextInputs();
             }
             else if (select.value === 'date')
             {
@@ -118,8 +123,9 @@
             
                 document.querySelector('.lbl-date').style.display =''
                 document.getElementById('dateend').style.display = 'inline'
+                processDate();
             }
-            else 
+            else //Search all
             {
                 document.getElementById('datestart').style.display = 'none'
                 document.getElementById('dateend').style.display = 'none'
@@ -128,6 +134,7 @@
                 document.querySelector('.lbl-date').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = ''
+                processAll();
             }
         }
 
@@ -179,6 +186,7 @@
         function processTextInputs() {
             if (select.value === 'name') {
                 var name = document.getElementById('nameinp').value;
+                if (name == '') return;
                 name = $.trim(name);
 
                 nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-partnum', {name});
@@ -188,6 +196,7 @@
             }
             if (select.value === 'sohopdong') {
                 var sohopdong = document.getElementById('shdinp').value;
+                if (sohopdong == '') return;
                 sohopdong = $.trim(sohopdong);
 
                 nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-sohopdong', {sohopdong});

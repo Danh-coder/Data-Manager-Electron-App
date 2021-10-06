@@ -103,7 +103,7 @@
                 document.getElementById('shdinp').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
-                document.getElementById('nameinp').value = ''; //Empty input
+                processTextInputs();
             }
             else if (select.value === 'sohopdong')
             {
@@ -114,20 +114,19 @@
                 document.getElementById('shdinp').style.display ='inline'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sổ hợp đồng'
-                document.getElementById('shdinp').value = ''; //Empty input
+                processTextInputs();
             }
             else if (select.value === 'date')
             {
                 document.getElementById('nameinp').style.display = 'none'
                 document.getElementById('shdinp').style.display ='none'
                 document.getElementById('datestart').style.display = 'inline'
-                document.getElementById('datestart').value = ''
             
                 document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
             
                 document.querySelector('.lbl-date').style.display =''
                 document.getElementById('dateend').style.display = 'inline'
-                document.getElementById('dateend').value = ''; //Empty input
+                processDate();
             }
             else //All search
             {
@@ -137,38 +136,50 @@
                 document.querySelector('.lbl-date').style.display ='none'
                 document.getElementById('shdinp').style.display ='none'
 
-                document.getElementById('hmm').innerHTML = ''; //Empty input
+                processAll();
             }
         }
 
         //include electron package
         const {ipcRenderer} = require('electron');
-        var docs;
+        var nhaps, xuats;
 
         function print(state) {
             var box = $(`#${state}`);
             $(`#${state} div`).remove();
-            docs.forEach(doc => {
-                var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
-                var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
-                var mcu = $('<p></p>').html('MCU: ' + doc.mcu);
-                var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                var chip = $('<p></p>').html('Chip: ' + doc.chip);
-                var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
-                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
 
-                var button, butto;
-                if (state == 'nhap') {
-                    button = $(`<button onclick="redirect('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
-                    butto = $(`<button onclick="redirect1('${doc.id}')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
-                }
-                if (state == 'xuat') {
-                    button = $(`<button onclick="redirect2('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
-                    butto = $(`<button onclick="redirect3('${doc.id}')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
-                }
-                block.append(butto, button, tenhang, mcu, sohopdong, chip, date, quantity);
-                box.append(block);
-            });
+            if (state == 'nhap') {
+                var index = 0;
+                nhaps.forEach(doc => {
+                    var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
+                    var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
+                    var mcu = $('<p></p>').html('MCU: ' + doc.mcu);
+                    var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
+                    var chip = $('<p></p>').html('Chip: ' + doc.chip);
+                    var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
+                    var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
+                    var button = $(`<button onclick="redirect('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
+                    var butto = $(`<button onclick="redirect1('${doc.id}'); nhaps.splice(${index++}, 1); print('nhap')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
+                    block.append(butto, button, tenhang, mcu, sohopdong, chip, date, quantity);
+                    box.append(block);
+                });
+            }
+            if (state == 'xuat') {
+                var index = 0;
+                xuats.forEach(doc => {
+                    var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
+                    var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
+                    var mcu = $('<p></p>').html('MCU: ' + doc.mcu);
+                    var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
+                    var chip = $('<p></p>').html('Chip: ' + doc.chip);
+                    var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
+                    var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
+                    var button = $(`<button onclick="redirect2('${doc.id}')" style="position: absolute; right: 0; background-color: transparent;"><i class="far fa-edit"></i></button>`);
+                    var butto = $(`<button onclick="redirect3('${doc.id}'); xuats.splice(${index++}, 1); print('xuat')" style="position: absolute; right: 30px; margin-right:30px; background-color: transparent;"><i class="far fa-trash-alt"></i></button>`);
+                    block.append(butto, button, tenhang, mcu, sohopdong, chip, date, quantity);
+                    box.append(block);
+                });
+            }
         }
 
         //Redirect to edit file
@@ -178,7 +189,6 @@
         }
         function redirect1(id) {
             ipcRenderer.send('xoa-nhap-thanhpham', id);
-            location.href='./cstp.html';
         }
         function redirect2(id) {
             ipcRenderer.send('edit-send', {type: 'thanhpham', id: id});
@@ -186,7 +196,6 @@
         }
         function redirect3(id) {
             ipcRenderer.send('xoa-xuat-thanhpham', id);
-            location.href='./cstp.html';
         }
 
         //Submit form when press Enter
@@ -202,9 +211,9 @@
         // Option All
         function processAll() {
             if (select.value == 'all') {
-                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-all', {});
+                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-all', {});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-all', {});
+                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-all', {});
                 print('xuat');
             }
         }
@@ -214,29 +223,31 @@
             var datestart = document.getElementById('datestart').value;
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
-                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-ngay', {datestart, dateend});
+                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-ngay', {datestart, dateend});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-ngay', {datestart, dateend});
+                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-ngay', {datestart, dateend});
                 print('xuat');
             }
         }
         function processTextInputs() {
             if (select.value === "name") {
                 var name = document.getElementById('nameinp').value;
+                if (name == '') return;
                 name = $.trim(name);
 
-                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-partnum', {name});
+                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-partnum', {name});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-partnum', {name});
+                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-partnum', {name});
                 print('xuat');
             }
             if (select.value === 'sohopdong') {
                 var sohopdong = document.getElementById('shdinp').value;
+                if (sohopdong == '') return;
                 sohopdong = $.trim(sohopdong);
 
-                docs = ipcRenderer.sendSync('doc-nhap-thanhpham-sohopdong', {sohopdong});
+                nhaps = ipcRenderer.sendSync('doc-nhap-thanhpham-sohopdong', {sohopdong});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-thanhpham-sohopdong', {sohopdong});
+                xuats = ipcRenderer.sendSync('doc-xuat-thanhpham-sohopdong', {sohopdong});
                 print('xuat');
             }
         }

@@ -106,7 +106,7 @@
                 document.getElementById('shdinp').style.display ='none'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
-                document.getElementById('nameinp').value = ''; //Empty input
+                processTextInputs();
             }
             else if (select.value === 'sohopdong')
             {
@@ -117,20 +117,19 @@
                 document.getElementById('shdinp').style.display ='inline'
 
                 document.getElementById('hmm').innerHTML = 'Nhập sổ hợp đồng'
-                document.getElementById('shdinp').value = ''; //Empty input
+                processTextInputs();
             }
             else if (select.value === 'date')
             {
                 document.getElementById('nameinp').style.display = 'none'
                 document.getElementById('shdinp').style.display ='none'
                 document.getElementById('datestart').style.display = 'inline'
-                document.getElementById('datestart').value = ''
             
                 document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
             
                 document.querySelector('.lbl-date').style.display =''
                 document.getElementById('dateend').style.display = 'inline'
-                document.getElementById('dateend').value = ''; //Empty input
+                processDate();
             }
             else //All search
             {
@@ -140,58 +139,66 @@
                 document.querySelector('.lbl-date').style.display ='none'
                 document.getElementById('shdinp').style.display ='none'
 
-                document.getElementById('hmm').innerHTML = ''; //Empty input
+                processAll();
             }
         }
 
         //include electron package
         const {ipcRenderer} = require('electron');
-        var docs;
+        var nhaps, xuats;
 
         function print(state) {
             var box = $(`#${state}`);
             $(`#${state} div`).remove();
-            docs.forEach(doc => {
-                // var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px; position: relative"></div>')
-                // var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
-                // var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
-                // var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                // var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                // var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
-                // var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
-                // var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                // var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
-                // var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
-                // var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien);
-                var buttonContaner;
-                if (state == 'nhap') {
-                    buttonContaner = `
-                        <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                            <button onclick="redirect('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                            <button onclick="redirect1('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+
+            if (state == 'nhap') {
+                var index = 0;
+                nhaps.forEach(doc => {
+                    // var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px; position: relative"></div>')
+                    // var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
+                    // var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
+                    // var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
+                    // var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
+                    // var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
+                    // var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
+                    // var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
+                    // var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
+                    // var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
+                    // var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien); 
+                    box.append(`
+                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
+                            <div style="align-self: flex-start;">
+                                <h5 style="font-size: 25px;">
+                                    Phiếu nhập số: ${doc.stthopdong}
+                                </h5>
+                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
+                            </div>
+                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
+                                <button onclick="redirect('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect1('${doc.id}'); nhaps.splice(${index++}, 1); print('nhap')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                            </div>
                         </div>
-                    `
-                }
-                if (state == 'xuat') {
-                    buttonContaner = `
-                        <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                            <button onclick="redirect2('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                            <button onclick="redirect3('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                    `);
+                });
+            }
+            if (state == 'xuat') {
+                xuats.forEach(doc => { 
+                    box.append(`
+                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
+                            <div style="align-self: flex-start;">
+                                <h5 style="font-size: 25px;">
+                                    Phiếu nhập số: ${doc.stthopdong}
+                                </h5>
+                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
+                            </div>
+                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
+                                <button onclick="redirect2('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect3('${doc.id}'); xuats.splice(${index++}, 1); print('xuat')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                            </div>
                         </div>
-                    `
-                }     
-                box.append(`
-                    <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
-                        <div style="align-self: flex-start;">
-                            <h5 style="font-size: 25px;">
-                                Phiếu nhập số: ${doc.stthopdong}
-                            </h5>
-                            <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
-                        </div>
-                        ${buttonContaner}
-                    </div>
-                `);
-            });
+                    `);
+                });
+            }
         }
 
         //Redirect to edit file
@@ -201,7 +208,7 @@
         }
         function redirect1(id) {
             ipcRenderer.send('xoa-nhap-linhkien', id);
-            location.href='./cslk.html';
+            // location.href='./cslk.html';
         }
         function redirect2(id) {
             ipcRenderer.send('edit-send', {type: 'linhkien', id: id});
@@ -209,7 +216,7 @@
         }
         function redirect3(id) {
             ipcRenderer.send('xoa-xuat-linhkien', id);
-            location.href='./cslk.html';
+            // location.href='./cslk.html';
         }
 
         //Submit form when press Enter
@@ -225,9 +232,9 @@
         // Option All
         function processAll() {
             if (select.value == 'all') {
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
                 print('xuat');
             }
         }
@@ -237,30 +244,32 @@
             var datestart = document.getElementById('datestart').value;
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
                 print('nhap')
-                docs = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
                 print('xuat');
             }
         }
         function processTextInputs() {
             if (select.value === "name") {
                 var name = document.getElementById('nameinp').value;
+                if (name == '') return;
                 name = $.trim(name);
 
                 //Search documents via products' partnums
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
                 print('xuat');
             }
             if (select.value === 'sohopdong') {
                 var sohopdong = document.getElementById('shdinp').value;
+                if (sohopdong == '') return;
                 sohopdong = $.trim(sohopdong);
 
-                docs = ipcRenderer.sendSync('doc-nhap-linhkien-sohopdong', {sohopdong});
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-sohopdong', {sohopdong});
                 print('nhap');
-                docs = ipcRenderer.sendSync('doc-xuat-linhkien-sohopdong', {sohopdong});
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-sohopdong', {sohopdong});
                 print('xuat');
             }
         }

@@ -9,7 +9,6 @@ function addReview(key) {
 
     reviews[key].push(obj);
     updateLocalStorage();
-    location.reload(); //Reload page
 }
 
 function removeReview(key, index) {

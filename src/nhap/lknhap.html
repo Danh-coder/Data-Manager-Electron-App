@@ -95,7 +95,7 @@
         </form>
 
         <div id="buttonContainer" class="row" style="margin: 30px 0;">
-            <input onclick="addReview('nhapLinhkien')" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('nhapLinhkien'); printReviews('nhapLinhkien'); addKeyword();" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -271,14 +271,18 @@
             const form = document.querySelector('form');
             if (form.id == "save") {
                 //Submit all previous reviews
-                var index = 0;
+                var index = 0, stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
+                    reviews['nhapLinhkien'][index]['stthopdong'] = stthopdong; //avoid having same stthopdong
                     var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
-                    if (canSubmit) removeReview('nhapLinhkien', index);
-                    else index++; //Skip element
+                    if (canSubmit) { 
+                        removeReview('nhapLinhkien', index);
+                        stthopdong++; //One more contract is done
+                    } else index++; //Skip element
                 }
 
-                location.reload(); //Reload page
+                document.getElementById('stthopdong').innerHTML = stthopdong; //Display updated stthopdong
+                printReviews('nhapLinhkien'); //Update grid
             } 
             if (form.id == "edit") {
                 var obj = prepareObj();

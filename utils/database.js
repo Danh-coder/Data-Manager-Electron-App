@@ -20,8 +20,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // -------------------------------------Keywords Processes-------------------------------------
-const addKeywordLinhkien = (body) => {
-    db.collection('keywords').doc('tenhang + partnum').update({
+const addKeywordLinhkien = async (body) => {
+    await db.collection('keywords').doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,
             partnum: body.partnum
@@ -29,17 +29,17 @@ const addKeywordLinhkien = (body) => {
     })
 
     var keyNames = Object.keys(body);
-    keyNames.forEach(key => {
+    keyNames.forEach(async(key) => {
         if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
-        db.collection('keywords').doc(key).update({
+        await db.collection('keywords').doc(key).update({
             values: firebase.firestore.FieldValue.arrayUnion(body[key])
         })
     })
 }
-const addKeywordThanhpham = (body) => {
-    db.collection('keywords').doc('tenhang + partnum').update({
+const addKeywordThanhpham = async (body) => {
+    await db.collection('keywords').doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,
             partnum: body.partnum
@@ -47,11 +47,11 @@ const addKeywordThanhpham = (body) => {
     })
 
     var keyNames = Object.keys(body);
-    keyNames.forEach(key => {
+    keyNames.forEach(async(key) => {
         if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
-        db.collection('keywords').doc(key).update({
+        await db.collection('keywords').doc(key).update({
             values: firebase.firestore.FieldValue.arrayUnion(body[key])
         })
     })
@@ -151,9 +151,9 @@ const save = async (type, body) => {
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
 
-        //Add keywords
-        if (type == 'linhkien') addKeywordLinhkien(body);
-        else addKeywordThanhpham(body);
+        // //Add keywords
+        // if (type == 'linhkien') addKeywordLinhkien(body);
+        // else addKeywordThanhpham(body);
         //Now one more submission is done
         if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
 
@@ -202,14 +202,14 @@ const edit = async (state, type, {id, ...body}) => {
                     popup('info', 'Success', 'Save data successfully');
 
                     //Add keywords
-                    if (type == 'linhkien') {
-                        removeKeywordLinhkien(docRef.data());
-                        addKeywordLinhkien(body);
-                    }
-                    else {
-                        removeKeywordThanhpham(docRef.data());
-                        addKeywordThanhpham(body);
-                    }
+                    // if (type == 'linhkien') {
+                    //     removeKeywordLinhkien(docRef.data());
+                    //     addKeywordLinhkien(body);
+                    // }
+                    // else {
+                    //     removeKeywordThanhpham(docRef.data());
+                    //     addKeywordThanhpham(body);
+                    // }
                 }
             }
             else {
@@ -243,9 +243,9 @@ const del = async (state, type, id) => {
     })
 
     //Remove Keywords
-    var body = docRef.data();
-    if (type == 'linhkien') removeKeywordLinhkien(body);
-    else removeKeywordThanhpham(body);
+    // var body = docRef.data();
+    // if (type == 'linhkien') removeKeywordLinhkien(body);
+    // else removeKeywordThanhpham(body);
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
@@ -287,9 +287,9 @@ const xuat = async(type, body) => {
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
 
-        //Add keywords
-        if (type == 'linhkien') addKeywordLinhkien(body);
-        else addKeywordThanhpham(body);
+        // //Add keywords
+        // if (type == 'linhkien') addKeywordLinhkien(body);
+        // else addKeywordThanhpham(body);
         //Now one more submission is done
         if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
 
@@ -383,5 +383,7 @@ module.exports = {
     readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
     readStorage: readStorage,
+    addKeywordLinhkien: addKeywordLinhkien,
+    addKeywordThanhpham: addKeywordThanhpham,
     countSubmissions: countSubmissions,
 }

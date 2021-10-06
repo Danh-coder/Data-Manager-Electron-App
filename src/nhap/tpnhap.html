@@ -65,7 +65,7 @@
 
         <div class="row" id="buttonContainer" style="margin: 30px 0;">
             <input onclick="submit()" type="submit" value="Thêm" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
-            <input onclick="addReview('nhapThanhpham')" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('nhapThanhpham'); printReviews('nhapThanhpham'); addKeyword();" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-4 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -167,14 +167,18 @@
             const form = document.querySelector('form');
             if (form.id == "save") {
                 //Submit all previous reviews
-                var index = 0;
+                var index = 0, stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
                 while (index < reviews['nhapThanhpham'].length) { //Inside the array
+                    reviews['nhapThanhpham'][index]['stthopdong'] = stthopdong; //avoid having same stthopdong
                     var canSubmit = ipcRenderer.sendSync('save-thanhpham', reviews['nhapThanhpham'][index]);
-                    if (canSubmit) removeReview('nhapThanhpham', index);
-                    else index++; //Skip element
+                    if (canSubmit) { 
+                        removeReview('nhapThanhpham', index);
+                        stthopdong++; //One more contract is done
+                    } else index++; //Skip element
                 }
 
-                location.reload(); //Page Reload
+                document.getElementById('stthopdong').innerHTML = stthopdong; //Display updated stthopdong
+                printReviews('nhapThanhpham'); //Update grid
             } 
             if (form.id == "edit") {
                 var obj = prepareObj();
