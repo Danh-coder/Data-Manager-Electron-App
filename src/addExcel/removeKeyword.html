@@ -42,7 +42,7 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="partnum" onchange="pasteResult('partnum');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="partnum" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
@@ -61,7 +61,7 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="tenhang" onchange="pasteResult('tenhang');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="tenhang" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
@@ -79,7 +79,7 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="sohopdong" onchange="pasteResult('sohopdong');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="sohopdong" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
@@ -98,7 +98,7 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="cty" onchange="pasteResult('cty');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="cty" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
@@ -118,7 +118,7 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="dvtinh" onchange="pasteResult('dvtinh');" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="dvtinh" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
@@ -147,11 +147,14 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script>
-        const pasteResult = (aspect) => {
-            document.getElementById(`${aspect}Result`).innerHTML = document.getElementById(aspect).value;
+        const remove = async (aspect) => {
+            if (aspect == 'tenhang' || aspect == 'partnum') {
+                const arr = await Keywords.findPairKeywords(document.getElementById(aspect).value);
+                Keywords.removeKeyword('tenhang + partnum', arr);
+            }
+            await Keywords.removeKeyword(aspect, [document.getElementById(aspect).value]);
+            location.reload();
         }
-
-
     </script>
 
     <!-- Insert this line after script imports -->

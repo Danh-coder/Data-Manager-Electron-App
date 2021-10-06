@@ -22,15 +22,16 @@ const read = async (name) => {
 }
 
 const readLinhkien = async () => {
-    var tenhang_partnum, partnum, sohopdong, sanpham, cty, dvtinh;
+    var tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh;
     tenhang_partnum = await read('tenhang + partnum');
+    tenhang = await read('tenhang');
     partnum = await read('partnum');
     sohopdong = await read('sohopdong');
     sanpham = await read('sanpham');
     cty = await read('cty');
     dvtinh = await read('dvtinh');
     return {
-        tenhang_partnum, partnum, sohopdong, sanpham, cty, dvtinh
+        tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh
     }
 }
 
@@ -57,9 +58,21 @@ const removeKeyword = async (aspect, values) => {
     })
 }
 
+//Find relative tenhang_partnum keywords 
+const findPairKeywords = async (value) => {
+    var ans = [];
+    const doc = await keywords.doc('tenhang + partnum').get();
+    const arr = doc.data().values;
+    arr.forEach(element => {
+        if (element.tenhang == value || element.partnum == value) ans.push(element);
+    });
+    return ans;
+}
+
 module.exports = {
     readLinhkien: readLinhkien,
     readThanhpham: readThanhpham,
     addKeyword: addKeyword,
-    removeKeyword: removeKeyword
+    removeKeyword: removeKeyword,
+    findPairKeywords: findPairKeywords,
 }

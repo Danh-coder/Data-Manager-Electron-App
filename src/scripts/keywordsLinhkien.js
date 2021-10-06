@@ -3,7 +3,6 @@ const Keywords = require('../../utils/keywords');
 
 var info;
 const autoSuggest = async () => {
-    console.log('Entered');
     info = await Keywords.readLinhkien();
 
     SuggestKeywords('sohopdong');
