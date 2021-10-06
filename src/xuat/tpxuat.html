@@ -124,31 +124,12 @@
             document.getElementById('datetime').innerHTML = doc.submissionDate;
 
             const form = $('form');
-            form.empty();
-            form.attr("id", 'edit')
-            const formContent = $(`
+            form.attr("id", 'edit');
+            $('form').append(`
                 <input type="hidden" id="_id" value="${doc.id}">
-                <input type="hidden" id="partnum" value="${doc.partnum}">
-
-                <label for="tensp">Tên sản phẩm</label>
-                <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">
-                
-                <label for="date">Ngày nhập</label>
-                <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}">
-
-                <label for="sohopdong">Số hợp đồng</label>
-                <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" value="${doc.sohopdong}">
-                
-                <label for="mcu">MCU</label>
-                <input type="text" class="form-control" id="mcu" placeholder="MCU"  value="${doc.mcu}">
-
-                <label for="chip">Chip</label>
-                <input type="text" class="form-control" id="chip" placeholder="Chip" value="${doc.chip}">
-
-                <label for="quantity">Số lượng</label>
-                <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}">
             `)
-            form.append(formContent);
+
+            displayThanhpham([doc]); //Display document via grid
 
             //Change buttons too
             const buttonContainer = $('#buttonContainer');
@@ -157,31 +138,27 @@
                 <input onclick="submit()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
                 <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             `)
-
-            //Hidden the excel table
-            document.getElementById('grid').style.display = 'none';
         })
 
         function submit() {
             const form = document.querySelector('form');
             if (form.id == "save") {
                 //Submit all previous reviews
-                var index = 0, stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+                var index = 0;
                 while (index < reviews['xuatThanhpham'].length) { //Inside the array
-                    reviews['xuatThanhpham'][index]['stthopdong'] = stthopdong; //avoid having same stthopdong
                     var canSubmit = ipcRenderer.sendSync('xuat-thanhpham', reviews['xuatThanhpham'][index]);
                     if (canSubmit) { 
                         removeReview('xuatThanhpham', index);
-                        stthopdong++; //One more contract is done
                     } else index++; //Skip element
                 }
-
-                document.getElementById('stthopdong').innerHTML = stthopdong; //Display updated stthopdong
                 printReviews('xuatThanhpham'); //Update grid
             } 
             if (form.id == "edit") {
-                var obj = prepareObj();
+                // var obj = prepareObj();
+                var obj = getEditedDocument(); //via grid.data
                 obj.id = document.getElementById('_id').value;
+                obj.dvtinh = 'none'; //There's no quantity column in the thanhpham's grid
+
                 var canSubmit = ipcRenderer.sendSync('edit-xuat-thanhpham', obj);
                 if (canSubmit) { 
                     form.action = "../chinhsua/cstp.html"; form.submit(); 
