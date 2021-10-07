@@ -40,7 +40,7 @@
     <div class="container container-custom" style="position: relative; padding: 0 !important;">
     
         <div style="display: flex; margin-top: 50px;">
-            <h1>Nhập linh kiện thành phẩm</h1> 
+            <h1 id = "h1-edit">Xuất linh kiện điện tử</h1> 
             <div style="margin-right: 0; margin-left: auto;"> 
                 <span style="float: right; margin-right: 0; margin-left: auto; font-size: 15px; margin-top: 15px;">Ngày thực nhập: <span id="datetime"></span></span>
                 <p class="clearfix" style="font-size: 15px; margin-right: 0; margin-left: auto; margin-top: 5px;">Phiếu nhập số: <span id="stthopdong"></span></p>
@@ -96,6 +96,10 @@
         <div id="grid">
             
         </div>
+        <div id="btn-edit" class="row" style="margin: 30px 0;">
+
+        </div>
+
         <input id="button2" onclick="submit()" type="submit" value="Lưu" class="form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
       
     </div>
@@ -203,8 +207,15 @@
 
             displayLinhkien([doc]); //Display document via grid
 
+
+            $('#h1-edit').text("Chỉnh sửa xuất linh kiện điện tử")
+
+            var btntmp = $('#buttonContainer')
+            btntmp.empty()
+
+
             //Change buttons too
-            const buttonContainer = $('#buttonContainer');
+            const buttonContainer = $('#btn-edit');
             buttonContainer.empty();
             buttonContainer.append(`
                 <input onclick="submit()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
