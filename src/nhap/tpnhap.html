@@ -125,7 +125,7 @@
             document.getElementById('datetime').innerHTML = doc.submissionDate;
 
             const form = $('form');
-            form.attr("id", 'edit');
+            form.attr("id", 'edit').hide();
             $('form').append(`
                 <input type="hidden" id="_id" value="${doc.id}">
             `)
