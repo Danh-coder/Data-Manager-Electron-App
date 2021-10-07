@@ -80,10 +80,17 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
-    <script src="../scripts/keywordsInputs.js"></script>
+    <script src="../scripts/autoComplete.js"></script>
     <script src="../scripts/printExcel.js"></script>
     <script>
         var select = document.getElementById('type')
+
+        //Auto Complete
+        const trigger = () => {
+            SuggestKeywords('nameinp');
+            SuggestKeywords('shdinp');
+        }
+        
         
         function myFunction() {
             //Clear recent searches and spreadsheets

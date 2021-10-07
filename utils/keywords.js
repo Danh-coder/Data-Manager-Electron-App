@@ -21,8 +21,8 @@ const read = async (name) => {
     return await (doc.data().values);
 }
 
-const readLinhkien = async () => {
-    var tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh;
+const readKeywords = async () => {
+    var tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip;
     tenhang_partnum = await read('tenhang + partnum');
     tenhang = await read('tenhang');
     partnum = await read('partnum');
@@ -30,19 +30,10 @@ const readLinhkien = async () => {
     sanpham = await read('sanpham');
     cty = await read('cty');
     dvtinh = await read('dvtinh');
-    return {
-        tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh
-    }
-}
-
-const readThanhpham = async () => {
-    var tenhang_partnum, mcu, sohopdong, chip;
-    tenhang_partnum = await read('tenhang + partnum');
     mcu = await read('mcu');
-    sohopdong = await read('sohopdong');
     chip = await read('chip');
     return {
-        tenhang_partnum, mcu, sohopdong, chip
+        tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip
     }
 }
 
@@ -70,8 +61,7 @@ const findPairKeywords = async (value) => {
 }
 
 module.exports = {
-    readLinhkien: readLinhkien,
-    readThanhpham: readThanhpham,
+    readKeywords: readKeywords,
     addKeyword: addKeyword,
     removeKeyword: removeKeyword,
     findPairKeywords: findPairKeywords,

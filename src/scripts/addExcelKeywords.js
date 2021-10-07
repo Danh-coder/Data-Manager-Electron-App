@@ -3,7 +3,6 @@ const workbook = new Excel.Workbook();
 const Dialogs = require('dialogs');
 const dialogs = Dialogs();
 const Keywords = require('../../utils/keywords');
-const fs = require('fs');
 
 const input = document.getElementById('excel');
 input.onchange = async (e) => {

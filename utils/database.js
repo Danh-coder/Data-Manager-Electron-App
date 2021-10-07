@@ -1,4 +1,4 @@
-const {BrowserWindow, ipcMain, dialog} = require('electron');
+const {dialog} = require('electron');
 const popup = require('./popup');
 const firebase = require("firebase");
 require('dotenv').config();
@@ -55,44 +55,6 @@ const addKeywordThanhpham = async (body) => {
         
         await db.collection('keywords').doc(key).update({
             values: firebase.firestore.FieldValue.arrayUnion(body[key])
-        })
-    })
-}
-const removeKeywordLinhkien = (body) => {
-    //Remove pair tenhang-partnum
-    db.collection('keywords').doc('tenhang + partnum').update({
-        values: firebase.firestore.FieldValue.arrayRemove({
-            tenhang: body.tenhang,
-            partnum: body.partnum
-        })
-    })
-
-    var keyNames = Object.keys(body);
-    keyNames.forEach(key => {
-        if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
-            return;
-        
-        db.collection('keywords').doc(key).update({
-            values: firebase.firestore.FieldValue.arrayRemove(body[key])
-        })
-    })
-}
-const removeKeywordThanhpham = (body) => {
-    //Remove pair tenhang-partnum
-    db.collection('keywords').doc('tenhang + partnum').update({
-        values: firebase.firestore.FieldValue.arrayRemove({
-            tenhang: body.tenhang,
-            partnum: body.partnum
-        })
-    })
-
-    var keyNames = Object.keys(body);
-    keyNames.forEach(key => {
-        if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
-            return;
-        
-        db.collection('keywords').doc(key).update({
-            values: firebase.firestore.FieldValue.arrayRemove(body[key])
         })
     })
 }
