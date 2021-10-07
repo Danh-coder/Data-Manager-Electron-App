@@ -207,7 +207,7 @@
             document.getElementById('stthopdong').innerHTML = doc.stthopdong;
 
             const form = $('form');
-            form.attr("id", 'edit');
+            form.attr("id", 'edit').hide();
             $('form .row').append(`
                 <input type="hidden" id="_id" value="${doc.id}">
             `)
