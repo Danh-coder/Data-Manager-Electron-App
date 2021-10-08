@@ -22,7 +22,6 @@ const read = async (name) => {
 }
 
 const readKeywords = async () => {
-    // var tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip;
     const [tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip] = await Promise.all([
         read('tenhang + partnum'),
         read('tenhang'),
@@ -34,15 +33,6 @@ const readKeywords = async () => {
         read('mcu'),
         read('chip'),
     ])
-    // tenhang_partnum = await read('tenhang + partnum');
-    // tenhang = await read('tenhang');
-    // partnum = await read('partnum');
-    // sohopdong = await read('sohopdong');
-    // sanpham = await read('sanpham');
-    // cty = await read('cty');
-    // dvtinh = await read('dvtinh');
-    // mcu = await read('mcu');
-    // chip = await read('chip');
     return {
         tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip
     }
