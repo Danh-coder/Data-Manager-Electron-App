@@ -24,7 +24,7 @@ function createWindow() {
   mainWindow.loadFile('src/index.html')
 
 //   Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
