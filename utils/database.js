@@ -1,29 +1,81 @@
 const {dialog} = require('electron');
-const popup = require('./popup');
 const firebase = require("firebase");
 require('dotenv').config();
-
 // Required for side-effects
 require("firebase/firestore");
-
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTHDOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGEBUCKET,
-    messagingSenderId: process.env.MSG_SENDER_ID,
-    appId: process.env.APPID,
-    measurementId: process.env.MEASUREMENT_ID
+    // apiKey: process.env.API_KEY,
+    // authDomain: process.env.AUTHDOMAIN,
+    // projectId: process.env.PROJECT_ID,
+    // storageBucket: process.env.STORAGEBUCKET,
+    // messagingSenderId: process.env.MSG_SENDER_ID,
+    // appId: process.env.APPID,
+    // measurementId: process.env.MEASUREMENT_ID
+    apiKey: "AIzaSyB9-dEkmcl8UZxMGOuuNixbWOTV56dvuGg",
+    authDomain: "fir-dcb51.firebaseapp.com",
+    projectId: "fir-dcb51",
+    storageBucket: "fir-dcb51.appspot.com",
+    messagingSenderId: "646138430424",
+    appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
+    measurementId: "G-72YX6WP7VW"
 };
-
 firebase.initializeApp(firebaseConfig);
-
 const db = firebase.firestore();
 
+//popup noti
+const popup = (type, title, message) => {
+    const options = {type, title, message};
+    dialog.showMessageBox(null, options);
+}
+
 // -------------------------------------Keywords Processes-------------------------------------
-const addKeywordLinhkien = async (body) => {
-    await db.collection('keywords').doc('tenhang + partnum').update({
+const keywords = db.collection('keywords');
+//Read keywords
+const read = async (name) => { //Only one aspect
+    const doc = await keywords.doc(name).get();
+    return await (doc.data().values);
+}
+const readKeywords = async () => { //All aspects
+    const [tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip] = await Promise.all([
+        read('tenhang + partnum'),
+        read('tenhang'),
+        read('partnum'),
+        read('sohopdong'),
+        read('sanpham'),
+        read('cty'),
+        read('dvtinh'),
+        read('mcu'),
+        read('chip'),
+    ])
+    return {
+        tenhang_partnum, tenhang, partnum, sohopdong, sanpham, cty, dvtinh, mcu, chip
+    }
+}
+//Find relative tenhang_partnum keywords 
+const findPairKeywords = async (value) => {
+    var ans = [];
+    const doc = await keywords.doc('tenhang + partnum').get();
+    const arr = doc.data().values;
+    arr.forEach(element => {
+        if (element.tenhang == value || element.partnum == value) ans.push(element);
+    });
+    return ans;
+}
+// Add, remove keywords
+const addKeyword = async (aspect, values) => { //Via aspects
+    await keywords.doc(aspect).update({
+        values: firebase.firestore.FieldValue.arrayUnion(...values)
+    })
+}
+const removeKeyword = async (aspect, values) => { //Via aspects
+    await keywords.doc(aspect).update({
+        values: firebase.firestore.FieldValue.arrayRemove(...values)
+    })
+}
+const addKeywordLinhkien = async (body) => { //Via type
+    console.log(body);
+    await keywords.doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,
             partnum: body.partnum
@@ -35,13 +87,13 @@ const addKeywordLinhkien = async (body) => {
         if (key == 'state' || key == 'dongia' || key == 'quantity' || key == 'thanhtien' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
-        await db.collection('keywords').doc(key).update({
+        await keywords.doc(key).update({
             values: firebase.firestore.FieldValue.arrayUnion(body[key])
         })
     })
 }
-const addKeywordThanhpham = async (body) => {
-    await db.collection('keywords').doc('tenhang + partnum').update({
+const addKeywordThanhpham = async (body) => { //Via type
+    await keywords.doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,
             partnum: body.partnum
@@ -53,7 +105,7 @@ const addKeywordThanhpham = async (body) => {
         if (key == 'state' || key == 'quantity' || key == 'date' || key == 'submissionDate' || key == 'stthopdong')
             return;
         
-        await db.collection('keywords').doc(key).update({
+        await keywords.doc(key).update({
             values: firebase.firestore.FieldValue.arrayUnion(body[key])
         })
     })
@@ -347,8 +399,14 @@ module.exports = {
     readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
     readStorage: readStorage,
+
+    readKeywords: readKeywords,
     addKeywordLinhkien: addKeywordLinhkien,
     addKeywordThanhpham: addKeywordThanhpham,
+    addKeyword: addKeyword,
+    removeKeyword: removeKeyword,
+    findPairKeywords: findPairKeywords,
+
     countSubmissions: countSubmissions,
     increaseSubmissionCount: increaseSubmissionCount,
 }

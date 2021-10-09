@@ -1,9 +1,9 @@
 const autocomplete = require('autocompleter');
-const Keywords = require('../../utils/keywords');
+const {readKeywords, findPairKeywords, removeKeyword, addKeywordLinhkien, addKeywordThanhpham} = require('../../utils/database');
 
 var info;
 (async () => {
-    info = await Keywords.readKeywords();
+    info = await readKeywords();
     trigger();
 })()
 
@@ -12,6 +12,8 @@ const addKeyword = async (type) => {
     var obj = prepareObj();
     if (type == 'linhkien') await ipcRenderer.send('addKeyword-linhkien', obj);
     if (type == 'thanhpham') await ipcRenderer.send('addKeyword-thanhpham', obj);
+    // if (type == 'linhkien') await addKeywordLinhkien(obj);
+    // if (type == 'thanhpham') await addKeywordThanhpham(obj);
     location.reload();
 }
 

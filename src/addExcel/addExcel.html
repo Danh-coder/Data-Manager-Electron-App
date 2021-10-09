@@ -43,8 +43,8 @@
         </form>
     </div>
 
-    <!-- Insert this line after script imports -->
-    <script>if (window.module) module = window.module;</script>
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
     <script src="../scripts/addExcelKeywords.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
