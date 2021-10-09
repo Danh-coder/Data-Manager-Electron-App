@@ -5,10 +5,6 @@ var grid = canvasDatagrid({
 });
 grid.style.height = '100%';
 grid.style.width = '100%';
-// Firestore Database Setup
-const firebase = require("firebase");
-require("firebase/firestore");
-const db = firebase.firestore();
 
 //Print excel in ketxuat
 var printExcel = (nhaps, xuats, tons, type) => {

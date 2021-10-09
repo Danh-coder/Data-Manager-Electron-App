@@ -79,7 +79,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="../scripts/keywordsThanhpham.js"></script>
+    <script src="../scripts/autoComplete.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
@@ -87,6 +87,15 @@
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         // Print recent submissions when first enter the page
         printReviews('xuatThanhpham');
+
+        // Auto Complete
+        const trigger = () => {
+            SuggestKeywordsSpecial('tenhang');
+            SuggestKeywords('chip');
+            SuggestKeywords('mcu');
+            SuggestKeywords('sohopdong');
+        }
+        
 
         // Update the date today
         var dt = new Date();
@@ -124,12 +133,27 @@
             document.getElementById('datetime').innerHTML = doc.submissionDate;
 
             const form = $('form');
-            form.attr("id", 'edit').hide();
-            $('form').append(`
+            form.empty();
+            form.attr("id", 'edit')
+            const formContent = $(`
                 <input type="hidden" id="_id" value="${doc.id}">
+                <input type="hidden" id="partnum" value="${doc.partnum}">
+                <label for="tensp">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="tenhang" placeholder="Tên sản phẩm" value="${doc.tenhang}">
+                
+                <label for="date">Ngày nhập</label>
+                <input type="date" class="form-control" id="date" placeholder="Ngày nhập" value="${doc.date}">
+                <label for="sohopdong">Số hợp đồng</label>
+                <input type="text" class="form-control" id="sohopdong" placeholder="Số hợp đồng" value="${doc.sohopdong}">
+                
+                <label for="mcu">MCU</label>
+                <input type="text" class="form-control" id="mcu" placeholder="MCU"  value="${doc.mcu}">
+                <label for="chip">Chip</label>
+                <input type="text" class="form-control" id="chip" placeholder="Chip" value="${doc.chip}">
+                <label for="quantity">Số lượng</label>
+                <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}">
             `)
-
-            displayThanhpham([doc]); //Display document via grid
+            form.append(formContent);
 
             //Change buttons too
             const buttonContainer = $('#buttonContainer');
@@ -138,8 +162,10 @@
                 <input onclick="submit()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
                 <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             `)
-        })
 
+            //Hidden excel table
+            document.getElementById('grid').style.display = 'none';
+        })
         function submit() {
             const form = document.querySelector('form');
             if (form.id == "save") {
@@ -154,11 +180,8 @@
                 printReviews('xuatThanhpham'); //Update grid
             } 
             if (form.id == "edit") {
-                // var obj = prepareObj();
-                var obj = getEditedDocument(); //via grid.data
+                var obj = prepareObj();
                 obj.id = document.getElementById('_id').value;
-                obj.dvtinh = 'none'; //There's no quantity column in the thanhpham's grid
-
                 var canSubmit = ipcRenderer.sendSync('edit-xuat-thanhpham', obj);
                 if (canSubmit) { 
                     form.action = "../chinhsua/cstp.html"; form.submit(); 

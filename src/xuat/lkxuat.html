@@ -109,7 +109,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="../scripts/keywordsLinhkien.js"></script>
+    <script src="../scripts/autoComplete.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
@@ -117,6 +117,16 @@
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
 
+        // Auto Complete
+        const trigger = () => {
+            SuggestKeywordsSpecial('tenhang');
+            SuggestKeywordsSpecial('partnum');
+            SuggestKeywords('cty');
+            SuggestKeywords('dvtinh');
+            SuggestKeywords('sanpham');
+            SuggestKeywords('sohopdong');
+        }
+        
             
         function setTwoNumberDecimal(event) {
             this.value = parseFloat(this.value).toFixed(4);

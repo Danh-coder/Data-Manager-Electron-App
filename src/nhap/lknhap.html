@@ -119,7 +119,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="../scripts/keywordsLinhkien.js"></script>
+    <script src="../scripts/autoComplete.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
@@ -150,6 +150,17 @@
         })
 
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
+
+        // Auto Complete
+        const trigger = () => {
+            SuggestKeywordsSpecial('tenhang');
+            SuggestKeywordsSpecial('partnum');
+            SuggestKeywords('cty');
+            SuggestKeywords('dvtinh');
+            SuggestKeywords('sanpham');
+            SuggestKeywords('sohopdong');
+        }
+        
 
         // Print reviews when first enter the page
         printReviews('nhapLinhkien');

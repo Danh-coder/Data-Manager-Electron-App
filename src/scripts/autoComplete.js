@@ -3,25 +3,27 @@ const Keywords = require('../../utils/keywords');
 
 var info;
 (async () => {
-    info = await Keywords.readLinhkien();
-    if (document.getElementById('nameinp')) {
-        SuggestKeywords('nameinp');
-        SuggestKeywords('shdinp');
-    }
-    else { //Remove keyword page
-        SuggestKeywords1('tenhang');
-        SuggestKeywords1('partnum');
-        SuggestKeywords1('sohopdong');
-        SuggestKeywords1('cty');
-        SuggestKeywords1('dvtinh');
-    }
+    info = await Keywords.readKeywords();
+    trigger();
 })()
 
-const SuggestKeywords = (name) => {
+//Add keyword after adding a review
+const addKeyword = async (type) => {
+    var obj = prepareObj();
+    if (type == 'linhkien') await ipcRenderer.send('addKeyword-linhkien', obj);
+    if (type == 'thanhpham') await ipcRenderer.send('addKeyword-thanhpham', obj);
+    location.reload();
+}
+
+const SuggestKeywords = (name, atRemoveKeywordPage = false) => {
     var input = document.getElementById(name);
     var arr;
-    if (name == 'nameinp') arr = info.partnum;
-    if (name == 'shdinp' || name == 'sohopdong') arr = info.sohopdong;
+    if (name == 'tenhang') arr = info.tenhang;
+    if (name == 'partnum' || name == 'nameinp') arr = info.partnum;
+    if (name == 'chip') arr = info.chip;
+    if (name == 'mcu') arr = info.mcu;
+    if (name == 'sohopdong' || name == 'shdinp') arr = info.sohopdong;
+    if (name == 'sanpham') arr = info.sanpham;
     if (name == 'cty') arr = info.cty;
     if (name == 'dvtinh') arr = info.dvtinh;
 
@@ -37,6 +39,7 @@ const SuggestKeywords = (name) => {
         },
         onSelect: function(item) {
             input.value = item;
+            if (atRemoveKeywordPage) document.getElementById(`${name}Result`).innerHTML = item;
         },
         render: function(item, currentValue){
             const itemElement = document.createElement("div");
@@ -46,18 +49,15 @@ const SuggestKeywords = (name) => {
         minLength: 0,
         showOnFocus: true,
         emptyMsg: "No items found",
-        disableAutoSelect: true,
 });
 }
 
-const SuggestKeywords1 = (name) => {
+const SuggestKeywordsSpecial = (name) => {
     var input = document.getElementById(name);
-    var arr;
-    if(name == 'sohopdong') arr = info.sohopdong;
-    if (name == 'cty') arr = info.cty;
-    if (name == 'dvtinh') arr = info.dvtinh;
-    if (name == 'tenhang') arr = info.tenhang;
-    if (name == 'partnum') arr = info.partnum;
+    var arr = JSON.parse(JSON.stringify(info.tenhang_partnum)); //Only copy values of the 'info' variable
+    if (name == 'tenhang') {
+        arr = deleteSimilarTenhang(arr); //Show all suggestions in partnum input
+    }
 
     autocomplete({
         input: input,
@@ -66,21 +66,31 @@ const SuggestKeywords1 = (name) => {
             var suggestions;
             if (text.length == 0) suggestions = arr;
             // you can also use AJAX requests instead of preloaded data
-            else suggestions = arr.filter(n => n.toLowerCase().startsWith(text))
+            else suggestions = arr.filter(n => n[name].toLowerCase().startsWith(text))
+
             update(suggestions);
         },
         onSelect: function(item) {
-            input.value = item;
-            document.getElementById(`${name}Result`).innerHTML = item;
+            document.getElementById('tenhang').value = item.tenhang;
+            document.getElementById('partnum').value = item.partnum;
         },
         render: function(item, currentValue){
             const itemElement = document.createElement("div");
-            itemElement.textContent = item;
+            itemElement.textContent = item[name];
             return itemElement;
         },
         minLength: 0,
         showOnFocus: true,
         emptyMsg: "No items found",
-        disableAutoSelect: true,
 });
+}
+
+var deleteSimilarTenhang = (arr) => {
+    var visited = {}, i = 0;
+    while (i < arr.length) {
+        while (i < arr.length && visited[arr[i].tenhang] == true) arr.splice(i, 1);
+        if (i < arr.length) visited[arr[i].tenhang] = true;
+        i++;
+    }
+    return arr;
 }
