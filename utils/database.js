@@ -12,20 +12,12 @@ module.exports = (type, title, message) => {
 
 
 const firebaseConfig = {
-    // apiKey: process.env.API_KEY,
-    // authDomain: process.env.AUTHDOMAIN,
-    // projectId: process.env.PROJECT_ID,
-    // storageBucket: process.env.STORAGEBUCKET,
-    // messagingSenderId: process.env.MSG_SENDER_ID,
-    // appId: process.env.APPID,
-    // measurementId: process.env.MEASUREMENT_ID
-    apiKey: "AIzaSyB9-dEkmcl8UZxMGOuuNixbWOTV56dvuGg",
-    authDomain: "fir-dcb51.firebaseapp.com",
-    projectId: "fir-dcb51",
-    storageBucket: "fir-dcb51.appspot.com",
-    messagingSenderId: "646138430424",
-    appId: "1:646138430424:web:4d7aaf370d3cd93343a8ad",
-    measurementId: "G-72YX6WP7VW"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTHDOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGEBUCKET,
+    messagingSenderId: process.env.MSG_SENDER_ID,
+    appId: process.env.APPID,
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();

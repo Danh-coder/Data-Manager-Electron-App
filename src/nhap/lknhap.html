@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.min.css" />
-    <link rel="stylesheet" href="../oldcss/style.min.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../oldcss/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://kraaden.github.io/autocomplete/autocomplete.css">
     <title>Data Manager</title>
 
@@ -64,7 +67,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
                     class="form-control" id="dongia" placeholder="Đơn giá" required>
     
                 </div>
@@ -81,8 +84,7 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày nhập" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
-                    class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="number" class="form-control" id="quantity" placeholder="Số lượng" required>
     
                     <label for="thanhtien">Thành tiền</label>
                     <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
@@ -113,6 +115,7 @@
 
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="../scripts/checkInternetStatus.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -120,13 +123,10 @@
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
+    
     <script>
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
-    
-        function setTwoNumberDecimal(event) {
-            this.value = parseFloat(this.value).toFixed(4);
-        }
 
         $(document).on("dblclick", "#stthopdong", function()
         {
@@ -207,7 +207,7 @@
                 date: date,
                 dvtinh: dvtinh,
                 quantity: parseInt(quantity, 10),
-                dongia: (parseInt(dongia * 10000, 10) / 10000).toFixed(4),
+                dongia: (parseInt(dongia * 100, 10) / 100).toFixed(2),
                 thanhtien: (parseInt(thanhtien * 10000, 10) / 10000).toFixed(4),
                 submissionDate: submissionDate,
                 state: 'nhap'
@@ -278,8 +278,6 @@
             }
         }
         
-
-
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
