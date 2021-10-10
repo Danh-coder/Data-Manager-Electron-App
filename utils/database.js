@@ -4,6 +4,11 @@ require('dotenv').config();
 // Required for side-effects
 require("firebase/firestore");
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+module.exports = (type, title, message) => {
+    const options = {type, title, message};
+    dialog.showMessageBox(null, options);
+}
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTHDOMAIN,
