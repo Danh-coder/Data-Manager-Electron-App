@@ -95,7 +95,7 @@
         </form>
 
         <div id="buttonContainer" class="row" style="margin: 30px 0;">
-            <input onclick="addReview('nhapLinhkien'); printReviews('nhapLinhkien'); addKeyword('linhkien');" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="preSave()" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -122,9 +122,12 @@
     <script src="../scripts/autoComplete.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
-    <script src="../scripts/reviews.js"></script>
+    <script src="../scripts/localStorage.js"></script>
     
     <script>
+        //Show last submission
+        displayLastSubmission('nhapLinhkien');
+
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
 
@@ -176,8 +179,9 @@
         var formChange = document.querySelector('form')
         formChange.addEventListener('change', (e) => {
             thanhtien = document.getElementById('dongia').value *document.getElementById('quantity').value 
-            // document.getElementById('thanhtien').placeholder = document.getElementById('dongia').value *document.getElementById('quantity').value
+            console.log(document.getElementById('thanhtien').placeholder);
             document.getElementById('thanhtien').placeholder = thanhtien;
+            console.log(document.getElementById('thanhtien').placeholder);
         })
 
         function prepareObj() {
@@ -213,6 +217,19 @@
                 state: 'nhap'
             }
             return obj;
+        }
+
+        // Pre save (adding to grid) processes
+        function preSave() {
+            var obj = prepareObj();
+            addReview('nhapLinhkien', obj); 
+            printReviews('nhapLinhkien'); 
+            saveLastSubmission('nhapLinhkien', obj);
+            addKeyword('linhkien', obj);
+
+            //Update stthopdong
+            const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+            ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
         }
 
         // Edit document also ////////////////////
@@ -254,17 +271,13 @@
             const form = document.querySelector('form');
             if (form.id == "save") {
                 //Submit all previous reviews
-                var index = 0, stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+                var index = 0;
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
-                    reviews['nhapLinhkien'][index]['stthopdong'] = stthopdong; //avoid having same stthopdong
                     var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
                     if (canSubmit) { 
                         removeReview('nhapLinhkien', index);
-                        stthopdong++; //One more contract is done
                     } else index++; //Skip element
                 }
-
-                document.getElementById('stthopdong').innerHTML = stthopdong; //Display updated stthopdong
                 printReviews('nhapLinhkien'); //Update grid
             } 
             if (form.id == "edit") {

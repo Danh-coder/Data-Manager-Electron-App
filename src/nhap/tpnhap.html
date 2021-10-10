@@ -62,7 +62,7 @@
 
         <div class="row" id="buttonContainer" style="margin: 30px 0;">
             <input onclick="submit()" type="submit" value="Thêm" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
-            <input onclick="addReview('nhapThanhpham'); printReviews('nhapThanhpham'); addKeyword('thanhpham');" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="preSave()" type="submit" value="Đợi" class="col-4 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-4 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -80,9 +80,12 @@
     <script src="../scripts/autoComplete.js"></script>
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
-    <script src="../scripts/reviews.js"></script>
+    <script src="../scripts/localStorage.js"></script>
     
     <script>
+        //Show last submission
+        displayLastSubmission('nhapThanhpham');
+
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
 
         // Auto Complete
@@ -126,6 +129,15 @@
                 state: 'nhap'
             }
             return obj;
+        }
+
+        // Pre save (adding to grid) processes
+        function preSave() {
+            var obj = prepareObj();
+            addReview('nhapThanhpham', obj); 
+            printReviews('nhapThanhpham'); 
+            saveLastSubmission('nhapThanhpham', obj);
+            addKeyword('thanhpham', obj);
         }
 
         // Edit document also ////////////////////

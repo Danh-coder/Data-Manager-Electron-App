@@ -8,8 +8,7 @@ var info;
 })()
 
 //Add keyword after adding a review
-const addKeyword = async (type) => {
-    var obj = prepareObj();
+const addKeyword = async (type, obj) => {
     if (type == 'linhkien') await ipcRenderer.send('addKeyword-linhkien', obj);
     if (type == 'thanhpham') await ipcRenderer.send('addKeyword-thanhpham', obj);
     location.reload();
