@@ -93,7 +93,7 @@
         </form>
 
         <div id="buttonContainer" class="row" style="margin: 30px 0;">
-            <input onclick="addReview('nhapLinhkien'); printReviews('nhapLinhkien'); addKeyword();" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('nhapLinhkien'); printReviews('nhapLinhkien'); addKeyword('linhkien');" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -168,7 +168,8 @@
 
         //Update submissionCount after changing its value
         $('#stthopdong').on('DOMSubtreeModified',function(){ //Detect changing span value
-            ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
+            if (document.querySelector('form').id == 'save')
+                ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
         })        
 
         var thanhtien = document.getElementById('thanhtien').value;
@@ -216,11 +217,11 @@
 
         // Edit document also ////////////////////
         ipcRenderer.on('edit-receive', (event, doc) => {
+            const form = $('form');
+            form.attr("id", 'edit').hide();
             document.getElementById('datetime').innerHTML = doc.submissionDate;
             document.getElementById('stthopdong').innerHTML = doc.stthopdong;
 
-            const form = $('form');
-            form.attr("id", 'edit').hide();
             $('form .row').append(`
                 <input type="hidden" id="_id" value="${doc.id}">
             `)

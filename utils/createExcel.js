@@ -1,4 +1,9 @@
-const popup = require('./popup');
+const {dialog} = require('electron');
+//popup noti
+const popup = (type, title, message) => {
+    const options = {type, title, message};
+    dialog.showMessageBox(null, options);
+}
 
 function printLinhkien(sheet, arr) {
     sheet.columns = [

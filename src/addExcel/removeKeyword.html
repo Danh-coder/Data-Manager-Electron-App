@@ -156,10 +156,10 @@
 
         const remove = async (aspect) => {
             if (aspect == 'tenhang' || aspect == 'partnum') {
-                const arr = await Keywords.findPairKeywords(document.getElementById(aspect).value);
-                Keywords.removeKeyword('tenhang + partnum', arr);
+                const arr = await findPairKeywords(document.getElementById(aspect).value);
+                removeKeyword('tenhang + partnum', arr);
             }
-            await Keywords.removeKeyword(aspect, [document.getElementById(aspect).value]);
+            await removeKeyword(aspect, [document.getElementById(aspect).value]);
             location.reload();
         }
     </script>

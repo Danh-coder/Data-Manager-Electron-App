@@ -89,7 +89,7 @@
         </form>
 
         <div class="row" id="buttonContainer" style="margin: 30px 0;">
-            <input onclick="addReview('xuatLinhkien'); printReviews('xuatLinhkien'); addKeyword();" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
+            <input onclick="addReview('xuatLinhkien'); printReviews('xuatLinhkien'); addKeyword('linhkien');" type="submit" value="Nhập" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: blue; color:white;">
             <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
         </div>
 
@@ -206,11 +206,11 @@
 
         // Edit document also ////////////////////
         ipcRenderer.on('edit-receive', (event, doc) => {
-            document.getElementById('datetime').innerHTML = doc.submissionDate;
-            document.getElementById('stthopdong').innerHTML = doc.stthopdong;
-
             const form = $('form');
             form.attr("id", 'edit').hide();
+            document.getElementById('datetime').innerHTML = doc.submissionDate;
+            document.getElementById('stthopdong').innerHTML = doc.stthopdong;
+            
             $('form .row').append(`
                 <input type="hidden" id="_id" value="${doc.id}">
             `)

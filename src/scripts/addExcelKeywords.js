@@ -1,8 +1,6 @@
 const Excel = require('exceljs');
 const workbook = new Excel.Workbook();
-const Dialogs = require('dialogs');
-const dialogs = Dialogs();
-const Keywords = require('../../utils/keywords');
+const {addKeyword} = require('../../utils/database');
 
 const input = document.getElementById('excel');
 input.onchange = async (e) => {
@@ -12,19 +10,12 @@ input.onchange = async (e) => {
     reader.onload = async () => {
         const buffer = reader.result;
         await workbook.xlsx.load(buffer);
-        processExcelFile();
+        await processExcelFile();
     }
 }
 
-const processExcelFile = () => {
-    const worksheet = workbook.getWorksheet(1);
-
+const addTenhang_Partnum = async (tenhangColumn, partnumColumn) => {
     var keyPair = []; //Containing tenhang and partnum values as pairs
-    //var added = {}; //Mark if the tenhang has been already added to the array ==> Avoid adding similar tenhangs
-    var tenhangColumn = worksheet.getColumn(2);
-    var partnumColumn = worksheet.getColumn(1);
-    var dvtinhColumn = worksheet.getColumn(3);
-
     partnumColumn = partnumColumn.values;
     tenhangColumn = tenhangColumn.values;
     //Remove the two first values which are unnecessary
@@ -49,10 +40,13 @@ const processExcelFile = () => {
             })
         }
     }
-    Keywords.addKeyword('tenhang + partnum', keyPair);
-    Keywords.addKeyword('tenhang', tenhangColumn);
-    Keywords.addKeyword('partnum', partnumColumn);
-
+    await Promise.all([ //Run code asynchoronously => Increase code performance
+        addKeyword('tenhang + partnum', keyPair),
+        addKeyword('tenhang', tenhangColumn),
+        addKeyword('partnum', partnumColumn)
+    ])
+}
+const addUnit = async (dvtinhColumn) => {
     dvtinhColumn = dvtinhColumn.values;
     dvtinhColumn.shift(); dvtinhColumn.shift();
     // Remove undefined items in array
@@ -62,7 +56,22 @@ const processExcelFile = () => {
             i--;
         }
     }
-    Keywords.addKeyword('dvtinh', dvtinhColumn);
+    await addKeyword('dvtinh', dvtinhColumn);
+}
+
+const processExcelFile = async () => {
+    const Dialogs = require('dialogs');
+    const dialogs = Dialogs();
+   
+    const worksheet = workbook.getWorksheet(1);
+    var tenhangColumn = worksheet.getColumn(2);
+    var partnumColumn = worksheet.getColumn(1);
+    var dvtinhColumn = worksheet.getColumn(3);
+
+    Promise.all([
+        addTenhang_Partnum(tenhangColumn, partnumColumn),
+        addUnit(dvtinhColumn)
+    ])
 
     //popup in renderer side
     dialogs.alert('Add Keywords successfully');

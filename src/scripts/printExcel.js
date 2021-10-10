@@ -41,8 +41,8 @@ const updateEdition = () => {
     }
 }
 const getEditedDocument = () => {
-    var obj = JSON.parse(JSON.stringify(grid.data[0])); //Only copy values
-    obj.quantity = parseInt(obj.quantity, 10); //Not affect grid.data
+    var obj = JSON.parse(JSON.stringify(grid.data[0])); //Only copy values => Not affect grid.data
+    obj.quantity = parseInt(obj.quantity, 10); //Grid.data saves it as string
     return obj;
 }
 

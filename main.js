@@ -53,7 +53,6 @@ app.on('window-all-closed', function () {
 // Work with database, excel file
 const database = require('./utils/database')
 const createExcelFile = require('./utils/createExcel');
-const { addKeywordLinhkien, addKeywordThanhpham } = require('./utils/database');
 // Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
   const success = await database.save('linhkien', obj);
@@ -72,7 +71,7 @@ ipcMain.on('excel-linhkien', async (event, state) => {
   await createExcelFile('linhkien', state[0], state[1], state[2]);
 })
 ipcMain.on('addKeyword-linhkien', async (event, obj) => {
-  await addKeywordLinhkien(obj); 
+  await database.addKeywordLinhkien(obj); 
 })
 
   // Nhap ////////////////////
@@ -150,7 +149,7 @@ ipcMain.on('excel-thanhpham', async (event, state) => {
   await createExcelFile('thanhpham', state[0], state[1], state[2]);
 })
 ipcMain.on('addKeyword-thanhpham', async (event, obj) => {
-  await addKeywordThanhpham(obj); 
+  await database.addKeywordThanhpham(obj); 
 })
 
   // Nhap //////////////////
