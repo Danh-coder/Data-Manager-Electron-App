@@ -67,7 +67,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
+                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
                     class="form-control" id="dongia" placeholder="Đơn giá" required>
     
                 </div>
@@ -84,8 +84,7 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày nhập" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
-                    class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="number" class="form-control" id="quantity" placeholder="Số lượng" required>
     
                     <label for="thanhtien">Thành tiền</label>
                     <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
@@ -116,6 +115,7 @@
 
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="../scripts/checkInternetStatus.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -123,13 +123,10 @@
     <script src="https://unpkg.com/canvas-datagrid"></script>
     <script src="../scripts/printExcel.js"></script>
     <script src="../scripts/reviews.js"></script>
+    
     <script>
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
-    
-        function setTwoNumberDecimal(event) {
-            this.value = parseFloat(this.value).toFixed(4);
-        }
 
         $(document).on("dblclick", "#stthopdong", function()
         {
@@ -210,7 +207,7 @@
                 date: date,
                 dvtinh: dvtinh,
                 quantity: parseInt(quantity, 10),
-                dongia: (parseInt(dongia * 10000, 10) / 10000).toFixed(4),
+                dongia: (parseInt(dongia * 100, 10) / 100).toFixed(2),
                 thanhtien: (parseInt(thanhtien * 10000, 10) / 10000).toFixed(4),
                 submissionDate: submissionDate,
                 state: 'nhap'
