@@ -123,17 +123,29 @@
         crossorigin="anonymous"></script>
     
     <script>
-        // Initialize/Update global variables
+        // Initialize/Update global variables/////////////////////////
         // Via localStorage
-        const updated = (localStorage.reviews && JSON.parse(localStorage.getItem('reviews')).hasOwnProperty('nhapLinhkien'));
-        if (!updated) 
+        //Reviews
+        const reviewsUpdated = (localStorage.reviews && JSON.parse(localStorage.getItem('reviews')).hasOwnProperty('nhapLinhkien'));
+        if (!reviewsUpdated) {
             localStorage.reviews = JSON.stringify({ //Initializing localStorage object is more complex than usual
                 nhapLinhkien: [],
                 xuatLinhkien: [],
                 nhapThanhpham: [],
                 xuatThanhpham: []
             })
+        }
+        //Last Submission
+        if (localStorage.lastSubmission == undefined) {
+            localStorage.lastSubmission = JSON.stringify({ //Initializing localStorage object is more complex than usual
+                nhapLinhkien: {},
+                xuatLinhkien: {},
+                nhapThanhpham: {},
+                xuatThanhpham: {}
+            })
+        }
 
+        //Auto update/////////////////////////////////////////////////
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         
         const notification = document.getElementById('notification');
