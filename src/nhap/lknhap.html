@@ -179,9 +179,7 @@
         var formChange = document.querySelector('form')
         formChange.addEventListener('change', (e) => {
             thanhtien = document.getElementById('dongia').value *document.getElementById('quantity').value 
-            console.log(document.getElementById('thanhtien').placeholder);
             document.getElementById('thanhtien').placeholder = thanhtien;
-            console.log(document.getElementById('thanhtien').placeholder);
         })
 
         function prepareObj() {

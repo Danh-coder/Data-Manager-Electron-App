@@ -208,8 +208,8 @@
             }
         }
         function exportExcel() {
-            printExcel(nhaps, xuats, tons, 'Linhkien'); //Print datas as an excel file on the program
-            ipcRenderer.send('excel-linhkien', [nhaps, xuats, tons]); //Parsing data into an excel file 
+            const success = ipcRenderer.sendSync('excel-linhkien', [nhaps, xuats, tons]); //Parsing data into an excel file 
+            if (success) printExcel(nhaps, xuats, tons, 'Linhkien'); //Print datas as an excel file on the program
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

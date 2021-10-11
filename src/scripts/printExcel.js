@@ -210,9 +210,9 @@ var displayTon = (arr) => {
     var tmp = [];
     arr.forEach(product => {
         var row = {
-            col1: product.tenhang,
-            col2: product.quantity,
-            col3: product.dvtinh,
+            partnum: product.partnum,
+            quantity: product.quantity,
+            dvtinh: product.dvtinh,
         }
         tmp.push(row);
     });
@@ -220,17 +220,17 @@ var displayTon = (arr) => {
     //Rename the header of each column
     grid.schema = [
         {
-            title: 'Tên Hàng',
-            name: 'col1',
+            title: 'Part Number',
+            name: 'partnum',
         },
         {
             title: 'Số Lượng',
-            name: 'col2',
+            name: 'quantity',
             type: 'number'
         },
         {
             title: 'Đơn Vị Tính',
-            name: 'col3',
+            name: 'dvtinh',
         },
     ]    
 }

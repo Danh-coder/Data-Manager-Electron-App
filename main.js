@@ -68,7 +68,8 @@ ipcMain.on('doc-ton-linhkien', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-linhkien', async (event, state) => {
-  await createExcelFile('linhkien', state[0], state[1], state[2]);
+  const success = await createExcelFile('linhkien', state[0], state[1], state[2]);
+  event.returnValue = success;
 })
 ipcMain.on('addKeyword-linhkien', async (event, obj) => {
   await database.addKeywordLinhkien(obj); 
@@ -146,7 +147,8 @@ ipcMain.on('doc-ton-thanhpham', async (event, {name}) => {
   event.returnValue = tons;
 })
 ipcMain.on('excel-thanhpham', async (event, state) => {
-  await createExcelFile('thanhpham', state[0], state[1], state[2]);
+  const success = await createExcelFile('thanhpham', state[0], state[1], state[2]);
+  event.returnValue = success;
 })
 ipcMain.on('addKeyword-thanhpham', async (event, obj) => {
   await database.addKeywordThanhpham(obj); 

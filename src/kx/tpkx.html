@@ -210,8 +210,8 @@
             }
         }
         function exportExcel() {
-            printExcel(nhaps, xuats, tons, 'Thanhpham'); //Print datas as an excel file on the program
-            ipcRenderer.send('excel-thanhpham', [nhaps, xuats, tons]);
+            const success = ipcRenderer.sendSync('excel-thanhpham', [nhaps, xuats, tons]);
+            if (success) printExcel(nhaps, xuats, tons, 'Thanhpham'); //Print datas as an excel file on the program
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

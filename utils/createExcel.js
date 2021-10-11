@@ -59,7 +59,7 @@ function printThanhpham(sheet, arr) {
 }
 function printTon(sheet, arr) {
     sheet.columns = [
-        { header: 'Tên Hàng', key: 'tenhang', width: 20},
+        { header: 'Part Number', key: 'partnum', width: 20},
         { header: 'Số Lượng', key: 'quantity', width: 20},
         { header: 'Đơn Vị Tính', key: 'dvtinh', width: 20},
     ]
@@ -67,14 +67,14 @@ function printTon(sheet, arr) {
     // Add rows in the above header
     arr.forEach(doc => {
         sheet.addRow({
-            tenhang: doc.tenhang,
+            partnum: doc.partnum,
             quantity: doc.quantity,
             dvtinh: doc.dvtinh
         })
     })
 }
 
-module.exports = function createNewExcelFile(type, nhaps, xuats, tons)
+module.exports = async function createNewExcelFile(type, nhaps, xuats, tons)
 {
     var Excel = require('exceljs');
     // A new Excel Work Book
@@ -117,10 +117,17 @@ module.exports = function createNewExcelFile(type, nhaps, xuats, tons)
     }
 
     // Save Excel on Hard Disk
-    workbook.xlsx.writeFile("My Excel File.xlsx")
-    .then(function() {
+    var success;
+    try {
+        await workbook.xlsx.writeFile("My Excel File.xlsx");
         // Success Message
+        success = true;
         console.log('File excel saved');
         popup('info', 'Success', 'File Excel is exported successfully');
-    });
+    } catch (error) {
+        success = false;
+        popup('error', 'Failed', `This process isn't completed because the file is open in another app. 
+Please close it and try again`);
+    }
+    return success;
 }
