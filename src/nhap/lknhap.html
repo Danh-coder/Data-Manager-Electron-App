@@ -208,7 +208,7 @@
                 date: date,
                 dvtinh: dvtinh,
                 quantity: parseInt(quantity, 10),
-                dongia: (parseInt(dongia * 100, 10) / 100).toFixed(2),
+                dongia: (parseInt(dongia * 10000, 10) / 10000).toFixed(4),
                 thanhtien: (parseInt(thanhtien * 10000, 10) / 10000).toFixed(4),
                 submissionDate: submissionDate,
                 state: 'nhap'
@@ -279,7 +279,7 @@
             } 
             if (form.id == "edit") {
                 // var obj = prepareObj();
-                var obj = getEditedDocument(); //via grid.data
+                var obj = getEditedDocument(true); //via grid.data
                 obj.id = document.getElementById('_id').value;
                 var canSubmit = ipcRenderer.sendSync('edit-nhap-linhkien', obj);
                 if (canSubmit) { 

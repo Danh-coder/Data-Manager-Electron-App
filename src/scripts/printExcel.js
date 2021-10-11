@@ -35,14 +35,15 @@ var createBtn = (name, type) => {
 const updateEdition = () => {
     //Mainly update thanhtien, dongia, quantity when one is edited
     if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
-        grid.data[0]['dongia'] = (parseInt(grid.data[0]['dongia'] * 100, 10) / 100).toFixed(2); //Reformat value
+        grid.data[0]['dongia'] = (parseInt(grid.data[0]['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
         grid.data[0]['thanhtien'] = grid.data[0]['quantity'] * grid.data[0]['dongia']; //Change quantity or dongia will affect thanhtien
         grid.data[0]['thanhtien'] = (parseInt(grid.data[0]['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
     }
 }
-const getEditedDocument = () => {
+const getEditedDocument = (linhkien = false) => {
     var obj = JSON.parse(JSON.stringify(grid.data[0])); //Only copy values => Not affect grid.data
     obj.quantity = parseInt(obj.quantity, 10); //Grid.data saves it as string
+    if (linhkien) obj.stthopdong = document.getElementById('stthopdong').innerHTML;
     return obj;
 }
 
@@ -77,7 +78,7 @@ grid.addEventListener('endedit', function (e) { //Update review after finish edi
 
     newObj['quantity'] = parseInt(newObj['quantity'], 10); //Grid saves it as string ==> Reformat value
     if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
-        newObj['dongia'] = (parseInt(newObj['dongia'] * 100, 10) / 100).toFixed(2); //Reformat value
+        newObj['dongia'] = (parseInt(newObj['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
         newObj['thanhtien'] = newObj['quantity'] * newObj['dongia']; //Change quantity or dongia will affect thanhtien
         newObj['thanhtien'] = (parseInt(newObj['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
     }

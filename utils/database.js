@@ -5,12 +5,6 @@ require('dotenv').config();
 require("firebase/firestore");
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-module.exports = (type, title, message) => {
-    const options = {type, title, message};
-    dialog.showMessageBox(null, options);
-}
-
-
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTHDOMAIN,
@@ -165,13 +159,6 @@ const save = async (type, body) => {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
-
-        // //Add keywords
-        // if (type == 'linhkien') addKeywordLinhkien(body);
-        // else addKeywordThanhpham(body);
-        //Now one more submission is done
-        if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
-
         return true;
     }
     else return false;
@@ -186,9 +173,6 @@ const edit = async (state, type, {id, ...body}) => {
         // Delete old document
         if (success) {
             await del(state, type, id);
-
-            // Don't count this submission if it's linhkien editing
-            if (type == 'linhkien') await decreaseSubmissionCount();
         }
     }
     else {
@@ -215,16 +199,6 @@ const edit = async (state, type, {id, ...body}) => {
                     console.log(`Updated log-${type}`);
                     console.log(`Updated ton-${type}`);
                     popup('info', 'Success', 'Save data successfully');
-
-                    //Add keywords
-                    // if (type == 'linhkien') {
-                    //     removeKeywordLinhkien(docRef.data());
-                    //     addKeywordLinhkien(body);
-                    // }
-                    // else {
-                    //     removeKeywordThanhpham(docRef.data());
-                    //     addKeywordThanhpham(body);
-                    // }
                 }
             }
             else {
@@ -256,11 +230,6 @@ const del = async (state, type, id) => {
             console.log(`Updated ton-${type}`);
         }
     })
-
-    //Remove Keywords
-    // var body = docRef.data();
-    // if (type == 'linhkien') removeKeywordLinhkien(body);
-    // else removeKeywordThanhpham(body);
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
@@ -301,13 +270,6 @@ const xuat = async(type, body) => {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
         popup('info', 'Success', 'Save data successfully');
-
-        // //Add keywords
-        // if (type == 'linhkien') addKeywordLinhkien(body);
-        // else addKeywordThanhpham(body);
-        //Now one more submission is done
-        if (type == 'linhkien') await increaseSubmissionCount(body.stthopdong); //Only for linhkien documents
-
         return true;
     }
     else return false;

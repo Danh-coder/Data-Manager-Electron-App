@@ -30,7 +30,7 @@ function displayLastSubmission(key) {
     var objKeys = Object.keys(obj);
     objKeys.forEach(KEY => {
         const input = document.getElementById(KEY);
-        if (KEY == 'thanhtien') input.placeholder = obj[KEY]; //To update thanhtien's value properly
+        // if (KEY == 'thanhtien') input.placeholder = obj[KEY]; //To update thanhtien's value properly
         if (input) input.value = obj[KEY]; //Paste value 
     })
 }
