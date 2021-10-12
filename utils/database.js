@@ -4,7 +4,6 @@ require('dotenv').config();
 // Required for side-effects
 require("firebase/firestore");
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTHDOMAIN,
@@ -299,6 +298,7 @@ const readFollowingDate = async (state, type, {datestart, dateend}) => {
             })
         }
     });
+    popup('info', 'Info', `Found: ${infos.length} in ${state}`);
     return await(infos);
 }
 const readFollowingPartnum = async (state, type, {name}) => {

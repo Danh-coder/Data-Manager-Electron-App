@@ -36,7 +36,7 @@
     </nav>
     <form action="" style="margin-left: 5vw;">
         <label for="type" >Chọn hình thức kết xuất</label>
-        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
+        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction();">
             <option value="date">Ngày</option>
             <option value="name">Sản phẩm</option>
             <option value="sohopdong">Sổ hợp đồng</option>
@@ -79,13 +79,19 @@
     
     <script>
         var select = document.getElementById('type')
-        
-        function myFunction() {
-            //Clear recent searches and spreadsheets
+
+        //Clear recent searches and spreadsheets
+        function empty(includedTon = false) {
             document.getElementById('grid').style.visibility = 'hidden';
             $('#sheet-buttons').empty();
             $('#ton div').remove();
 
+            nhaps = xuats = [];
+            if (includedTon) tons = [];
+            else tons = undefined;
+        }
+
+        function myFunction() {
             if (select.value === 'name')
             {
                 document.getElementById('datestart').style.display = 'none'
@@ -143,6 +149,7 @@
         //include electron package
         const {ipcRenderer} = require('electron');
         var nhaps, xuats, tons;
+        nhaps = xuats = []; tons = undefined;
 
         function print() {
             var box = $('#ton');
@@ -170,14 +177,14 @@
         });
 
         function processAll() {
-            if (select.value === 'all') {
-                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
-                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
-                tons = ipcRenderer.sendSync('doc-ton-linhkien', {name: ''});
-                print();
-            }
+            empty(true); //Clear previous searches
+            nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+            xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+            tons = ipcRenderer.sendSync('doc-ton-linhkien', {name: ''});
+            print();
         }
         function processDate() {
+            empty(); //Clear previous searches
             var datestart = document.getElementById('datestart').value;
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
@@ -188,6 +195,7 @@
         }
         function processTextInputs() {
             if (select.value === 'name') {
+                empty(true); //Clear previous searches
                 var name = document.getElementById('nameinp').value;
                 if (name == '') return;
                 name = $.trim(name);
@@ -198,6 +206,7 @@
                 print();
             }
             if (select.value === 'sohopdong') {
+                empty(); //Clear previous searches
                 var sohopdong = document.getElementById('shdinp').value;
                 if (sohopdong == '') return;
                 sohopdong = $.trim(sohopdong);

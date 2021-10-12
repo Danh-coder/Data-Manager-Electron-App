@@ -77,15 +77,15 @@
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <form action="" class="form-inline">
                     <label for="">Tìm keyword</label>
-                    <input id="tenhang" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
+                    <input id="sanpham" style="margin-top: 15px; margin-left: 15px;" type="text" class="form-control">
                 </form>
                 
             </div>
             <div class="col-6 form-group" style="margin-top: 5px;">
                 <div style="display: flex; justify-content: flex-end;">
-                    <p class="" id="tenhangResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
+                    <p class="" id="sanphamResult" style="font-size: 20px; margin-top: 15px; margin-right: 15px;">Keyword 2</p>
                     <div class="">
-                        <button onclick="remove('tenhang')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
+                        <button onclick="remove('sanpham')" style="padding: 10px 15px; margin-top: 10px;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -168,6 +168,7 @@
         const trigger = () => {
             SuggestKeywords('partnum', true);
             SuggestKeywords('tenhang', true); 
+            SuggestKeywords('sanpham', true);
             SuggestKeywords('sohopdong', true);
             SuggestKeywords('cty', true);
             SuggestKeywords('dvtinh', true);
@@ -176,10 +177,10 @@
 
         const remove = async (aspect) => {
             if (aspect == 'tenhang' || aspect == 'partnum') {
-                const arr = await findPairKeywords(document.getElementById(aspect).value);
+                const arr = await findPairKeywords(document.getElementById(`${aspect}Result`).innerHTML);
                 removeKeyword('tenhang + partnum', arr);
             }
-            await removeKeyword(aspect, [document.getElementById(aspect).value]);
+            await removeKeyword(aspect, [document.getElementById(`${aspect}Result`).innerHTML]);
             location.reload();
         }
     </script>
