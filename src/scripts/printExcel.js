@@ -94,7 +94,7 @@ var displayLinhkien = (arr) => {
     _grid.style.visibility = 'visible';
     resize(); //make the grid more good-looking
     //Add data to the grid
-    var tmp = [];
+    var tmp = [], totalThanhtien = 0;
     arr.forEach(product => {
         var row = {
             partnum: product.partnum,
@@ -109,8 +109,12 @@ var displayLinhkien = (arr) => {
             thanhtien: product.thanhtien
         }
         tmp.push(row);
+
+        totalThanhtien += parseFloat(product.thanhtien); //calculate totalThanhtien
     });
+    tmp.push({thanhtien: totalThanhtien.toFixed(4)}) //display totalThanhtien on the last line
     grid.data = tmp; //grid.data doesn't allow to push each row
+
     //Rename the header of each column
     grid.schema = [
         {

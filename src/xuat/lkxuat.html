@@ -153,8 +153,11 @@
         printReviews('xuatLinhkien');
 
         //Print the number of submissions
-        var submissionCount = ipcRenderer.sendSync('countSubmissions');
-        document.getElementById('stthopdong').innerHTML = submissionCount;
+        const displaySubmissionCount = () => {
+            var submissionCount = ipcRenderer.sendSync('countSubmissions');
+            document.getElementById('stthopdong').innerHTML = submissionCount;
+        }
+        displaySubmissionCount(); //When first entering the page
 
         //Update submissionCount after changing its value
         $('#stthopdong').on('DOMSubtreeModified',function(){ //Detect changing span value
@@ -211,10 +214,6 @@
             printReviews('xuatLinhkien'); 
             saveLastSubmission('xuatLinhkien', obj);
             addKeyword('linhkien', obj);
-
-            //Update stthopdong
-            const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
-            ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
         }
 
         // Edit document also ////////////////////
@@ -252,6 +251,11 @@
         function submit() {
             const form = document.querySelector('form');
             if (form.id == "save") {
+                //Update stthopdong
+                const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+                ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
+                displaySubmissionCount();
+
                 //Submit all previous reviews
                 var index = 0;
                 while (index < reviews['xuatLinhkien'].length) { //Inside the array
