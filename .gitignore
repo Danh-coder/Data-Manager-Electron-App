@@ -108,3 +108,5 @@ dist
 release-builds/
 /release-builds/
 electron-builder.yml
+
+*.xlsx

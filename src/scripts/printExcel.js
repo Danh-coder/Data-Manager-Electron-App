@@ -26,7 +26,7 @@ var createBtn = (name, type) => {
     var btn = $('<button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);"></button>').html(name);
     if (name == 'Nhập') btn.attr('onclick', `display${type}(nhaps)`);
     if (name == 'Xuất') btn.attr('onclick', `display${type}(xuats)`);
-    if (name == 'Tồn') btn.attr('onclick', 'displayTon(tons)');
+    if (name == 'Tồn') btn.attr('onclick', `displayTon(tons, '${type}')`);
 
     buttons.append(btn);
 }
@@ -90,11 +90,11 @@ grid.addEventListener('endedit', function (e) { //Update review after finish edi
 var resize = () => {
     _grid.style.height = (window.innerHeight - 150) + 'px';
 }
-var displayLinhkien = (arr) => {
+var displayLinhkien = (arr, isReview = false) => {
     _grid.style.visibility = 'visible';
     resize(); //make the grid more good-looking
     //Add data to the grid
-    var tmp = [];
+    var tmp = [], totalThanhtien = 0;
     arr.forEach(product => {
         var row = {
             partnum: product.partnum,
@@ -109,8 +109,11 @@ var displayLinhkien = (arr) => {
             thanhtien: product.thanhtien
         }
         tmp.push(row);
+        totalThanhtien += parseFloat(product.thanhtien); //calculate totalThanhtien
     });
+    if (!isReview) tmp.push({thanhtien: totalThanhtien.toFixed(4)}) //display totalThanhtien on the last line
     grid.data = tmp; //grid.data doesn't allow to push each row
+
     //Rename the header of each column
     grid.schema = [
         {
@@ -204,25 +207,14 @@ var displayThanhpham = (arr) => {
         },
     ]
 }
-var displayTon = (arr) => {
+var displayTon = (arr, type) => {
     _grid.style.visibility = 'visible';
     resize(); //make the grid more good-looking
-    //Add data to the grid
-    var tmp = [];
-    arr.forEach(product => {
-        var row = {
-            partnum: product.partnum,
-            quantity: product.quantity,
-            dvtinh: product.dvtinh,
-        }
-        tmp.push(row);
-    });
-    grid.data = tmp; //grid.data doesn't allow to push each row
     //Rename the header of each column
     grid.schema = [
         {
-            title: 'Part Number',
-            name: 'partnum',
+            title: 'Tên Hàng/Part number',
+            name: 'tenhang/partnum',
         },
         {
             title: 'Số Lượng',
@@ -233,7 +225,27 @@ var displayTon = (arr) => {
             title: 'Đơn Vị Tính',
             name: 'dvtinh',
         },
-    ]    
+    ]   
+    if (type == 'Linhkien') grid.schema[0] = {
+        title: 'Part Number',
+        name: 'partnum',
+    }
+    if (type == 'Thanhpham') grid.schema[0] = {
+        title: 'Tên Hàng',
+        name: 'tenhang',
+    }
+    //Add data to the grid
+    var tmp = [];
+    arr.forEach(product => {
+        var row = {
+            quantity: product.quantity,
+            dvtinh: product.dvtinh,
+        }
+        if (type == 'Linhkien') row['partnum'] = product.partnum;
+        if (type == 'Thanhpham') row['tenhang'] = product.tenhang;
+        tmp.push(row);
+    });
+    grid.data = tmp; //grid.data doesn't allow to push each row
 }
 
 var displayLinhkienReviews = (arr) => {

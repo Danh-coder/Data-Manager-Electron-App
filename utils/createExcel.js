@@ -20,6 +20,7 @@ function printLinhkien(sheet, arr) {
     ]
 
     // Add rows in the above header
+    var totalThanhtien = 0;
     arr.forEach(doc => {
         sheet.addRow({
             partnum: doc.partnum,
@@ -33,7 +34,9 @@ function printLinhkien(sheet, arr) {
             dongia: doc.dongia,
             thanhtien: doc.thanhtien,
         })
+        totalThanhtien += parseFloat(doc.thanhtien);
     })
+    sheet.addRow({thanhtien: totalThanhtien.toFixed(4)}); //display totalThanhtien on the last line
 }
 function printThanhpham(sheet, arr) {
     sheet.columns = [
@@ -57,7 +60,7 @@ function printThanhpham(sheet, arr) {
         })
     })
 }
-function printTon(sheet, arr) {
+function printTonLinhkien(sheet, arr) {
     sheet.columns = [
         { header: 'Part Number', key: 'partnum', width: 20},
         { header: 'Số Lượng', key: 'quantity', width: 20},
@@ -68,6 +71,22 @@ function printTon(sheet, arr) {
     arr.forEach(doc => {
         sheet.addRow({
             partnum: doc.partnum,
+            quantity: doc.quantity,
+            dvtinh: doc.dvtinh
+        })
+    })
+}
+function printTonThanhpham(sheet, arr) {
+    sheet.columns = [
+        { header: 'Tên Hàng', key: 'tenhang', width: 20},
+        { header: 'Số Lượng', key: 'quantity', width: 20},
+        { header: 'Đơn Vị Tính', key: 'dvtinh', width: 20},
+    ]
+
+    // Add rows in the above header
+    arr.forEach(doc => {
+        sheet.addRow({
+            tenhang: doc.tenhang,
             quantity: doc.quantity,
             dvtinh: doc.dvtinh
         })
@@ -99,7 +118,7 @@ module.exports = async function createNewExcelFile(type, nhaps, xuats, tons)
         //Create a sheet
         if (tons != undefined) {
             sheet = workbook.addWorksheet('ton-thanhpham');
-            printTon(sheet, tons);
+            printTonThanhpham(sheet, tons);
         }
     }
     if (type == 'linhkien') {
@@ -112,7 +131,7 @@ module.exports = async function createNewExcelFile(type, nhaps, xuats, tons)
         //Create a sheet
         if (tons != undefined) {
             sheet = workbook.addWorksheet('ton-linhkien');
-            printTon(sheet, tons);
+            printTonLinhkien(sheet, tons, type);
         }
     }
 
