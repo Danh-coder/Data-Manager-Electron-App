@@ -90,7 +90,7 @@ grid.addEventListener('endedit', function (e) { //Update review after finish edi
 var resize = () => {
     _grid.style.height = (window.innerHeight - 150) + 'px';
 }
-var displayLinhkien = (arr) => {
+var displayLinhkien = (arr, isReview = false) => {
     _grid.style.visibility = 'visible';
     resize(); //make the grid more good-looking
     //Add data to the grid
@@ -109,10 +109,9 @@ var displayLinhkien = (arr) => {
             thanhtien: product.thanhtien
         }
         tmp.push(row);
-
         totalThanhtien += parseFloat(product.thanhtien); //calculate totalThanhtien
     });
-    tmp.push({thanhtien: totalThanhtien.toFixed(4)}) //display totalThanhtien on the last line
+    if (!isReview) tmp.push({thanhtien: totalThanhtien.toFixed(4)}) //display totalThanhtien on the last line
     grid.data = tmp; //grid.data doesn't allow to push each row
 
     //Rename the header of each column
