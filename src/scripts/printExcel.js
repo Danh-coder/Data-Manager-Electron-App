@@ -32,19 +32,23 @@ var createBtn = (name, type) => {
 }
 
 //Update grid data when editing documents
-const updateEdition = () => {
+const updateEdition = (rowIndex) => {
     //Mainly update thanhtien, dongia, quantity when one is edited
     if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
-        grid.data[0]['dongia'] = (parseInt(grid.data[0]['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
-        grid.data[0]['thanhtien'] = grid.data[0]['quantity'] * grid.data[0]['dongia']; //Change quantity or dongia will affect thanhtien
-        grid.data[0]['thanhtien'] = (parseInt(grid.data[0]['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+        grid.data[rowIndex]['dongia'] = (parseInt(grid.data[rowIndex]['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+        grid.data[rowIndex]['thanhtien'] = grid.data[rowIndex]['quantity'] * grid.data[rowIndex]['dongia']; //Change quantity or dongia will affect thanhtien
+        grid.data[rowIndex]['thanhtien'] = (parseInt(grid.data[rowIndex]['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
     }
 }
-const getEditedDocument = (linhkien = false) => {
-    var obj = JSON.parse(JSON.stringify(grid.data[0])); //Only copy values => Not affect grid.data
-    obj.quantity = parseInt(obj.quantity, 10); //Grid.data saves it as string
-    if (linhkien) obj.stthopdong = document.getElementById('stthopdong').innerHTML;
-    return obj;
+const getEditedDocuments = () => {
+    var objs = [];
+    for (let index = 0; index < grid.data.length; index++) {
+        var obj = JSON.parse(JSON.stringify(grid.data[index])); //Only copy values => Not affect grid.data
+        obj.quantity = parseInt(obj.quantity, 10); //Grid.data saves it as string
+        obj.stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+        objs.push(obj);
+    }    
+    return objs;
 }
 
 //Print reviews in nhap,xuat
@@ -68,11 +72,12 @@ grid.addEventListener('click', function (e) { //Remove review when click the del
         printReviews(memKey);
     }
 });
-grid.addEventListener('endedit', function (e) { //Update review after finish editing
+grid.addEventListener('endedit', function (e) { //Update grid after finish editing
     if (!e.cell || e.cell.rowIndex < 0 || memKey == undefined) { return; }
-    if (grid.schema[0].title != 'Xóa' && memKey != undefined) { updateEdition(); return;} //Chinhsua editions
+    if (grid.schema[0].title != 'Xóa' && memKey != undefined) { updateEdition(e.cell.rowIndex); return;} //Chinhsua editions
 
-    //Nhap, xuat editions
+    //Nhap, xuat reviews editions
+    console.log(e.cell.rowIndex);
     var newObj = JSON.parse( JSON.stringify(grid.data[e.cell.rowIndex])); //Only copy values
     delete newObj['col0']; //Don't include delete button
 

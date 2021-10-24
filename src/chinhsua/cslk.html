@@ -161,17 +161,6 @@
             if (state == 'nhap') {
                 var index = 0;
                 nhaps.forEach(doc => {
-                    // var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px; position: relative"></div>')
-                    // var tenhang = $('<p></p>').html('Tên hàng: ' + doc.tenhang);
-                    // var partnum = $('<p></p>').html('Mã: ' + doc.partnum);
-                    // var sohopdong = $('<p></p>').html('Số hợp đồng: ' + doc.sohopdong);
-                    // var sanpham = $('<p></p>').html('Sản phẩm: ' + doc.sanpham);
-                    // var cty = $('<p></p>').html('Tên công ty nhập: ' + doc.cty);
-                    // var date = $('<p></p>').html('Ngày nhập: ' + doc.date);
-                    // var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                    // var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
-                    // var dongia = $('<p></p>').html('Đơn giá: ' + doc.dongia);
-                    // var thanhtien = $('<p></p>').html('Thành tiền: ' + doc.thanhtien); 
                     box.append(`
                         <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
                             <div style="align-self: flex-start;">
@@ -181,15 +170,15 @@
                                 <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
                             </div>
                             <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                                <button onclick="redirect('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                                <button onclick="redirect1('${doc.id}'); nhaps.splice(${index++}, 1); print('nhap')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                                <button onclick="redirect(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect1(${doc.stthopdong}, '${doc.submissionDate}'); nhaps.splice(${index++}, 1); print('nhap')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
                             </div>
                         </div>
                     `);
                 });
             }
             if (state == 'xuat') {
-                xuats.forEach(doc => { 
+                xuats.forEach(doc => {
                     box.append(`
                         <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
                             <div style="align-self: flex-start;">
@@ -199,8 +188,8 @@
                                 <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
                             </div>
                             <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                                <button onclick="redirect2('${doc.id}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                                <button onclick="redirect3('${doc.id}'); xuats.splice(${index++}, 1); print('xuat')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                                <button onclick="redirect2(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect3(${doc.stthopdong}, '${doc.submissionDate}'); xuats.splice(${index++}, 1); print('xuat')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
                             </div>
                         </div>
                     `);
@@ -209,21 +198,19 @@
         }
 
         //Redirect to edit file
-        function redirect(id) {
-            ipcRenderer.send('edit-send', {type: 'linhkien', id: id});
+        function redirect(stthopdong, submissionDate) {
+            ipcRenderer.send('edit-send', {type: 'linhkien', stthopdong, submissionDate});
             location.href='../nhap/lknhap.html';
         }
-        function redirect1(id) {
-            ipcRenderer.send('xoa-nhap-linhkien', id);
-            // location.href='./cslk.html';
+        function redirect1(stthopdong, submissionDate) {
+            ipcRenderer.send('xoa-nhap-linhkien-stthopdong', {stthopdong, submissionDate});
         }
-        function redirect2(id) {
-            ipcRenderer.send('edit-send', {type: 'linhkien', id: id});
+        function redirect2(stthopdong, submissionDate) {
+            ipcRenderer.send('edit-send', {type: 'linhkien', stthopdong, submissionDate});
             location.href='../xuat/lkxuat.html';
         }
-        function redirect3(id) {
-            ipcRenderer.send('xoa-xuat-linhkien', id);
-            // location.href='./cslk.html';
+        function redirect3(stthopdong, submissionDate) {
+            ipcRenderer.send('xoa-xuat-linhkien-stthopdong', {stthopdong, submissionDate});
         }
 
         //Submit form when press Enter
@@ -236,12 +223,29 @@
             });
         });
 
+        //Delete all similar Stthopdong value ==> Convenient display
+        function deleteSimilarStthopdong(arr) {
+            let visited = [], index = 0;
+            while (index < arr.length) {
+                const obj = {
+                    stthopdong: arr[index].stthopdong,
+                    submissionDate: arr[index].submissionDate
+                }
+                const found = visited.find(element => JSON.stringify(element) == JSON.stringify(obj))
+                if (found) arr.splice(index, 1);
+                else {index++; visited.push(obj);}
+            }
+            return arr;
+        }
+
         // Option All
         function processAll() {
             if (select.value == 'all') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                nhaps = deleteSimilarStthopdong(nhaps);
                 print('nhap');
                 xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+                xuats = deleteSimilarStthopdong(xuats);
                 print('xuat');
             }
         }
@@ -252,8 +256,10 @@
             var dateend = document.getElementById('dateend').value;
             if (datestart != '' && dateend != '') {
                 nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
+                nhaps = deleteSimilarStthopdong(nhaps);
                 print('nhap')
                 xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
+                xuats = deleteSimilarStthopdong(xuats);
                 print('xuat');
             }
         }
@@ -265,8 +271,10 @@
 
                 //Search documents via products' partnums
                 nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
+                nhaps = deleteSimilarStthopdong(nhaps);
                 print('nhap');
                 xuats = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
+                xuats = deleteSimilarStthopdong(xuats);
                 print('xuat');
             }
             if (select.value === 'sohopdong') {
@@ -275,8 +283,10 @@
                 sohopdong = $.trim(sohopdong);
 
                 nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-sohopdong', {sohopdong});
+                nhaps = deleteSimilarStthopdong(nhaps);
                 print('nhap');
                 xuats = ipcRenderer.sendSync('doc-xuat-linhkien-sohopdong', {sohopdong});
+                xuats = deleteSimilarStthopdong(xuats);
                 print('xuat');
             }
         }

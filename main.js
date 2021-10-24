@@ -23,7 +23,7 @@ function createWindow() {
   mainWindow.loadFile('src/index.html')
 
 //   Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
@@ -100,8 +100,8 @@ ipcMain.on('edit-nhap-linhkien', async (event, obj) => {
   const success = await database.edit('nhap', 'linhkien', obj);
   event.returnValue = success;
 })
-ipcMain.on('xoa-nhap-linhkien', async (event, id) => {
-  await database.delete('nhap', 'linhkien', id);
+ipcMain.on('xoa-nhap-linhkien-stthopdong', async (event, stthopdong_submissionDate) => {
+  await database.deleteFollowingStthopdong('nhap', 'linhkien', stthopdong_submissionDate);
 })
   //Xuat ////////////////
 ipcMain.on('doc-xuat-linhkien-all', async (event, obj) => {
@@ -128,8 +128,8 @@ ipcMain.on('edit-xuat-linhkien', async (event, obj) => {
   const success = await database.edit('xuat', 'linhkien', obj);
   event.returnValue = success;
 })
-ipcMain.on('xoa-xuat-linhkien', async (event, id) => {
-  await database.delete('xuat', 'linhkien', id);
+ipcMain.on('xoa-xuat-linhkien-stthopdong', async (event, stthopdong_submissionDate) => {
+  await database.deleteFollowingStthopdong('xuat', 'linhkien', stthopdong_submissionDate);
 })
 
 // Thanh pham
@@ -214,9 +214,11 @@ ipcMain.on('xoa-xuat-thanhpham', async (event, id) => {
 
 // Edit file in general ///////////////////////
 ipcMain.on('edit-send', async (event, obj) => {
-  let doc = await database.readFollowingId(obj);
+  var docs; 
+  if (obj.type == 'linhkien') docs = await database.readFollowingStthopdong(obj);
+  if (obj.type == 'thanhpham') docs = await database.readFollowingId(obj);
   mainWindow.webContents.once('dom-ready', () => {
-    mainWindow.webContents.send('edit-receive', doc);
+    mainWindow.webContents.send('edit-receive', docs);
   })
 })
 // Count linhkien submissions

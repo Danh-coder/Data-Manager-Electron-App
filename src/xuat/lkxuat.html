@@ -217,23 +217,26 @@
         }
 
         // Edit document also ////////////////////
-        ipcRenderer.on('edit-receive', (event, doc) => {
+        ipcRenderer.on('edit-receive', (event, docs) => {
             const form = $('form');
             form.attr("id", 'edit').hide();
-            document.getElementById('datetime').innerHTML = doc.submissionDate;
-            document.getElementById('stthopdong').innerHTML = doc.stthopdong;
             
+            document.getElementById('datetime').innerHTML = docs[0].submissionDate;
+            document.getElementById('stthopdong').innerHTML = docs[0].stthopdong;
+            var ids = [];
+            docs.forEach(doc => ids.push(doc.id))
             $('form .row').append(`
-                <input type="hidden" id="_id" value="${doc.id}">
+                <input type="hidden" id="_id" value=${ids}>
             `)
 
-            displayLinhkien([doc], true); //Display document via grid
+            displayLinhkien(docs, true); //Display document via grid
 
 
-            $('#h1-edit').text("Chỉnh sửa xuất linh kiện điện tử")
+            $('#h1-edit').text("Chỉnh sửa nhập linh kiện điện tử")
 
             var btntmp = $('#buttonContainer')
             btntmp.empty()
+
 
 
             //Change buttons too
@@ -244,36 +247,43 @@
                 <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             `)
 
+
+
             //Hidden submit button
             document.getElementById('button2').style.display = 'none';
         })
 
+
         function submit() {
             const form = document.querySelector('form');
             if (form.id == "save") {
-                //Update stthopdong
                 const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
-                ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
-                displaySubmissionCount();
 
                 //Submit all previous reviews
                 var index = 0;
                 while (index < reviews['xuatLinhkien'].length) { //Inside the array
+                    reviews['xuatLinhkien'][index].stthopdong = stthopdong;
                     var canSubmit = ipcRenderer.sendSync('xuat-linhkien', reviews['xuatLinhkien'][index]);
                     if (canSubmit) { 
                         removeReview('xuatLinhkien', index);
                     } else index++; //Skip element
                 }
                 printReviews('xuatLinhkien'); //Update grid
+
+                //Update stthopdong
+                ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
+                displaySubmissionCount();
             } 
             if (form.id == "edit") {
-                // var obj = prepareObj();
-                var obj = getEditedDocument(true); //via grid.data
-                obj.id = document.getElementById('_id').value;
-                var canSubmit = ipcRenderer.sendSync('edit-xuat-linhkien', obj);
-                if (canSubmit) { 
-                    form.action = "../chinhsua/cslk.html"; form.submit(); 
+                var objs = getEditedDocuments(); //via grid.data
+                var ids = document.getElementById('_id').value.split(','); //transform string to array of ids
+                var ok = true; //check if all editions are proper
+                for (let index = 0; index < objs.length; index++) {
+                    objs[index].id = ids[index];
+                    var canSubmit = ipcRenderer.sendSync('edit-xuat-linhkien', objs[index]);
+                    if (!canSubmit) ok = false; 
                 }
+                if (ok) {form.action = "../chinhsua/cslk.html"; form.submit(); } //all are correct => Turn back to chinhsua pages
             }
         }
 

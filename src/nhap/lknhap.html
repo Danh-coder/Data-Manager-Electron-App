@@ -185,7 +185,7 @@
         })
 
         function prepareObj() {
-            var stthopdong = document.getElementById('stthopdong').innerHTML;
+            // var stthopdong = document.getElementById('stthopdong').innerHTML;
             var tenhang = document.getElementById('tenhang').value;
             var partnum = document.getElementById('partnum').value;
             var sohopdong = document.getElementById('sohopdong').value;
@@ -202,7 +202,7 @@
             if (thanhtien == "") thanhtien = "0";
             
             const obj = {
-                stthopdong: parseInt(stthopdong, 10),
+                // stthopdong: parseInt(stthopdong, 10),
                 tenhang: tenhang,
                 partnum: partnum,
                 sohopdong: sohopdong,
@@ -229,17 +229,19 @@
         }
 
         // Edit document also ////////////////////
-        ipcRenderer.on('edit-receive', (event, doc) => {
+        ipcRenderer.on('edit-receive', (event, docs) => {
             const form = $('form');
             form.attr("id", 'edit').hide();
-            document.getElementById('datetime').innerHTML = doc.submissionDate;
-            document.getElementById('stthopdong').innerHTML = doc.stthopdong;
-
+            
+            document.getElementById('datetime').innerHTML = docs[0].submissionDate;
+            document.getElementById('stthopdong').innerHTML = docs[0].stthopdong;
+            var ids = [];
+            docs.forEach(doc => ids.push(doc.id))
             $('form .row').append(`
-                <input type="hidden" id="_id" value="${doc.id}">
+                <input type="hidden" id="_id" value=${ids}>
             `)
 
-            displayLinhkien([doc], true); //Display document via grid
+            displayLinhkien(docs, true); //Display document via grid
 
 
             $('#h1-edit').text("Chỉnh sửa nhập linh kiện điện tử")
@@ -264,31 +266,35 @@
         })
 
         function submit() {
-            //Update stthopdong
-            const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
-            ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
-            displaySubmissionCount();
-
             const form = document.querySelector('form');
             if (form.id == "save") {
+                const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
+
                 //Submit all previous reviews
                 var index = 0;
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
+                    reviews['nhapLinhkien'][index].stthopdong = stthopdong;
                     var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
                     if (canSubmit) { 
                         removeReview('nhapLinhkien', index);
                     } else index++; //Skip element
                 }
                 printReviews('nhapLinhkien'); //Update grid
+
+                //Update stthopdong
+                ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
+                displaySubmissionCount();
             } 
             if (form.id == "edit") {
-                // var obj = prepareObj();
-                var obj = getEditedDocument(true); //via grid.data
-                obj.id = document.getElementById('_id').value;
-                var canSubmit = ipcRenderer.sendSync('edit-nhap-linhkien', obj);
-                if (canSubmit) { 
-                    form.action = "../chinhsua/cslk.html"; form.submit(); 
+                var objs = getEditedDocuments(); //via grid.data
+                var ids = document.getElementById('_id').value.split(','); //transform string to array of ids
+                var ok = true; //check if all editions are proper
+                for (let index = 0; index < objs.length; index++) {
+                    objs[index].id = ids[index];
+                    var canSubmit = ipcRenderer.sendSync('edit-nhap-linhkien', objs[index]);
+                    if (!canSubmit) ok = false; 
                 }
+                if (ok) {form.action = "../chinhsua/cslk.html"; form.submit(); } //all are correct => Turn back to chinhsua pages
             }
         }
         

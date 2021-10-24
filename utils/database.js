@@ -230,6 +230,13 @@ const del = async (state, type, id) => {
         }
     })
 }
+const delStthopdong = async (state, type, {stthopdong, submissionDate}) => {
+    const database = db.collection(`log-${type}`);
+    const querySnapshot = await database.where("stthopdong", "==", stthopdong).get();
+    querySnapshot.forEach(async (doc) => {
+        if (doc.data().submissionDate == submissionDate) del(state, type, doc.id);
+    })
+}
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
     const database = db.collection(`ton-${type}`);
@@ -337,6 +344,18 @@ const readFollowingId = async ({type, id}) => {
     }
     return await (obj);
 }
+const readFollowingStthopdong = async ({type, stthopdong, submissionDate}) => {
+    var infos = [];
+    const querySnapshot = await db.collection(`log-${type}`).where("stthopdong", "==", stthopdong).get();
+    querySnapshot.forEach(async (doc) => {
+        if (doc.data().submissionDate == submissionDate) 
+            infos.push({
+                id: doc.id,
+                ...doc.data()
+            })
+    })
+    return infos;
+}
 const readStorage = async (type, name) => {
     var infos = [];
     var querySnapshot;
@@ -353,12 +372,14 @@ module.exports = {
     save: save,
     edit: edit,
     delete: del,
+    deleteFollowingStthopdong: delStthopdong,
     xuat: xuat,
     readAll: readAll,
     readFollowingDate: readFollowingDate,
     readFollowingPartnum: readFollowingPartnum,
     readFollowingSohopdong: readFollowingSohopdong,
     readFollowingId: readFollowingId,
+    readFollowingStthopdong: readFollowingStthopdong,
     readStorage: readStorage,
 
     readKeywords: readKeywords,
