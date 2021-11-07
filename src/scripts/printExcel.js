@@ -3,7 +3,7 @@ var _grid = document.getElementById('grid');
 var grid = canvasDatagrid({
     parentNode: _grid
 });
-grid.style.height = '100%';
+grid.style.height = '300px';
 grid.style.width = '100%';
 
 //Print excel in ketxuat
@@ -23,7 +23,7 @@ var printExcel = (nhaps, xuats, tons, type) => {
 }
 var createBtn = (name, type) => {
     var buttons = $('#sheet-buttons');
-    var btn = $('<button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);"></button>').html(name);
+    var btn = $('<button style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49); color: white; border-radius: 3px;"></button>').html(name);
     if (name == 'Nhập') btn.attr('onclick', `display${type}(nhaps)`);
     if (name == 'Xuất') btn.attr('onclick', `display${type}(xuats)`);
     if (name == 'Tồn') btn.attr('onclick', `displayTon(tons, '${type}')`);
@@ -93,10 +93,10 @@ grid.addEventListener('endedit', function (e) { //Update grid after finish editi
 });
 
 var resize = () => {
-    _grid.style.height = (window.innerHeight - 150) + 'px';
+    _grid.style.height = '300px';
 }
 var displayLinhkien = (arr, isReview = false) => {
-    _grid.style.visibility = 'visible';
+    _grid.style.display = '';
     resize(); //make the grid more good-looking
     //Add data to the grid
     var tmp = [], totalThanhtien = 0;
@@ -124,50 +124,61 @@ var displayLinhkien = (arr, isReview = false) => {
         {
             title: 'Part Number',
             name: 'partnum',
+            width: 300,
         },
         {
             title: 'Tên Hàng',
             name: 'tenhang',
+            width: 200,
         },
         {
             title: 'Sổ Hợp Đồng',
             name: 'sohopdong',
+            width: 200,
         },
         {
             title: 'Sản Phẩm',
             name: 'sanpham',
+            width: 300,
         },
         {
             title: 'Công Ty Nhập',
             name: 'cty',
+            width: 300,
         },
         {
             title: 'Ngày Nhập',
             name: 'date',
+            width: 150,
         },
         {
             title: 'Đơn Vị Tính',
             name: 'dvtinh',
+            width: 75,
         },
         {
             title: 'Số Lượng',
             name: 'quantity',
-            type: 'number'
+            type: 'number',
+            width: 50,
         },
         {
             title: 'Đơn giá',
             name: 'dongia',
-            type: 'number'
+            type: 'number',
+            width: 150,
         },
         {
             title: 'Thành Tiền',
             name: 'thanhtien',
-            type: 'number'
+            type: 'number',
+            width: 200,
         },
+
     ]
 }
 var displayThanhpham = (arr) => {
-    _grid.style.visibility = 'visible';
+    _grid.style.display = '';
     resize(); //make the grid more good-looking
     //Add data to the grid
     var tmp = [];
@@ -188,32 +199,38 @@ var displayThanhpham = (arr) => {
         {
             title: 'Tên Hàng',
             name: 'tenhang',
+            width: 200,
         },
         {
             title: 'MCU',
             name: 'mcu',
+            width: 150,
         },
         {
             title: 'Sổ Hợp Đồng',
             name: 'sohopdong',
+            width: 75,
         },
         {
             title: 'Chip',
             name: 'chip',
+            width: 150,
         },
         {
             title: 'Ngày Nhập',
             name: 'date',
+            width: 150,
         },
         {
             title: 'Số Lượng',
             name: 'quantity',
-            type: 'number'
+            type: 'number',
+            width: 50,
         },
     ]
 }
 var displayTon = (arr, type) => {
-    _grid.style.visibility = 'visible';
+    _grid.style.display = '';
     resize(); //make the grid more good-looking
     //Rename the header of each column
     grid.schema = [
@@ -284,10 +301,12 @@ var displayLinhkienReviews = (arr) => {
         {
             title: 'Part Number',
             name: 'partnum',
+            with: 250,
         },
         {
             title: 'Tên Hàng',
             name: 'tenhang',
+            width: 200,
         },
         {
             title: 'Sổ Hợp Đồng',
@@ -308,11 +327,13 @@ var displayLinhkienReviews = (arr) => {
         {
             title: 'Đơn Vị Tính',
             name: 'dvtinh',
+            width: 75,
         },
         {
             title: 'Số Lượng',
             name: 'quantity',
-            type: 'number'
+            type: 'number',
+            width: 150,
         },
         {
             title: 'Đơn giá',

@@ -1,11 +1,12 @@
+const Dialogs = require('dialogs');
+const dialogs = Dialogs();
 var pressed = true;
 window.onload = ()=>{
     function offline() {
         if (pressed) {
             pressed = false;
 
-            const Dialogs = require('dialogs');
-            const dialogs = Dialogs();
+            
             dialogs.alert("You're offline. Please turn on wifi and try again", ok => {
                 pressed = true;
             })
