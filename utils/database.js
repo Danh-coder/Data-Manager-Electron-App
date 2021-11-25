@@ -3,6 +3,12 @@ const firebase = require("firebase");
 require('dotenv').config();
 // Required for side-effects
 require("firebase/firestore");
+
+//import { GoogleAuthProvider } from "firebase/auth";
+//const provider = new GoogleAuthProvider();
+
+
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
