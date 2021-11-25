@@ -20,10 +20,10 @@ function createWindow() {
     },
   })
   Menu.setApplicationMenu(null)
-  mainWindow.loadFile('src/index.html')
+  mainWindow.loadFile('src/preEnter/login.html')
 
 //   Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
