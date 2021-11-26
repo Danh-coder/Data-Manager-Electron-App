@@ -66,7 +66,6 @@ const removeKeyword = async (aspect, values) => { //Via aspects
     })
 }
 const addKeywordLinhkien = async (body) => { //Via type
-    console.log(body);
     await keywords.doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,

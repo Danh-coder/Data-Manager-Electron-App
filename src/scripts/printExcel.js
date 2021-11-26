@@ -76,8 +76,7 @@ grid.addEventListener('endedit', function (e) { //Update grid after finish editi
     if (!e.cell || e.cell.rowIndex < 0 || memKey == undefined) { return; }
     if (grid.schema[0].title != 'Xóa' && memKey != undefined) { updateEdition(e.cell.rowIndex); return;} //Chinhsua editions
 
-    //Nhap, xuat reviews editions
-    console.log(e.cell.rowIndex);
+    //Reviews editions
     var newObj = JSON.parse( JSON.stringify(grid.data[e.cell.rowIndex])); //Only copy values
     delete newObj['col0']; //Don't include delete button
 
