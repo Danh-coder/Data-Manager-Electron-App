@@ -52,6 +52,8 @@
         <input type="text" name="shdinp" id="shdinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
     </form>
 
+    <div class="col-12" id="grid" style="display: none;">
+    </div>
     <div class="row main-row">
         
         <div class="col-6" id="ton" style="border-right: 1px solid black;">
@@ -59,11 +61,11 @@
 
         </div>
 
-        <button onclick="exportExcel()" style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49);">Xuất file excel</button>
+        <div class="col-6">
+            <button onclick="exportExcel()" style="display: flex; margin-left: auto; margin-right: auto; align-items: center; justify-content: center; margin-top: 50px; height: 50px; width: 250px; text-align: center; background-color: rgb(49, 197, 49); color: white; border-radius: 3px;">Xuất file excel</button>
 
-        <div id="sheet-buttons">
-        </div>
-        <div class="col-12" id="grid" style="visibility: hidden;">
+            <div id="sheet-buttons">
+            </div>
         </div>
     </div>
 
@@ -82,7 +84,7 @@
 
         //Clear recent searches and spreadsheets
         function empty(includedTon = false) {
-            document.getElementById('grid').style.visibility = 'hidden';
+            document.getElementById('grid').style.display = 'none';
             $('#sheet-buttons').empty();
             $('#ton div').remove();
 

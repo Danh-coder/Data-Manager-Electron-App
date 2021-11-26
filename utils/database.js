@@ -3,6 +3,14 @@ const firebase = require("firebase");
 require('dotenv').config();
 // Required for side-effects
 require("firebase/firestore");
+
+//import { GoogleAuthProvider } from "firebase/auth";
+//const provider = new GoogleAuthProvider();
+
+
+
+
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
@@ -66,6 +74,7 @@ const removeKeyword = async (aspect, values) => { //Via aspects
     })
 }
 const addKeywordLinhkien = async (body) => { //Via type
+    console.log(body);
     await keywords.doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,

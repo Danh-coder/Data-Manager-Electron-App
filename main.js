@@ -16,11 +16,11 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: false
     },
   })
   Menu.setApplicationMenu(null)
-  mainWindow.loadFile('src/index.html')
+  mainWindow.loadFile('src/preEnter/login.html')
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()

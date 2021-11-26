@@ -1,4 +1,6 @@
 const {dialog} = require('electron');
+var Excel = require('exceljs');
+
 //popup noti
 const popup = (type, title, message) => {
     const options = {type, title, message};
@@ -95,7 +97,6 @@ function printTonThanhpham(sheet, arr) {
 
 module.exports = async function createNewExcelFile(type, nhaps, xuats, tons)
 {
-    var Excel = require('exceljs');
     // A new Excel Work Book
     var workbook = new Excel.Workbook();
 

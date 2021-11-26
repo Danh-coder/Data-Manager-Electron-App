@@ -75,7 +75,7 @@
                     <label for="sanpham">Sản phẩm</label>
                     <input type="text" class="form-control" id="sanpham" placeholder="Sản phẩm" required>
 
-                    <label for="date">Ngày nhập</label>
+                    <label for="date">Ngày xuất kho</label>
                     <input type="date" class="form-control" id="date" placeholder="Ngày xuất" required>
     
                     <label for="quantity">Số lượng</label>
@@ -225,9 +225,7 @@
             document.getElementById('stthopdong').innerHTML = docs[0].stthopdong;
             var ids = [];
             docs.forEach(doc => ids.push(doc.id))
-            $('form .row').append(`
-                <input type="hidden" id="_id" value=${ids}>
-            `)
+            $('form .row').append(`<input type="hidden" id="_id" value=${ids}>`)
 
             displayLinhkien(docs, true); //Display document via grid
 
@@ -237,8 +235,6 @@
             var btntmp = $('#buttonContainer')
             btntmp.empty()
 
-
-
             //Change buttons too
             const buttonContainer = $('#btn-edit');
             buttonContainer.empty();
@@ -246,8 +242,6 @@
                 <input onclick="submit()" type="submit" value="Thêm" class="col-6 form-control" style="line-height: 25px; font-size: 25px; background-color: green; color:white;">
                 <button class="col-6 form-control" onclick="location.href='../index.html'" style="line-height: 25px; font-size: 25px; background-color: red; color:white;">Hủy</button>
             `)
-
-
 
             //Hidden submit button
             document.getElementById('button2').style.display = 'none';
@@ -281,7 +275,8 @@
                 for (let index = 0; index < objs.length; index++) {
                     objs[index].id = ids[index];
                     var canSubmit = ipcRenderer.sendSync('edit-xuat-linhkien', objs[index]);
-                    if (!canSubmit) ok = false; 
+                    if (!canSubmit) 
+                        ok = false; 
                 }
                 if (ok) {form.action = "../chinhsua/cslk.html"; form.submit(); } //all are correct => Turn back to chinhsua pages
             }
