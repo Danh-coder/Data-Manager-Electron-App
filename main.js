@@ -20,7 +20,7 @@ function createWindow() {
     },
   })
   Menu.setApplicationMenu(null)
-  mainWindow.loadFile('src/preEnter/login.html')
+  mainWindow.loadFile('src/index.html')
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()

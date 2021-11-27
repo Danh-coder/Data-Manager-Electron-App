@@ -241,9 +241,11 @@ const del = async (state, type, id) => {
 const delStthopdong = async (state, type, {stthopdong, submissionDate}) => {
     const database = db.collection(`log-${type}`);
     const querySnapshot = await database.where("stthopdong", "==", stthopdong).get();
-    querySnapshot.forEach(async (doc) => {
-        if (doc.data().submissionDate == submissionDate) del(state, type, doc.id);
-    })
+    for (const doc of querySnapshot.docs) {
+        if (doc.data().submissionDate == submissionDate) {
+            await del(state, type, doc.id);
+        }
+    }
 }
 const xuat = async(type, body) => {
     var canAdd = true, isEmpty = true;
