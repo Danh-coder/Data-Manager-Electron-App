@@ -170,10 +170,20 @@
         auth.languageCode = 'it';
         // To apply the default browser preference instead of explicitly setting it.
         // firebase.auth().useDeviceLanguage();
+        provider.setCustomParameters({
+            prompt: 'select_account'
+        });
+
+        auth.signOut().then(()=>{
+            console.log('Sign-out successful.');
+        }).catch(function(error) {
+            console.log('An error happened.');
+        });
 
         document.getElementById('login-with-google-btn').addEventListener('click', () => {
             console.log('login with google');
             signInWithRedirect(auth, provider).then(res => {
+                window.location.href = './index.html';
                 console.log(res);
             }).catch(err => {
                 console.log(err);
@@ -181,6 +191,19 @@
             });
             // signInWithRedirect(auth, provider);
         });
+
+        //checkauthstate function
+        function checkAuthState() {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    console.log(user);
+                    window.location.href = './index.html';
+                } else {
+                    console.log('not logged in');
+                }
+            });
+        }
+        checkAuthState();
     </script>
     <!-- Insert this line after script imports -->
     <script>if (window.module) module = window.module;</script>
