@@ -123,30 +123,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <script src="../../utils/database.js"></script>
     <script>
-        // Initialize/Update global variables
-        // Via localStorage
-        //Reviews
-        const reviewsUpdated = (localStorage.reviews && JSON.parse(localStorage.getItem('reviews')).hasOwnProperty('nhapLinhkien'));
-        if (!reviewsUpdated) {
-            localStorage.reviews = JSON.stringify({ //Initializing localStorage object is more complex than usual
-                nhapLinhkien: [],
-                xuatLinhkien: [],
-                nhapThanhpham: [],
-                xuatThanhpham: []
-            })
-        }
-        //Last Submission
-        if (localStorage.lastSubmission == undefined) {
-            localStorage.lastSubmission = JSON.stringify({ //Initializing localStorage object is more complex than usual
-                nhapLinhkien: {},
-                xuatLinhkien: {},
-                nhapThanhpham: {},
-                xuatThanhpham: {}
-            })
-        }
-
         //Auto update/////////////////////////////////////////////////
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
         
@@ -172,18 +149,37 @@
         function restartApp() {
             ipcRenderer.send('restart_app');
         }
+    </script>
+    <script type="module">
+        // Initialize Firebase 
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
+        import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js';
 
-        var provider = new firebase.auth.GoogleAuthProvider();
+        const firebaseConfig = {
+            apiKey: process.env.API_KEY,
+            authDomain: process.env.AUTHDOMAIN,
+            projectId: process.env.PROJECT_ID,
+            storageBucket: process.env.STORAGEBUCKET,
+            messagingSenderId: process.env.MSG_SENDER_ID,
+            appId: process.env.APPID,
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth();
+        auth.languageCode = 'it';
+        // To apply the default browser preference instead of explicitly setting it.
+        // firebase.auth().useDeviceLanguage();
 
         document.getElementById('login-with-google-btn').addEventListener('click', () => {
             console.log('login with google');
-            firebase.auth().signInWithRedirect(provider).then(res => {
+            signInWithRedirect(auth, provider).then(res => {
                 console.log(res);
             }).catch(err => {
                 console.log(err);
             
             });
-
+            // signInWithRedirect(auth, provider);
         });
     </script>
     <!-- Insert this line after script imports -->

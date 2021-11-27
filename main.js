@@ -3,6 +3,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater')
 
 const path = require('path')
+const server = require('./server.js');
 
 var mainWindow;
 function createWindow() {
@@ -20,7 +21,8 @@ function createWindow() {
     },
   })
   Menu.setApplicationMenu(null)
-  mainWindow.loadFile('src/index.html')
+  // mainWindow.loadFile('src/preEnter/login.html')
+  mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()
