@@ -153,7 +153,7 @@
     <script type="module">
         // Initialize Firebase 
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
-        import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js';
+        import { GoogleAuthProvider, getAuth, signInWithRedirect, deleteUser, onAuthStateChanged, signInAnonymously } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey: process.env.API_KEY,
@@ -167,6 +167,7 @@
         const app = initializeApp(firebaseConfig);
         const provider = new GoogleAuthProvider();
         const auth = getAuth();
+        const user = auth.currentUser;
         auth.languageCode = 'it';
         // To apply the default browser preference instead of explicitly setting it.
         // firebase.auth().useDeviceLanguage();
@@ -183,20 +184,16 @@
 
         document.getElementById('login-with-google-btn').addEventListener('click', () => {
             console.log('login with google');
-            signInWithRedirect(auth, provider).then(res => {
-                window.location.href = './index.html';
-                console.log(res);
-            }).catch(err => {
-                console.log(err);
-            });
+            signInWithRedirect(auth, provider);
         });
 
         //checkauthstate function
         function checkAuthState() {
-            auth.onAuthStateChanged(user => {
+            onAuthStateChanged(auth, (user) => {
                 if (user) {
                     console.log(user);
-                    window.location.href = './index.html';
+                    const {ipcRenderer} = require('electron');
+                    ipcRenderer.send('load index file');
                 } else {
                     console.log('not logged in');
                 }

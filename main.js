@@ -17,12 +17,13 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      
     },
   })
   Menu.setApplicationMenu(null)
-  // mainWindow.loadFile('src/preEnter/login.html')
-  mainWindow.loadURL('http://localhost:3007/login');
+  // mainWindow.loadFile('src/index.html')
+  // mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()
@@ -36,7 +37,8 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
+  mainWindow.loadURL('http://localhost:3007/login');
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -53,8 +55,8 @@ app.on('window-all-closed', function () {
 })
 
 // Work with database, excel file
-const database = require('./utils/database')
-const createExcelFile = require('./utils/createExcel');
+const database = require('./src/utils/database')
+const createExcelFile = require('./src/utils/createExcel');
 // Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
   const success = await database.save('linhkien', obj);
@@ -230,6 +232,10 @@ ipcMain.on('countSubmissions', async (event) => {
 })
 ipcMain.on('updateSubmissionCount', async (event, value) => {
   await database.increaseSubmissionCount(value - 1); //(value - 1) + 1 = value
+})
+// Open main window after successfully login
+ipcMain.on('load index file', () => {
+  mainWindow.loadFile('./src/index.html');
 })
 
 

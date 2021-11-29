@@ -1,9 +1,9 @@
 const autocomplete = require('autocompleter');
-const {readKeywords, findPairKeywords, removeKeyword} = require('../../utils/database');
+const database = require('../utils/database.js');
 
 var info;
 (async () => {
-    info = await readKeywords();
+    info = await database.readKeywords();
     trigger();
 })()
 
