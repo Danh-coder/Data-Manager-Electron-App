@@ -22,8 +22,7 @@ function createWindow() {
     },
   })
   Menu.setApplicationMenu(null)
-  // mainWindow.loadFile('src/index.html')
-  // mainWindow.loadURL('http://localhost:3007/login');
+  mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
   mainWindow.webContents.openDevTools()
@@ -38,7 +37,6 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-  mainWindow.loadURL('http://localhost:3007/login');
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -55,8 +53,8 @@ app.on('window-all-closed', function () {
 })
 
 // Work with database, excel file
-const database = require('./src/utils/database')
-const createExcelFile = require('./src/utils/createExcel');
+const database = require('./utils/database')
+const createExcelFile = require('./utils/createExcel');
 // Linh kien
 ipcMain.on('save-linhkien', async(event, obj) => {
   const success = await database.save('linhkien', obj);
