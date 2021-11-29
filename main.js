@@ -17,11 +17,11 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      
     },
   })
   Menu.setApplicationMenu(null)
-  // mainWindow.loadFile('src/preEnter/login.html')
   mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
@@ -36,7 +36,7 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -230,6 +230,10 @@ ipcMain.on('countSubmissions', async (event) => {
 })
 ipcMain.on('updateSubmissionCount', async (event, value) => {
   await database.increaseSubmissionCount(value - 1); //(value - 1) + 1 = value
+})
+// Open main window after successfully login
+ipcMain.on('load index file', () => {
+  mainWindow.loadFile('./src/index.html');
 })
 
 
