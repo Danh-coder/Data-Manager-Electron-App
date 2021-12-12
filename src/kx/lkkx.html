@@ -157,11 +157,12 @@
             var box = $('#ton');
             $('#ton div').remove();
 
+            const numeral = require('numeral');
             tons.forEach(doc => {
                 var block = $('<div style="border: 1px solid black; padding-left: 15px; padding-top: 15px;"></div>')
                 var partnum = $('<p></p>').html('Part number: ' + doc.partnum);
                 var dvtinh = $('<p></p>').html('Đơn vị tính: ' + doc.dvtinh);
-                var quantity = $('<p></p>').html('Số lượng: ' + doc.quantity);
+                var quantity = $('<p></p>').html('Số lượng: ' + numeral(doc.quantity).format('0,0'));
 
                 block.append(partnum, dvtinh, quantity);
                 box.append(block);
