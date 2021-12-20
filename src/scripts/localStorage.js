@@ -31,6 +31,10 @@ function displayLastSubmission(key) {
     objKeys.forEach(KEY => {
         const input = document.getElementById(KEY);
         // if (KEY == 'thanhtien') input.placeholder = obj[KEY]; //To update thanhtien's value properly
-        if (input) input.value = obj[KEY]; //Paste value 
+        if (input) {
+            if (KEY == 'thanhtien' || KEY == 'dongia') input.value = numeral(obj[KEY]).format('0,0.0000')
+            else if (KEY == 'quantity') input.value = numeral(obj[KEY]).format('0,0')
+            else input.value = obj[KEY]; //Paste value 
+        }
     })
 }
