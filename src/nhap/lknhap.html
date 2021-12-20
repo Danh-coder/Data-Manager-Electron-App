@@ -67,8 +67,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="number" onchange="(function(el){el.value=parseFloat(el.value).toFixed(4);})(this)"
-                    class="form-control" id="dongia" placeholder="Đơn giá" required>
+                    <input type="text" class="form-control" id="dongia" placeholder="Đơn giá" required>
     
                 </div>
 
@@ -84,10 +83,10 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày nhập" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="number" class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="text" class="form-control" id="quantity" placeholder="Số lượng" required>
     
                     <label for="thanhtien">Thành tiền</label>
-                    <input type="number" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
+                    <input type="text" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
     
                 </div>
             </div>
@@ -149,7 +148,6 @@
         })
 
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
-
         // Auto Complete
         const trigger = () => {
             SuggestKeywordsSpecial('tenhang');
@@ -180,8 +178,10 @@
         var thanhtien = document.getElementById('thanhtien').value;
         var formChange = document.querySelector('form')
         formChange.addEventListener('change', (e) => {
-            thanhtien = document.getElementById('dongia').value * document.getElementById('quantity').value 
-            document.getElementById('thanhtien').value = thanhtien.toFixed(4);
+            thanhtien = numeral(document.getElementById('dongia').value).value() * numeral(document.getElementById('quantity').value).value(); 
+            document.getElementById('thanhtien').value = numeral(thanhtien).format('0,0.0000');
+            document.getElementById('quantity').value = numeral(document.getElementById('quantity').value).format('0,0');
+            document.getElementById('dongia').value = numeral(document.getElementById('dongia').value).format('0,0.0000');
         })
 
         function prepareObj() {
@@ -210,9 +210,9 @@
                 cty: cty,
                 date: date,
                 dvtinh: dvtinh,
-                quantity: parseInt(quantity, 10),
-                dongia: (parseInt(dongia * 10000, 10) / 10000).toFixed(4),
-                thanhtien: (parseInt(thanhtien * 10000, 10) / 10000).toFixed(4),
+                quantity: numeral(quantity).value(),
+                dongia: numeral(dongia).value(),
+                thanhtien: numeral(thanhtien).value(),
                 submissionDate: submissionDate,
                 state: 'nhap'
             }
@@ -274,6 +274,7 @@
                 var index = 0;
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
                     reviews['nhapLinhkien'][index].stthopdong = stthopdong;
+                    reviews['nhapLinhkien'][index].quantity = numeral(reviews['nhapLinhkien'][index].quantity).value();
                     var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
                     if (canSubmit) { 
                         removeReview('nhapLinhkien', index);

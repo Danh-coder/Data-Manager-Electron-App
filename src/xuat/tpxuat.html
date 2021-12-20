@@ -59,7 +59,7 @@
             <input type="text" class="form-control" id="chip" placeholder="Chip">
 
             <label for="quantity">Số lượng</label>
-            <input type="number" class="form-control" id="quantity" placeholder="Số lượng">
+            <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng">
 
         </form>
 
@@ -126,7 +126,7 @@
                 chip: chip,
                 date: date,
                 dvtinh: 'none',
-                quantity: parseInt(quantity, 10),
+                quantity: numeral(quantity).value(),
                 submissionDate: submissionDate,
                 state: 'xuat'
             }
@@ -186,6 +186,7 @@
                 //Submit all previous reviews
                 var index = 0;
                 while (index < reviews['xuatThanhpham'].length) { //Inside the array
+                    reviews['xuatThanhpham'][index].quantity = numeral(reviews['xuatThanhpham'][index].quantity).value();
                     var canSubmit = ipcRenderer.sendSync('xuat-thanhpham', reviews['xuatThanhpham'][index]);
                     if (canSubmit) { 
                         removeReview('xuatThanhpham', index);

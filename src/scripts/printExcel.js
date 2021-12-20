@@ -1,3 +1,4 @@
+const numeral = require('numeral');
 // Grid Table Setup
 var _grid = document.getElementById('grid');
 var grid = canvasDatagrid({
@@ -35,16 +36,17 @@ var createBtn = (name, type) => {
 const updateEdition = (rowIndex) => {
     //Mainly update thanhtien, dongia, quantity when one is edited
     if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
-        grid.data[rowIndex]['dongia'] = (parseInt(grid.data[rowIndex]['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
-        grid.data[rowIndex]['thanhtien'] = grid.data[rowIndex]['quantity'] * grid.data[rowIndex]['dongia']; //Change quantity or dongia will affect thanhtien
-        grid.data[rowIndex]['thanhtien'] = (parseInt(grid.data[rowIndex]['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+        grid.data[rowIndex]['dongia'] = numeral(grid.data[rowIndex]['dongia']).format('0,0.0000'); //Reformat value
+        grid.data[rowIndex]['thanhtien'] = numeral(grid.data[rowIndex]['quantity']).value() * numeral(grid.data[rowIndex]['dongia']).value(); //Change quantity or dongia will affect thanhtien
+        grid.data[rowIndex]['thanhtien'] = numeral(grid.data[rowIndex]['thanhtien']).format('0,0.0000'); //Reformat value
+        grid.data[rowIndex]['quantity'] = numeral(grid.data[rowIndex]['quantity']).format('0,0'); //Reformat value
     }
 }
 const getEditedDocuments = () => {
     var objs = [];
     for (let index = 0; index < grid.data.length; index++) {
         var obj = JSON.parse(JSON.stringify(grid.data[index])); //Only copy values => Not affect grid.data
-        obj.quantity = parseInt(obj.quantity, 10); //Grid.data saves it as string
+        obj.quantity = numeral(obj.quantity).value(); //Grid.data saves it as string
         obj.stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
         objs.push(obj);
     }    
@@ -81,11 +83,11 @@ grid.addEventListener('endedit', function (e) { //Update grid after finish editi
     var newObj = JSON.parse( JSON.stringify(grid.data[e.cell.rowIndex])); //Only copy values
     delete newObj['col0']; //Don't include delete button
 
-    newObj['quantity'] = parseInt(newObj['quantity'], 10); //Grid saves it as string ==> Reformat value
+    newObj['quantity'] = numeral(newObj['quantity']).format('0,0'); //Grid saves it as string ==> Reformat value
     if (memKey == 'nhapLinhkien' || memKey == 'xuatLinhkien') { //Only linhkien
-        newObj['dongia'] = (parseInt(newObj['dongia'] * 10000, 10) / 10000).toFixed(4); //Reformat value
-        newObj['thanhtien'] = newObj['quantity'] * newObj['dongia']; //Change quantity or dongia will affect thanhtien
-        newObj['thanhtien'] = (parseInt(newObj['thanhtien'] * 10000, 10) / 10000).toFixed(4); //Reformat value
+        newObj['dongia'] = numeral(newObj['dongia']).format('0,0.0000'); //Reformat value
+        newObj['thanhtien'] = numeral(newObj['quantity']).value() * numeral(newObj['dongia']).value(); //Change quantity or dongia will affect thanhtien
+        newObj['thanhtien'] = numeral(newObj['thanhtien']).format('0,0.0000'); //Reformat value
     }
 
     updateReview(memKey, e.cell.rowIndex, newObj);
@@ -109,14 +111,14 @@ var displayLinhkien = (arr, isReview = false) => {
             cty: product.cty,
             date: product.date,
             dvtinh: product.dvtinh,
-            quantity: product.quantity,
-            dongia: product.dongia,
-            thanhtien: product.thanhtien
+            quantity: numeral(product.quantity).format('0,0'),
+            dongia: numeral(product.dongia).format('0,0.0000'),
+            thanhtien: numeral(product.thanhtien).format('0,0.0000')
         }
         tmp.push(row);
         totalThanhtien += parseFloat(product.thanhtien); //calculate totalThanhtien
     });
-    if (!isReview) tmp.push({thanhtien: totalThanhtien.toFixed(4)}) //display totalThanhtien on the last line
+    if (!isReview) tmp.push({thanhtien: numeral(totalThanhtien).format('0,0.0000')}) //display totalThanhtien on the last line
     grid.data = tmp; //grid.data doesn't allow to push each row
 
     //Rename the header of each column
@@ -189,7 +191,7 @@ var displayThanhpham = (arr) => {
             sohopdong: product.sohopdong,
             chip: product.chip,
             date: product.date,
-            quantity: product.quantity,
+            quantity: numeral(product.quantity).format('0,0'),
         }
         tmp.push(row);
     });
@@ -260,7 +262,7 @@ var displayTon = (arr, type) => {
     var tmp = [];
     arr.forEach(product => {
         var row = {
-            quantity: product.quantity,
+            quantity: numeral(product.quantity).format('0,0'),
             dvtinh: product.dvtinh,
         }
         if (type == 'Linhkien') row['partnum'] = product.partnum;
@@ -284,9 +286,9 @@ var displayLinhkienReviews = (arr) => {
             cty: product.cty,
             date: product.date,
             dvtinh: product.dvtinh,
-            quantity: product.quantity,
-            dongia: product.dongia,
-            thanhtien: product.thanhtien
+            quantity: numeral(product.quantity).format('0,0'),
+            dongia: numeral(product.dongia).format('0,0.0000'),
+            thanhtien: numeral(product.thanhtien).format('0,0.0000')
         }
         tmp.push(row);
     });
@@ -359,7 +361,7 @@ var displayThanhphamReviews = (arr) => {
             sohopdong: product.sohopdong,
             chip: product.chip,
             date: product.date,
-            quantity: product.quantity,
+            quantity: numeral(product.quantity).format('0,0'),
         }
         tmp.push(row);
     });
