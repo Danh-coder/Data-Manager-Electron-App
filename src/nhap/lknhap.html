@@ -67,7 +67,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="text" class="form-control" id="dongia" placeholder="Đơn giá" required>
+                    <input type="text" class="form-control" id="dongia" placeholder="Đơn giá" required onkeypress="return onlyNumberKey(event)"> 
     
                 </div>
 
@@ -83,7 +83,7 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày nhập" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="quantity" placeholder="Số lượng" required>
+                    <input type="text" class="form-control" id="quantity" placeholder="Số lượng" required onkeypress="return onlyNumberKey(event)">
     
                     <label for="thanhtien">Thành tiền</label>
                     <input type="text" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>
@@ -125,7 +125,14 @@
     <script>
         //Show last submission
         displayLastSubmission('nhapLinhkien');
-
+        function onlyNumberKey(evt) {
+          
+          // Only ASCII character in that range allowed
+          var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+          if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+              return false;
+          return true;
+      }
         var dt = new Date();
         document.getElementById("datetime").innerHTML = (("0"+dt.getDate()).slice(-2)) +"/"+ (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (dt.getFullYear());
 

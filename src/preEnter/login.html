@@ -175,18 +175,6 @@
         provider.setCustomParameters({
             prompt: 'select_account'
         });
-
-        auth.signOut().then(()=>{
-            console.log('Sign-out successful.');
-        }).catch(function(error) {
-            console.log('An error happened.');
-        });
-
-        document.getElementById('login-with-google-btn').addEventListener('click', () => {
-            console.log('login with google');
-            signInWithRedirect(auth, provider);
-        });
-
         //checkauthstate function
         function checkAuthState() {
             onAuthStateChanged(auth, (user) => {
@@ -199,6 +187,19 @@
                 }
             });
         }
+
+        auth.signOut().then(()=>{
+            console.log('Sign-out successful.');
+        }).catch(function(error) {
+            console.log('An error happened.');
+        });
+        checkAuthState();
+        document.getElementById('login-with-google-btn').addEventListener('click', () => {
+            console.log('login with google');
+            signInWithRedirect(auth, provider);
+        });
+
+        
         checkAuthState();
     </script>
     <!-- Insert this line after script imports -->

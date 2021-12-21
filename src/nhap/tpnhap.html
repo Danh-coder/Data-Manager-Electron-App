@@ -56,7 +56,7 @@
             <input type="text" class="form-control" id="chip" placeholder="Chip">
 
             <label for="quantity">Số lượng</label>
-            <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng">
+            <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng" onkeypress="return onlyNumberKey(event)">
 
         </form>
 
@@ -84,6 +84,14 @@
     
     <script>
         //Show last submission
+        function onlyNumberKey(evt) {
+          
+          // Only ASCII character in that range allowed
+          var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+          if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+              return false;
+          return true;
+      }
         displayLastSubmission('nhapThanhpham');
 
         const {ipcRenderer} = require('electron'); //Now it's able to send events between backend and frontend 
