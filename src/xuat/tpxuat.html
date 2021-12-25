@@ -173,7 +173,7 @@
                 <label for="chip">Chip</label>
                 <input type="text" class="form-control" id="chip" placeholder="Chip" value="${doc.chip}">
                 <label for="quantity">Số lượng</label>
-                <input type="number" class="form-control" id="quantity" placeholder="Số lượng" value="${doc.quantity.toString()}">
+                <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng" value="${numeral(doc.quantity).format('0,0')}">
             `)
             form.append(formContent);
 
