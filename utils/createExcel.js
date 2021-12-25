@@ -23,6 +23,7 @@ function printLinhkien(sheet, arr) {
 
     // Add rows in the above header
     var totalThanhtien = 0;
+    var numeral = require('numeral');
     arr.forEach(doc => {
         sheet.addRow({
             partnum: doc.partnum,
@@ -36,9 +37,9 @@ function printLinhkien(sheet, arr) {
             dongia: doc.dongia,
             thanhtien: doc.thanhtien,
         })
-        totalThanhtien += parseFloat(doc.thanhtien);
+        totalThanhtien += numeral(doc.thanhtien).value();
     })
-    sheet.addRow({thanhtien: totalThanhtien.toFixed(4)}); //display totalThanhtien on the last line
+    sheet.addRow({thanhtien: numeral(totalThanhtien).format('0,0.0000')}); //display totalThanhtien on the last line
 }
 function printThanhpham(sheet, arr) {
     sheet.columns = [

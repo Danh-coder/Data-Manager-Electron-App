@@ -116,7 +116,7 @@ var displayLinhkien = (arr, isReview = false) => {
             thanhtien: numeral(product.thanhtien).format('0,0.0000')
         }
         tmp.push(row);
-        totalThanhtien += parseFloat(product.thanhtien); //calculate totalThanhtien
+        totalThanhtien += numeral(product.thanhtien).value(); //calculate totalThanhtien
     });
     if (!isReview) tmp.push({thanhtien: numeral(totalThanhtien).format('0,0.0000')}) //display totalThanhtien on the last line
     grid.data = tmp; //grid.data doesn't allow to push each row
