@@ -169,7 +169,9 @@
 
         //Update submissionCount after changing its value
         $('#stthopdong').on('DOMSubtreeModified',function(){ //Detect changing span value
-            ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
+            if (document.querySelector('form').id == 'save') {
+                ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
+            }
         })   
         
         var thanhtien = document.getElementById('thanhtien').value;

@@ -178,8 +178,9 @@
 
         //Update submissionCount after changing its value
         $('#stthopdong').on('DOMSubtreeModified',function(){ //Detect changing span value
-            if (document.querySelector('form').id == 'save')
+            if (document.querySelector('form').id == 'save') {
                 ipcRenderer.send('updateSubmissionCount', document.getElementById('stthopdong').innerHTML);
+            }
         })        
 
         var thanhtien = document.getElementById('thanhtien').value;
@@ -288,7 +289,7 @@
                     if (result.success) { 
                         removeReview('nhapLinhkien', index);
                     } else {
-                        errors += `Id: ${index + 1} - ${result.error} \n`;
+                        errors += `Id: ${index + 1} - ${result.error} \n `;
                         index++; //Skip element
                     }
                 }
@@ -303,7 +304,7 @@
                     displaySubmissionCount();
                 }
                 else {
-                    dialogs.alert(`Cannot save some documents \n ${errors}`);
+                    dialogs.alert(`Cannot edit some documents \n ${errors}`);
                 }
             } 
             if (form.id == "edit") {
@@ -315,7 +316,7 @@
                     var result = ipcRenderer.sendSync('edit-nhap-linhkien', objs[index]);
                     if (!result.success) {
                         ok = false; 
-                        errors += `Id: ${index + 1} - ${result.error} \n`;
+                        errors += `Id: ${index + 1} - ${result.error} \n `;
                     }
                 }
                 if (ok) {
