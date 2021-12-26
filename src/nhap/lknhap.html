@@ -211,7 +211,7 @@
             const obj = {
                 // stthopdong: parseInt(stthopdong, 10),
                 tenhang: tenhang,
-                partnum: partnum,
+                partnum: partnum.replace(/^\s+|\s+$/gm,''),
                 sohopdong: sohopdong,
                 sanpham: sanpham,
                 cty: cty,

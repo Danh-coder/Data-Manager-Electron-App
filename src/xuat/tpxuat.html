@@ -128,7 +128,7 @@
 
             const obj = {
                 tenhang: tenhang,
-                partnum: partnum,
+                partnum: partnum.replace(/^\s+|\s+$/gm,''),
                 mcu: mcu,
                 sohopdong: sohopdong,
                 chip: chip,
