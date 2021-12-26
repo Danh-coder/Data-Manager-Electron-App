@@ -280,12 +280,11 @@
                 const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
 
                 //Submit all previous reviews
-                var index = 0, docs = 0;
+                var index = 0;
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
                     reviews['nhapLinhkien'][index].stthopdong = stthopdong;
                     reviews['nhapLinhkien'][index].quantity = numeral(reviews['nhapLinhkien'][index].quantity).value();
                     var result = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
-                    docs++; //count processed documents
                     if (result.success) { 
                         removeReview('nhapLinhkien', index);
                     } else {

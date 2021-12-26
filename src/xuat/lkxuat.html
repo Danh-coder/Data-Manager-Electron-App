@@ -264,12 +264,11 @@
                 const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
 
                 //Submit all previous reviews
-                var index = 0, docs = 0;
+                var index = 0;
                 while (index < reviews['xuatLinhkien'].length) { //Inside the array
                     reviews['xuatLinhkien'][index].stthopdong = stthopdong;
                     reviews['xuatLinhkien'][index].quantity = numeral(reviews['xuatLinhkien'][index].quantity).value();
                     var result = ipcRenderer.sendSync('xuat-linhkien', reviews['xuatLinhkien'][index]);
-                    docs++;
                     if (result.success) { 
                         removeReview('xuatLinhkien', index);
                     } else {

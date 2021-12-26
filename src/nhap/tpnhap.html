@@ -192,11 +192,10 @@
             var errors = "";
             if (form.id == "save") {
                 //Submit all previous reviews
-                var index = 0, docs = 0;
+                var index = 0;
                 while (index < reviews['nhapThanhpham'].length) { //Inside the array
                     reviews['nhapThanhpham'][index].quantity = numeral(reviews['nhapThanhpham'][index].quantity).value();
                     var result = ipcRenderer.sendSync('save-thanhpham', reviews['nhapThanhpham'][index]);
-                    docs++; //count processed documents
                     if (result.success) { 
                         removeReview('nhapThanhpham', index);
                     } else {
