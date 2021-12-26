@@ -13,12 +13,12 @@ require("firebase/firestore");
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCmX9tG7JwURUWHrS6rJU8C3ZUA6-4bo4w",
-    authDomain: "data-manager-84213.firebaseapp.com",
-    projectId: "data-manager-84213",
-    storageBucket: "data-manager-84213.appspot.com",
-    messagingSenderId: "224760609164",    
-    appId: "1:224760609164:web:d01de3f761e154e6733ea9"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTHDOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGEBUCKET,
+    messagingSenderId: process.env.MSG_SENDER_ID,
+    appId: process.env.APPID,
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
