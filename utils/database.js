@@ -74,7 +74,6 @@ const removeKeyword = async (aspect, values) => { //Via aspects
     })
 }
 const addKeywordLinhkien = async (body) => { //Via type
-    console.log(body);
     await keywords.doc('tenhang + partnum').update({
         values: firebase.firestore.FieldValue.arrayUnion({
             tenhang: body.tenhang,
@@ -132,6 +131,7 @@ const decreaseSubmissionCount = async () => {
 
 // -------------------------------------Database processes--------------------------------------
 const save = async (type, body) => {
+    var result; //success or error 
     const database = db.collection(`ton-${type}`);
     //Add data to ton-... database and check if can add data to log-... or not
     var querySnapshot = await database.where("tenhang", "==", body.tenhang).get();
@@ -146,7 +146,11 @@ const save = async (type, body) => {
         }
         else {
             var err = 'Please use the correct unit: ' + doc.data().dvtinh;
-            dialog.showErrorBox("Can't save this form", err);
+            result = {
+                success: false,
+                error: err
+            };
+            // dialog.showErrorBox("Can't save this form", err);
             canAdd = false;
         }
     })
@@ -165,20 +169,20 @@ const save = async (type, body) => {
     if (canAdd) {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
-        popup('info', 'Success', 'Save data successfully');
-        return true;
+        // popup('info', 'Success', 'Save data successfully');
+        result = {success: true};
     }
-    else return false;
+    return result;
 }
 const edit = async (state, type, {id, ...body}) => {
     const docRef = await db.collection(`log-${type}`).doc(id).get();
-    var success = true;
+    var result; //success or error
     if (docRef.data().tenhang != body.tenhang) {
         //create a new one
-        if (state == 'nhap') success = await save(type, body);
-        if (state == 'xuat') success = await xuat(type, body);
+        if (state == 'nhap') result = await save(type, body);
+        if (state == 'xuat') result = await xuat(type, body);
         // Delete old document
-        if (success) {
+        if (result.success) {
             await del(state, type, id);
         }
     }
@@ -189,12 +193,16 @@ const edit = async (state, type, {id, ...body}) => {
         //Update the ton-... storage as well
         const database = db.collection(`ton-${type}`);
         const querySnapshot = await database.where('tenhang','==',body.tenhang).get();
-        querySnapshot.forEach(async(doc) => {
+        for (var i in querySnapshot.docs) {
+            const doc = querySnapshot.docs[i];
             if (doc.data().dvtinh == body.dvtinh || doc.data().quantity == docRef.data().quantity) {
                 if (state == 'xuat' && doc.data().quantity + delta < 0) {
                     let err = 'This quantity is over what we have in the storage, which is only: ' + (doc.data().quantity + docRef.data().quantity) + " " + doc.data().dvtinh;
-                    dialog.showErrorBox("Can't edit data", err);
-                    success = false;
+                    // dialog.showErrorBox("Can't edit data", err);
+                    result = {
+                        success: false,
+                        error: err
+                    }
                 }
                 else {
                     var newQuantity = (doc.data().dvtinh == body.dvtinh) ? doc.data().quantity + delta : body.quantity;
@@ -205,17 +213,25 @@ const edit = async (state, type, {id, ...body}) => {
                     })
                     console.log(`Updated log-${type}`);
                     console.log(`Updated ton-${type}`);
-                    popup('info', 'Success', 'Save data successfully');
+                    // popup('info', 'Success', 'Save data successfully');
+                    result = {
+                        success: true,
+                    }
                 }
             }
             else {
-                dialog.showErrorBox("Can't edit data", "Please use the correct unit: " + doc.data().dvtinh);
-                success = false;
+                // dialog.showErrorBox("Can't edit data", "Please use the correct unit: " + doc.data().dvtinh);
+                // success = false;
+                const err = 'Please use the correct unit: ' + doc.data().dvtinh;
+                result = {
+                    success: false,
+                    error: err
+                }
             }
-        })
+        }
     }
-
-    return success;
+    
+    return result;
 }
 const del = async (state, type, id) => {
     var docRef = await db.collection(`log-${type}`).doc(id).get();
@@ -248,6 +264,7 @@ const delStthopdong = async (state, type, {stthopdong, submissionDate}) => {
     }
 }
 const xuat = async(type, body) => {
+    var result; //success or error
     var canAdd = true, isEmpty = true;
     const database = db.collection(`ton-${type}`);
     //Check if can export data and save it in log-...
@@ -265,13 +282,21 @@ const xuat = async(type, body) => {
             }
             else {
                 let err = 'This quantity is over what we have in the storage, which is only: ' + doc.data().quantity + " " + doc.data().dvtinh;
-                dialog.showErrorBox("Can't save this form", err);
+                // dialog.showErrorBox("Can't save this form", err);
+                result = {
+                    success: false,
+                    error: err
+                }
                 canAdd = false;
             }
         }
         else {
             var err = 'Please use the correct unit: ' + doc.data().dvtinh;
-            dialog.showErrorBox("Can't save this form", err);
+            // dialog.showErrorBox("Can't save this form", err);
+            result = {
+                success: false,
+                error: err
+            }
             canAdd = false;
         }
     })
@@ -279,16 +304,22 @@ const xuat = async(type, body) => {
     //Add data to log-...
     if (isEmpty) {
         var err = "Your wanted product is unavailable in the storage";
-        dialog.showErrorBox("Can't save this form", err);
+        // dialog.showErrorBox("Can't save this form", err);
+        result = {
+            success: false,
+            error: err
+        }
         canAdd = false;
     }
     if (canAdd) {
         const docRef = await db.collection(`log-${type}`).add(body);
         console.log(`Added to log-${type}: `, docRef.id);
-        popup('info', 'Success', 'Save data successfully');
-        return true;
+        // popup('info', 'Success', 'Save data successfully');
+        result = {
+            success: true
+        }
     }
-    else return false;
+    return result;
 }
 const readAll = async (state, type) => {
     const database = db.collection(`log-${type}`);

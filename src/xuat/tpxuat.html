@@ -190,25 +190,40 @@
         })
         function submit() {
             const form = document.querySelector('form');
+            var errors = "";
             if (form.id == "save") {
                 //Submit all previous reviews
                 var index = 0;
                 while (index < reviews['xuatThanhpham'].length) { //Inside the array
                     reviews['xuatThanhpham'][index].quantity = numeral(reviews['xuatThanhpham'][index].quantity).value();
-                    var canSubmit = ipcRenderer.sendSync('xuat-thanhpham', reviews['xuatThanhpham'][index]);
-                    if (canSubmit) { 
+                    var result = ipcRenderer.sendSync('xuat-thanhpham', reviews['xuatThanhpham'][index]);
+                    if (result.success) { 
                         removeReview('xuatThanhpham', index);
-                    } else index++; //Skip element
+                    } else {
+                        errors += `Id: ${index + 1} - ${result.error} \n`;
+                        index++; //Skip element
+                    }
                 }
                 printReviews('xuatThanhpham'); //Update grid
+
+                //notify users the result
+                if (errors == "") //all succeed
+                    dialogs.alert('Save documents successfully');
+                else {
+                    // var output;
+                    // errors.forEach(err => output += `id: ${err.stt} - error: ${err.error} \n`)
+                    dialogs.alert(`Cannot save some documents \n ${errors}`);
+                }
             } 
             if (form.id == "edit") {
                 var obj = prepareObj();
                 obj.id = document.getElementById('_id').value;
-                var canSubmit = ipcRenderer.sendSync('edit-xuat-thanhpham', obj);
-                if (canSubmit) { 
+                var result = ipcRenderer.sendSync('edit-xuat-thanhpham', obj);
+                if (result.success) { 
+                    dialogs.alert('Edit document successfully');
                     form.action = "../chinhsua/cstp.html"; form.submit(); 
                 }
+                else dialogs.alert(`Cannot edit document \n ${result.error}`);
             }
         }
     </script>

@@ -272,26 +272,40 @@
             document.getElementById('button2').style.display = 'none';
         })
 
+        // Save documents
         function submit() {
             const form = document.querySelector('form');
+            var errors = "";
             if (form.id == "save") {
                 const stthopdong = parseInt(document.getElementById('stthopdong').innerHTML, 10);
 
                 //Submit all previous reviews
-                var index = 0;
+                var index = 0, docs = 0;
                 while (index < reviews['nhapLinhkien'].length) { //Inside the array
                     reviews['nhapLinhkien'][index].stthopdong = stthopdong;
                     reviews['nhapLinhkien'][index].quantity = numeral(reviews['nhapLinhkien'][index].quantity).value();
-                    var canSubmit = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
-                    if (canSubmit) { 
+                    var result = ipcRenderer.sendSync('save-linhkien', reviews['nhapLinhkien'][index]);
+                    docs++; //count processed documents
+                    if (result.success) { 
                         removeReview('nhapLinhkien', index);
-                    } else index++; //Skip element
+                    } else {
+                        errors += `Id: ${index + 1} - ${result.error} \n`;
+                        index++; //Skip element
+                    }
                 }
                 printReviews('nhapLinhkien'); //Update grid
 
-                //Update stthopdong
-                ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
-                displaySubmissionCount();
+                //notify users the result
+                if (errors == "") { //all succeed 
+                    dialogs.alert('Save documents successfully');
+
+                    //Update stthopdong
+                    ipcRenderer.send('updateSubmissionCount', stthopdong + 1);
+                    displaySubmissionCount();
+                }
+                else {
+                    dialogs.alert(`Cannot save some documents \n ${errors}`);
+                }
             } 
             if (form.id == "edit") {
                 var objs = getEditedDocuments(); //via grid.data
@@ -299,10 +313,17 @@
                 var ok = true; //check if all editions are proper
                 for (let index = 0; index < objs.length; index++) {
                     objs[index].id = ids[index];
-                    var canSubmit = ipcRenderer.sendSync('edit-nhap-linhkien', objs[index]);
-                    if (!canSubmit) ok = false; 
+                    var result = ipcRenderer.sendSync('edit-nhap-linhkien', objs[index]);
+                    if (!result.success) {
+                        ok = false; 
+                        errors += `Id: ${index + 1} - ${result.error} \n`;
+                    }
                 }
-                if (ok) {form.action = "../chinhsua/cslk.html"; form.submit(); } //all are correct => Turn back to chinhsua pages
+                if (ok) {
+                    dialogs.alert('Edit documents successfully');
+                    form.action = "../chinhsua/cslk.html"; form.submit(); 
+                } //all are correct => Turn back to chinhsua pages
+                else dialogs.alert(`Cannot edit some documents \n ${errors}`);
             }
         }
         
