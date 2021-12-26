@@ -25,7 +25,7 @@ function createWindow() {
   mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
