@@ -121,13 +121,6 @@ const increaseSubmissionCount = async (current) => { //stthopdong is editable
         value: current + 1
     })
 }
-const decreaseSubmissionCount = async () => {
-    var countRef = db.collection('log-linhkien').doc('submissionCount');
-    const doc = await countRef.get();
-    countRef.update({
-        value: doc.data().value - 1
-    })
-}
 
 // -------------------------------------Database processes--------------------------------------
 const save = async (type, body) => {
@@ -167,9 +160,10 @@ const save = async (type, body) => {
 
     //Add data to log-...
     if (canAdd) {
-        const docRef = await db.collection(`log-${type}`).add(body);
-        console.log(`Added to log-${type}: `, docRef.id);
-        // popup('info', 'Success', 'Save data successfully');
+        //docID: current date ==> Database sorts chronologically
+        const docID = new Date().toISOString(); //toISOString: return ISO standard format
+        await db.collection(`log-${type}`).doc(docID).set(body);
+        console.log(`Added to log-${type}: `, docID);
         result = {success: true};
     }
     return result;
@@ -213,15 +207,12 @@ const edit = async (state, type, {id, ...body}) => {
                     })
                     console.log(`Updated log-${type}`);
                     console.log(`Updated ton-${type}`);
-                    // popup('info', 'Success', 'Save data successfully');
                     result = {
                         success: true,
                     }
                 }
             }
             else {
-                // dialog.showErrorBox("Can't edit data", "Please use the correct unit: " + doc.data().dvtinh);
-                // success = false;
                 const err = 'Please use the correct unit: ' + doc.data().dvtinh;
                 result = {
                     success: false,
@@ -282,7 +273,6 @@ const xuat = async(type, body) => {
             }
             else {
                 let err = 'This quantity is over what we have in the storage, which is only: ' + doc.data().quantity + " " + doc.data().dvtinh;
-                // dialog.showErrorBox("Can't save this form", err);
                 result = {
                     success: false,
                     error: err
@@ -292,7 +282,6 @@ const xuat = async(type, body) => {
         }
         else {
             var err = 'Please use the correct unit: ' + doc.data().dvtinh;
-            // dialog.showErrorBox("Can't save this form", err);
             result = {
                 success: false,
                 error: err
@@ -304,7 +293,6 @@ const xuat = async(type, body) => {
     //Add data to log-...
     if (isEmpty) {
         var err = "Your wanted product is unavailable in the storage";
-        // dialog.showErrorBox("Can't save this form", err);
         result = {
             success: false,
             error: err
@@ -312,9 +300,10 @@ const xuat = async(type, body) => {
         canAdd = false;
     }
     if (canAdd) {
-        const docRef = await db.collection(`log-${type}`).add(body);
-        console.log(`Added to log-${type}: `, docRef.id);
-        // popup('info', 'Success', 'Save data successfully');
+        //docID: current date ==> Database sorts chronologically
+        const docID = new Date().toISOString(); //toISOString: return ISO standard format
+        await db.collection(`log-${type}`).doc(docID).set(body);
+        console.log(`Added to log-${type}: `, docID);
         result = {
             success: true
         }
