@@ -49,7 +49,7 @@
                 <p class="clearfix" style="font-size: 15px; margin-right: 0; margin-left: auto; margin-top: 5px;">Phiếu nhập số: <span id="stthopdong"></span></p>
             </div>
         </div>
-        <form style="margin-top: 15px;" id="save" action="" class="form-group" onsubmit="return process()">
+        <form style="margin-top: 15px;" id="save" action="" class="form-group" onsubmit="process()">
 
             <div class="row">
                 
@@ -67,7 +67,7 @@
                     <input type="text" class="form-control" id="dvtinh" placeholder="Đơn vị tính" required>
 
                     <label for="dongia">Đơn giá</label>
-                    <input type="text" class="form-control" id="dongia" placeholder="Đơn giá" required onkeypress="return onlyNumberKey(event)"> 
+                    <input type="text" class="form-control" id="dongia" placeholder="Đơn giá" required onkeypress="onlyNumberKey(event)"> 
     
                 </div>
 
@@ -83,7 +83,7 @@
                     <input type="date" class="form-control" id="date" placeholder="Ngày nhập" required>
     
                     <label for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="quantity" placeholder="Số lượng" required onkeypress="return onlyNumberKey(event)">
+                    <input type="text" class="form-control" id="quantity" placeholder="Số lượng" required onkeypress="onlyNumberKey(event)">
     
                     <label for="thanhtien">Thành tiền</label>
                     <input type="text" class="form-control" id="thanhtien" placeholder="Thành tiền" disabled>

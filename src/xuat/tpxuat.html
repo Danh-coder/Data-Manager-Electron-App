@@ -59,7 +59,7 @@
             <input type="text" class="form-control" id="chip" placeholder="Chip">
 
             <label for="quantity">Số lượng</label>
-            <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng" onkeypress="return onlyNumberKey(event)">
+            <input type="text" onchange="(function(el){el.value=numeral(el.value).format('0,0');})(this)" class="form-control" id="quantity" placeholder="Số lượng" onkeypress="onlyNumberKey(event)">
 
         </form>
 
