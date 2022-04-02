@@ -13,7 +13,7 @@ function createWindow() {
     height: 768,
     title: "Data Manager",
     minHeight:500,
-    minWidth:600,
+    minWidth:700,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -25,7 +25,7 @@ function createWindow() {
   mainWindow.loadURL('http://localhost:3007/login');
 
 //   Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+   mainWindow.webContents.openDevTools()
 
   mainWindow.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();

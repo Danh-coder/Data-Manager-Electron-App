@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../oldcss/style.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <link rel="stylesheet" type="text/css" href="https://kraaden.github.io/autocomplete/autocomplete.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Data Manager</title>
+    
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <style>
+        p {
+            margin: 0 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-light" style="padding: 0 !important;">
+        
+        <a class="navbar-brand" href="../index.html" style="font-weight: 400;">Back</a>
+            
+        <div class="nav-icon">
+            <a class="nav-link" href="../index.html">Home</a>
+        
+            <a class="nav-link" href="#">Nhập</a>
+        
+            <a class="nav-link" href="#">Xuất</a>
+        
+            <a class="nav-link" href="#">Kết xuất</a>
+                
+            
+        </div>
+
+    </nav>
+    <form action="" style="margin-left: 5vw;">
+        <label for="type" >Chọn hình thức hiển thị</label>
+        <select name="type" style="margin-left: 15px;" id="type" onchange="myFunction(); processAll()">
+            
+            <option value="date">Ngày</option>
+            <option value="name">Sản phẩm</option>
+            <option value="sohopdong">Sổ hợp đồng</option>
+            <option value="all">Tất cả</option>
+            
+        </select>
+        <br>
+        <label for="" class="lbl-date">Ngày bắt đầu</label>
+        <input type="date" name="datestart" id="datestart" style="margin-left: 15px;" onchange="processDate()">
+        <br>
+        <label for="" class="lbl-date-form" id="hmm">Ngày kết thúc</label>
+        <input type="date" name="dateend" id="dateend" style="margin-left: 15px;" onchange="processDate()">
+        <input type="text" name="nameinp" id="nameinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
+        <input type="text" name="shdinp" id="shdinp" style="margin-left: 15px; border: 1px solid black; display: none;" >
+    </form>
+
+    <div>
+        
+        <h1 style="text-align: center;">Chỉnh sửa linh kiện điện tử</h1>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            
+
+          <div class="mdc-tab-bar" role="tablist">
+            <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
+              <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
+                  
+                  <button id="nhap-tab" class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                    <span class="mdc-tab__content">
+                      <span class="mdc-tab__text-label">Nhập</span>
+                    </span>
+                    <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+                  
+                  <button id="xuat-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
+                    <span class="mdc-tab__content">
+                      <span class="mdc-tab__text-label">Xuất</span>
+                    </span>
+                    <span class="mdc-tab-indicator">
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+              <div class="mdc-data-table tab-content" id="nhap-content">
+                <div class="mdc-data-table__table-container">
+                  <table class="mdc-data-table__table" aria-label="Nhap">
+                    <thead>
+                      <tr class="mdc-data-table__header-row">
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Phiếu nhập số: </th>
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Ngày nhập</th>
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Chỉnh sửa</th>
+                        
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Xóa</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody class="mdc-data-table__content">
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 1 xuất</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 15</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 60</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              
+              <div class="mdc-data-table tab-content" id="xuat-content" style="display: none;">
+                <div class="mdc-data-table__table-container">
+                  <table class="mdc-data-table__table" aria-label="Nhap">
+                    <thead>
+                      <tr class="mdc-data-table__header-row">
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Phiếu nhập số: </th>
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Ngày nhập</th>
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Chỉnh sửa</th>
+                        
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Xóa</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody class="mdc-data-table__content">
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 1</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 1</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+                      <tr class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell" scope="row">Phiếu 1</th>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                        <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="../scripts/checkInternetStatus.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="../scripts/autoComplete.js"></script>
+    <script>
+        const {MDCTabBar} =  require('@material/tab-bar');
+        const tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+        Array.from(document.querySelectorAll('.mdc-tab')).forEach(
+            tab => tab.addEventListener('MDCTab:interacted', (e) => switchToTab(e.detail.tabId))
+            );
+
+        const switchToTab = (activatedTabId) => {
+            Array.from(document.querySelectorAll('.tab-content')).forEach(tabContent => {
+                tabContent.style.display = tabContent.id.slice(0, -1 * '-content'.length) == activatedTabId.slice(0, -1 * '-tab'.length) ? 'block' : 'none';
+                console.log(activatedTabId);
+            });
+        }
+    var select = document.getElementById('type');
+
+        //Auto Complete
+        const trigger = () => {
+            SuggestKeywords('nameinp');
+            SuggestKeywords('shdinp');
+        }
+        
+        
+        function myFunction() { //change searching options
+            //Clear recent searches
+            $(`#nhap div`).remove();
+            $(`#xuat div`).remove();
+
+            if (select.value === 'name')
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'inline'
+                document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='none'
+
+                document.getElementById('hmm').innerHTML = 'Nhập sản phẩm'
+                processTextInputs();
+            }
+            else if (select.value === 'sohopdong')
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'none'
+                document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='inline'
+
+                document.getElementById('hmm').innerHTML = 'Nhập sổ hợp đồng'
+                processTextInputs();
+            }
+            else if (select.value === 'date')
+            {
+                document.getElementById('nameinp').style.display = 'none'
+                document.getElementById('shdinp').style.display ='none'
+                document.getElementById('datestart').style.display = 'inline'
+            
+                document.getElementById('hmm').innerHTML = 'Ngày kết thúc'
+            
+                document.querySelector('.lbl-date').style.display =''
+                document.getElementById('dateend').style.display = 'inline'
+                processDate();
+            }
+            else //All search
+            {
+                document.getElementById('datestart').style.display = 'none'
+                document.getElementById('dateend').style.display = 'none'
+                document.getElementById('nameinp').style.display = 'none'
+                document.querySelector('.lbl-date').style.display ='none'
+                document.getElementById('shdinp').style.display ='none'
+                document.getElementById('hmm').innerHTML = ''
+
+                document.getElementById('hmm').innerHTML = ''
+                processAll();
+            }
+        }
+
+        //include electron package
+        const {ipcRenderer} = require('electron');
+        var nhaps, xuats;
+
+        function print(state) {
+            var box = $(`#${state}`);
+            $(`#${state} div`).remove();
+
+            if (state == 'nhap') {
+                var index = 0;
+                nhaps.forEach(doc => {
+                    box.append(`
+                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
+                            <div style="align-self: flex-start;">
+                                <h5 style="font-size: 25px;">
+                                    Phiếu nhập số: ${doc.stthopdong}
+                                </h5>
+                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
+                            </div>
+                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
+                                <button onclick="redirect(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect1(${doc.stthopdong}, '${doc.submissionDate}'); nhaps.splice(${index++}, 1); print('nhap')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+            if (state == 'xuat') {
+                xuats.forEach(doc => {
+                    box.append(`
+                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
+                            <div style="align-self: flex-start;">
+                                <h5 style="font-size: 25px;">
+                                    Phiếu nhập số: ${doc.stthopdong}
+                                </h5>
+                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
+                            </div>
+                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
+                                <button onclick="redirect2(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
+                                <button onclick="redirect3(${doc.stthopdong}, '${doc.submissionDate}'); xuats.splice(${index++}, 1); print('xuat')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+        }
+
+        //Redirect to edit file
+        function redirect(stthopdong, submissionDate) {
+            ipcRenderer.send('edit-send', {type: 'linhkien', stthopdong, submissionDate});
+            location.href='../nhap/lknhap.html';
+        }
+        function redirect1(stthopdong, submissionDate) {
+            ipcRenderer.send('xoa-nhap-linhkien-stthopdong', {stthopdong, submissionDate});
+        }
+        function redirect2(stthopdong, submissionDate) {
+            ipcRenderer.send('edit-send', {type: 'linhkien', stthopdong, submissionDate});
+            location.href='../xuat/lkxuat.html';
+        }
+        function redirect3(stthopdong, submissionDate) {
+            ipcRenderer.send('xoa-xuat-linhkien-stthopdong', {stthopdong, submissionDate});
+        }
+
+        //Submit form when press Enter
+        $('form').each(function() {
+            $(this).find('input').keypress(function(e) {
+                // Enter pressed?
+                if(e.which == 10 || e.which == 13) {
+                    processTextInputs();
+                }
+            });
+        });
+
+        //Delete all similar Stthopdong value ==> Convenient display
+        function deleteSimilarStthopdong(arr) {
+            let visited = [], index = 0;
+            while (index < arr.length) {
+                const obj = {
+                    stthopdong: arr[index].stthopdong,
+                    submissionDate: arr[index].submissionDate
+                }
+                const found = visited.find(element => JSON.stringify(element) == JSON.stringify(obj))
+                if (found) arr.splice(index, 1);
+                else {index++; visited.push(obj);}
+            }
+            return arr;
+        }
+
+        // Option All
+        function processAll() {
+            if (select.value == 'all') {
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-all', {});
+                nhaps = deleteSimilarStthopdong(nhaps);
+                print('nhap');
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-all', {});
+                xuats = deleteSimilarStthopdong(xuats);
+                print('xuat');
+            }
+        }
+
+        //Other options
+        function processDate() {
+            var datestart = document.getElementById('datestart').value;
+            var dateend = document.getElementById('dateend').value;
+            if (datestart != '' && dateend != '') {
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-ngay', {datestart, dateend});
+                nhaps = deleteSimilarStthopdong(nhaps);
+                print('nhap')
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-ngay', {datestart, dateend});
+                xuats = deleteSimilarStthopdong(xuats);
+                print('xuat');
+            }
+        }
+        function processTextInputs() {
+            if (select.value === "name") {
+                var name = document.getElementById('nameinp').value;
+                if (name == '') return;
+                name = $.trim(name);
+
+                //Search documents via products' partnums
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-partnum', {name});
+                nhaps = deleteSimilarStthopdong(nhaps);
+                print('nhap');
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-partnum', {name});
+                xuats = deleteSimilarStthopdong(xuats);
+                print('xuat');
+            }
+            if (select.value === 'sohopdong') {
+                var sohopdong = document.getElementById('shdinp').value;
+                if (sohopdong == '') return;
+                sohopdong = $.trim(sohopdong);
+
+                nhaps = ipcRenderer.sendSync('doc-nhap-linhkien-sohopdong', {sohopdong});
+                nhaps = deleteSimilarStthopdong(nhaps);
+                print('nhap');
+                xuats = ipcRenderer.sendSync('doc-xuat-linhkien-sohopdong', {sohopdong});
+                xuats = deleteSimilarStthopdong(xuats);
+                print('xuat');
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- Insert this line after script imports -->
+    
+    <script>if (window.module) module = window.module;</script>
+</body>
+</html>

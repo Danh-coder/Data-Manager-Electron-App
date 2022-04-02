@@ -17,6 +17,8 @@
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
+    "@material/data-table": "^13.0.0",
+    "@material/tab-bar": "^13.0.0",
     "alert": "^5.0.10",
     "autocomplete": "0.0.1",
     "autocompleter": "^6.1.0",
