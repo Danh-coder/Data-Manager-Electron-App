@@ -312,7 +312,7 @@ const xuat = async(type, body) => {
 }
 const readAll = async (state, type) => {
     const database = db.collection(`log-${type}`);
-    const querySnapshot = await database.orderBy('date', 'asc').get();
+    const querySnapshot = await database.get();
     var infos = [];
     querySnapshot.forEach(async(doc) => {
         if (doc.data().state == state) {
@@ -326,7 +326,7 @@ const readAll = async (state, type) => {
 }
 const readFollowingDate = async (state, type, {datestart, dateend}) => {
     var infos = [];
-    var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+    var querySnapshot = await db.collection(`log-${type}`).get();
     querySnapshot.forEach(doc => {
         if (doc.data().state == state && datestart <= doc.data().date  && doc.data().date <= dateend) {
             infos.push({
@@ -340,7 +340,7 @@ const readFollowingDate = async (state, type, {datestart, dateend}) => {
 }
 const readFollowingPartnum = async (state, type, {name}) => {
     var infos = [];
-    var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+    var querySnapshot = await db.collection(`log-${type}`).get();
     querySnapshot.forEach(doc => {
         if (doc.data().state == state && doc.data().partnum == name) {
             infos.push({
@@ -354,7 +354,7 @@ const readFollowingPartnum = async (state, type, {name}) => {
 }
 const readFollowingSohopdong = async (state, type, {sohopdong}) => {
     var infos = [];
-    var querySnapshot = await db.collection(`log-${type}`).orderBy("date", "asc").get();
+    var querySnapshot = await db.collection(`log-${type}`).get();
     querySnapshot.forEach(doc => {
         if (doc.data().state == state && doc.data().sohopdong == sohopdong) {
             infos.push({
