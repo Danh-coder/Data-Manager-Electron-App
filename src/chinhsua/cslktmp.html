@@ -112,8 +112,8 @@
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Ghi chú</th>
                       </tr>
                     </thead>
-                    <tbody class="mdc-data-table__content">
-
+                    <tbody class="mdc-data-table__content" id="nhap">
+<!-- 
                       <tr class="mdc-data-table__row">
                         <th class="mdc-data-table__cell" scope="row">Phiếu 1 xuất</th>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
@@ -136,7 +136,7 @@
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
                         <td class="mdc-data-table__cell">Không có ghi chú</td>
-                      </tr>
+                      </tr> -->
 
 
                     </tbody>
@@ -147,7 +147,7 @@
               
               <div class="mdc-data-table tab-content" id="xuat-content" style="display: none;">
                 <div class="mdc-data-table__table-container">
-                  <table class="mdc-data-table__table" aria-label="Nhap">
+                  <table class="mdc-data-table__table" aria-label="Xuat">
                     <thead>
                       <tr class="mdc-data-table__header-row">
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Phiếu nhập số: </th>
@@ -158,8 +158,8 @@
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Ghi chú</th>
                       </tr>
                     </thead>
-                    <tbody class="mdc-data-table__content">
-
+                    <tbody class="mdc-data-table__content" id="xuat">
+<!-- 
                       <tr class="mdc-data-table__row">
                         <th class="mdc-data-table__cell" scope="row">Phiếu 1</th>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24 - 05 - 2020</td>
@@ -182,7 +182,7 @@
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a href="#" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
                         <td class="mdc-data-table__cell">Không có ghi chú</td>
-                      </tr>
+                      </tr> -->
 
 
                     </tbody>
@@ -282,43 +282,34 @@
 
         function print(state) {
             var box = $(`#${state}`);
-            $(`#${state} div`).remove();
+            $(`#${state}`).empty();
 
             if (state == 'nhap') {
                 var index = 0;
                 nhaps.forEach(doc => {
-                    box.append(`
-                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
-                            <div style="align-self: flex-start;">
-                                <h5 style="font-size: 25px;">
-                                    Phiếu nhập số: ${doc.stthopdong}
-                                </h5>
-                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
-                            </div>
-                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                                <button onclick="redirect(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                                <button onclick="redirect1(${doc.stthopdong}, '${doc.submissionDate}'); nhaps.splice(${index++}, 1); print('nhap')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-                    `);
+                  box.append(`
+                      <tr class="mdc-data-table__row">
+                          <th class="mdc-data-table__cell" scope="row">Phiếu ${doc.stthopdong}</th>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric">${doc.submissionDate}</td>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a onclick="redirect(${doc.stthopdong}, '${doc.submissionDate}')" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a onclick="redirect1(${doc.stthopdong}, '${doc.submissionDate}'); nhaps.splice(${index++}, 1); print('nhap')" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                          <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+                  `);
                 });
             }
             if (state == 'xuat') {
+                var index = 0;
                 xuats.forEach(doc => {
-                    box.append(`
-                        <div style="max-width: 80%; margin-left: auto; margin-right: auto; display: flex; border-bottom: 1px solid rgb(121, 120, 120, 0.5); padding-bottom: 10px;">
-                            <div style="align-self: flex-start;">
-                                <h5 style="font-size: 25px;">
-                                    Phiếu nhập số: ${doc.stthopdong}
-                                </h5>
-                                <p style="font-size: 15px;">Ngày nhập: ${doc.submissionDate}</p>
-                            </div>
-                            <div style="margin-left: auto; margin-right: 0; margin-top: 15px;">
-                                <button onclick="redirect2(${doc.stthopdong}, '${doc.submissionDate}')" style="background-color: transparent;"><i style="font-size:20px;" class="far fa-edit"></i></button>                
-                                <button onclick="redirect3(${doc.stthopdong}, '${doc.submissionDate}'); xuats.splice(${index++}, 1); print('xuat')" style="background-color: transparent;"><i style="font-size:20px; margin: 0 !important;" class="far fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-                    `);
+                  box.append(`                        
+                      <tr class="mdc-data-table__row">
+                          <th class="mdc-data-table__cell" scope="row">Phiếu ${doc.stthopdong}</th>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric">${doc.submissionDate}</td>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a onclick="redirect2(${doc.stthopdong}, '${doc.submissionDate}')" style="color: black;"><span class="material-icons" style="font-size: 20px;">edit</span></a></td>
+                          <td class="mdc-data-table__cell mdc-data-table__cell--numeric"><a onclick="redirect3(${doc.stthopdong}, '${doc.submissionDate}'); xuats.splice(${index++}, 1); print('xuat')" style="color: black;"><span class="material-icons" style="font-size: 20px;">delete</span></a></td>
+                          <td class="mdc-data-table__cell">Không có ghi chú</td>
+                      </tr>
+                  `);
                 });
             }
         }
